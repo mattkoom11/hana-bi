@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+:root {
+  --hb-paper: #f7f3eb;
+  --hb-paper-muted: #f0ece3;
+  --hb-ink: #1a1614;
+  --hb-smoke: #645c55;
+  --hb-sienna: #a0643a;
+  --hb-gold: #c9a768;
+  --hb-border: #d7cec2;
+  --hb-tag: #ede6dd;
+  --hb-accent: #8a6a4a;
+}
+
+@theme inline {
+  --color-paper: var(--hb-paper);
+  --color-ink: var(--hb-ink);
+  --color-smoke: var(--hb-smoke);
+  --color-sienna: var(--hb-sienna);
+  --color-border: var(--hb-border);
+  --font-serif: var(--font-hanabi-serif);
+  --font-sans: var(--font-hanabi-sans);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--hb-paper);
+  color: var(--hb-ink);
+  font-family: var(--font-hanabi-sans), "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: 0.01em;
+}
+
+::selection {
+  background-color: var(--hb-sienna);
+  color: var(--hb-paper);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ink-grid {
+  background-image: linear-gradient(
+      rgba(26, 22, 20, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(26, 22, 20, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.sketch-border {
+  border: 1px solid var(--hb-border);
+  box-shadow: 4px 4px 0 rgba(26, 22, 20, 0.08);
+}
