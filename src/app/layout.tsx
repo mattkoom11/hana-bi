@@ -1,7 +1,7 @@
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import type { Metadata } from "next";
-import { Playfair_Display, Space_Grotesk } from "next/font/google";
+import { Playfair_Display, Space_Grotesk, Kalam } from "next/font/google";
 import "./globals.css";
 
 const hanabiSerif = Playfair_Display({
@@ -18,6 +18,14 @@ const hanabiSans = Space_Grotesk({
   weight: ["400", "500", "600", "700"],
 });
 
+// Handwritten/script font for captions and delicate notes
+const hanabiScript = Kalam({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-hanabi-script",
+  weight: ["300", "400"],
+});
+
 export const metadata: Metadata = {
   title: "Hana-Bi — Archival Denim",
   description:
@@ -30,7 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${hanabiSerif.variable} ${hanabiSans.variable} antialiased min-h-screen`}
+        className={`${hanabiSerif.variable} ${hanabiSans.variable} ${hanabiScript.variable} antialiased min-h-screen`}
       >
         <div className="flex min-h-screen flex-col bg-[var(--hb-paper)] text-[var(--hb-ink)]">
           <SiteHeader />

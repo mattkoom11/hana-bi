@@ -1,3 +1,20 @@
+/**
+ * Legacy local product data
+ *
+ * This file is kept as a fallback for development when Shopify is unavailable.
+ * In production, products are fetched from Shopify Storefront API via:
+ * - lib/shopify.ts (API client)
+ * - lib/shopify-mappers.ts (data transformation)
+ *
+ * To use Shopify:
+ * 1. Set environment variables in .env.local:
+ *    - SHOPIFY_STORE_DOMAIN
+ *    - SHOPIFY_STOREFRONT_ACCESS_TOKEN
+ *    - SHOPIFY_API_VERSION (optional, defaults to "2025-01")
+ * 2. Products will automatically fetch from Shopify on all pages
+ * 3. This file will only be used if Shopify fetch fails
+ */
+
 export type ProductStatus = "available" | "sold_out" | "archived";
 
 export interface Product {

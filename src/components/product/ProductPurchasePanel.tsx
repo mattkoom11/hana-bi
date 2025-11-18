@@ -2,14 +2,19 @@
 
 import { AddToCartButton } from "@/components/shop/AddToCartButton";
 import { Product } from "@/data/products";
+import type { ShopifyProductNode } from "@/lib/shopify";
 import { formatCurrency } from "@/lib/utils";
 import { useState } from "react";
 
 interface ProductPurchasePanelProps {
   product: Product;
+  shopifyProductNode?: ShopifyProductNode | null;
 }
 
-export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
+export function ProductPurchasePanel({
+  product,
+  shopifyProductNode,
+}: ProductPurchasePanelProps) {
   const [selectedSize, setSelectedSize] = useState<string | null>(
     product.sizes[0] ?? null
   );
@@ -49,7 +54,11 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
         </div>
       </div>
 
-      <AddToCartButton product={product} selectedSize={selectedSize} />
+      <AddToCartButton
+        product={product}
+        selectedSize={selectedSize}
+        shopifyProductNode={shopifyProductNode}
+      />
       <p className="text-[0.75rem] text-[var(--hb-smoke)]">
         Need a custom tailoring note? Add it during checkout or email studio@hana-bi.example.
       </p>

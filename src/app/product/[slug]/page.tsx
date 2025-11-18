@@ -5,8 +5,14 @@ import { ProductPurchasePanel } from "@/components/product/ProductPurchasePanel"
 import { SizeGuideModal } from "@/components/product/SizeGuideModal";
 import { ProductCard } from "@/components/shop/ProductCard";
 import {
+  getAllProducts,
+  getProductByHandle,
+  type ShopifyProductNode,
+} from "@/lib/shopify";
+import { mapShopifyProductToHanaBiProduct } from "@/lib/shopify-mappers";
+import {
   getProductBySlug,
-  products,
+  products as fallbackProducts,
   type Product,
 } from "@/data/products";
 import type { Metadata } from "next";
@@ -17,14 +23,36 @@ interface ProductPageProps {
   params: { slug: string };
 }
 
-export function generateStaticParams() {
-  return products.map((product) => ({ slug: product.slug }));
+/**
+ * Generate static params for product pages
+ * 
+ * Note: In production with Shopify, you may want to fetch all product handles
+ * at build time. For now, this uses fallback data.
+ */
+export async function generateStaticParams() {
+  try {
+    const shopifyProducts = await getAllProducts();
+    return shopifyProducts.map((product) => ({ slug: product.handle }));
+  } catch {
+    // Fallback to local data if Shopify unavailable
+    return fallbackProducts.map((product) => ({ slug: product.slug }));
+  }
 }
 
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
-  const product = getProductBySlug(params.slug);
+  let product: Product | null = null;
+
+  try {
+    const shopifyProduct = await getProductByHandle(params.slug);
+    if (shopifyProduct) {
+      product = mapShopifyProductToHanaBiProduct(shopifyProduct);
+    }
+  } catch {
+    // Fallback to local data
+    product = getProductBySlug(params.slug) ?? null;
+  }
 
   if (!product) {
     return {
@@ -38,19 +66,52 @@ export async function generateMetadata({
   };
 }
 
-const getRelatedProducts = (current: Product) =>
-  products
-    .filter((product) => product.slug !== current.slug && product.status === "available")
-    .slice(0, 3);
+/**
+ * Get related products (available products excluding current)
+ */
+async function getRelatedProducts(
+  currentSlug: string
+): Promise<Product[]> {
+  try {
+    const allProducts = await getAllProducts();
+    const mapped = allProducts.map(mapShopifyProductToHanaBiProduct);
+    return mapped
+      .filter((p) => p.slug !== currentSlug && p.status === "available")
+      .slice(0, 3);
+  } catch {
+    // Fallback to local data
+    return fallbackProducts
+      .filter((p) => p.slug !== currentSlug && p.status === "available")
+      .slice(0, 3);
+  }
+}
 
-export default function ProductPage({ params }: ProductPageProps) {
-  const product = getProductBySlug(params.slug);
+export default async function ProductPage({ params }: ProductPageProps) {
+  let product: Product | null = null;
+  let shopifyProductNode: ShopifyProductNode | null = null;
+
+  try {
+    shopifyProductNode = await getProductByHandle(params.slug);
+    if (shopifyProductNode) {
+      product = mapShopifyProductToHanaBiProduct(shopifyProductNode);
+    }
+  } catch (error) {
+    console.warn(
+      "Failed to fetch product from Shopify, using fallback:",
+      error
+    );
+  }
+
+  // Fallback to local data if Shopify fetch failed
+  if (!product) {
+    product = getProductBySlug(params.slug) ?? null;
+  }
 
   if (!product) {
     notFound();
   }
 
-  const related = getRelatedProducts(product);
+  const related = await getRelatedProducts(product.slug);
 
   return (
     <main>
@@ -86,7 +147,10 @@ export default function ProductPage({ params }: ProductPageProps) {
             </div>
           </div>
           <div className="space-y-6">
-            <ProductPurchasePanel product={product} />
+            <ProductPurchasePanel
+              product={product}
+              shopifyProductNode={shopifyProductNode}
+            />
             <div className="space-y-3 border border-[var(--hb-border)] p-6">
               <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)]">
                 Story

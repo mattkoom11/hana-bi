@@ -1,11 +1,58 @@
 "use client";
 
 import { formatCurrency } from "@/lib/utils";
-import { useCartCount, useCartStore, useCartTotal } from "@/store/cart";
+import {
+  useCartCount,
+  useCartStore,
+  useCartTotal,
+  type CartItem,
+} from "@/store/cart";
+import { useState } from "react";
 
 interface CartDrawerProps {
   open: boolean;
   onClose: () => void;
+}
+
+async function handleCheckout(items: CartItem[], onClose: () => void) {
+  // Filter out items without variantId (fallback data)
+  const validItems = items.filter((item) => item.variantId);
+
+  if (validItems.length === 0) {
+    alert(
+      "Cannot checkout: items are missing variant IDs. This may happen if products were added from fallback data."
+    );
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/shopify/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        lineItems: validItems.map((item) => ({
+          variantId: item.variantId,
+          quantity: item.quantity,
+        })),
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Failed to create checkout");
+    }
+
+    const { checkoutUrl } = await response.json();
+    onClose(); // Close drawer before redirect
+    window.location.href = checkoutUrl;
+  } catch (error) {
+    console.error("Checkout error:", error);
+    alert(
+      error instanceof Error
+        ? error.message
+        : "Failed to start checkout. Please try again."
+    );
+  }
 }
 
 export function CartDrawer({ open, onClose }: CartDrawerProps) {
@@ -15,6 +62,8 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
   const clearCart = useCartStore((state) => state.clearCart);
   const itemCount = useCartCount();
   const total = useCartTotal();
+  const setCheckingOut = useCartStore((state) => state.setCheckingOut);
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!open) {
     return null;
@@ -103,10 +152,17 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             <span className="font-semibold">{formatCurrency(total)}</span>
           </div>
           <button
-            disabled={items.length === 0}
-            className="w-full py-3 border border-[var(--hb-ink)] bg-[var(--hb-ink)] text-[var(--hb-paper)] uppercase tracking-[0.3em]"
+            onClick={async () => {
+              setIsLoading(true);
+              setCheckingOut(true);
+              await handleCheckout(items, onClose);
+              setIsLoading(false);
+              setCheckingOut(false);
+            }}
+            disabled={items.length === 0 || isLoading}
+            className="w-full py-3 border border-[var(--hb-ink)] bg-[var(--hb-ink)] text-[var(--hb-paper)] uppercase tracking-[0.3em] disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Checkout Soon
+            {isLoading ? "Redirecting..." : "Checkout"}
           </button>
           {items.length > 0 && (
             <button

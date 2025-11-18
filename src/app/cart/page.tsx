@@ -2,8 +2,49 @@
 
 import { PageShell } from "@/components/layout/PageShell";
 import { formatCurrency } from "@/lib/utils";
-import { useCartStore, useCartTotal } from "@/store/cart";
+import { useCartStore, useCartTotal, type CartItem } from "@/store/cart";
 import Link from "next/link";
+import { useState } from "react";
+
+async function handleCheckout(items: CartItem[]) {
+  // Filter out items without variantId (fallback data)
+  const validItems = items.filter((item) => item.variantId);
+
+  if (validItems.length === 0) {
+    alert(
+      "Cannot checkout: items are missing variant IDs. This may happen if products were added from fallback data."
+    );
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/shopify/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        lineItems: validItems.map((item) => ({
+          variantId: item.variantId,
+          quantity: item.quantity,
+        })),
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Failed to create checkout");
+    }
+
+    const { checkoutUrl } = await response.json();
+    window.location.href = checkoutUrl;
+  } catch (error) {
+    console.error("Checkout error:", error);
+    alert(
+      error instanceof Error
+        ? error.message
+        : "Failed to start checkout. Please try again."
+    );
+  }
+}
 
 export default function CartPage() {
   const items = useCartStore((state) => state.items);
@@ -11,12 +52,15 @@ export default function CartPage() {
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const clearCart = useCartStore((state) => state.clearCart);
   const total = useCartTotal();
+  const isCheckingOut = useCartStore((state) => state.isCheckingOut);
+  const setCheckingOut = useCartStore((state) => state.setCheckingOut);
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <PageShell
       eyebrow="Cart"
       title="Your current study."
-      intro="This cart lives entirely on the client for now. It is set up via Zustand, so swapping in a real API session is straightforward."
+      intro="Cart items are stored locally and checkout redirects to Shopify-hosted checkout. Products and pricing come from Shopify Storefront API."
     >
       <div className="space-y-8">
         <div className="border border-[var(--hb-border)] divide-y divide-[var(--hb-border)]">
@@ -82,8 +126,18 @@ export default function CartPage() {
               <span>Total</span>
               <span className="font-semibold">{formatCurrency(total)}</span>
             </div>
-            <button className="w-full border border-[var(--hb-ink)] bg-[var(--hb-ink)] text-[var(--hb-paper)] uppercase tracking-[0.4em] px-6 py-4 text-xs">
-              Checkout (coming soon)
+            <button
+              onClick={async () => {
+                setIsLoading(true);
+                setCheckingOut(true);
+                await handleCheckout(items);
+                setIsLoading(false);
+                setCheckingOut(false);
+              }}
+              disabled={isLoading || isCheckingOut}
+              className="w-full border border-[var(--hb-ink)] bg-[var(--hb-ink)] text-[var(--hb-paper)] uppercase tracking-[0.4em] px-6 py-4 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? "Redirecting to checkout..." : "Checkout"}
             </button>
             <button
               onClick={clearCart}

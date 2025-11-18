@@ -3,12 +3,15 @@
 import { create } from "zustand";
 
 export interface CartItem {
-  id: string;
+  id: string; // Local cart item ID (for UI)
+  productId: string; // Shopify product ID
+  variantId: string; // Shopify variant ID (required for checkout)
   name: string;
   slug: string;
   price: number;
   size: string;
   quantity: number;
+  image?: string; // Optional product image URL
 }
 
 interface CartState {
@@ -17,6 +20,9 @@ interface CartState {
   removeItem: (id: string, size: string) => void;
   updateQuantity: (id: string, size: string, quantity: number) => void;
   clearCart: () => void;
+  // Checkout state
+  isCheckingOut: boolean;
+  setCheckingOut: (isCheckingOut: boolean) => void;
 }
 
 const findItemIndex = (items: CartItem[], id: string, size: string) =>
@@ -24,6 +30,7 @@ const findItemIndex = (items: CartItem[], id: string, size: string) =>
 
 export const useCartStore = create<CartState>((set) => ({
   items: [],
+  isCheckingOut: false,
   addItem: (newItem, quantity = 1) =>
     set((state) => {
       const items = [...state.items];
@@ -65,7 +72,8 @@ export const useCartStore = create<CartState>((set) => ({
         ),
       };
     }),
-  clearCart: () => set({ items: [] }),
+  clearCart: () => set({ items: [], isCheckingOut: false }),
+  setCheckingOut: (isCheckingOut) => set({ isCheckingOut }),
 }));
 
 export const useCartCount = () =>
