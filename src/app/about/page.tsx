@@ -22,24 +22,24 @@ const CHAPTERS = [
 
 export default function AboutPage() {
   return (
-    <main>
+    <main className="page-transition">
       <PageShell
         eyebrow="About"
         title="The Hana-Bi study."
         intro="A sustainable denim house with an editorial mindset. Use this page to tell the brand story, update process notes, and add future chapters."
       >
-        <div className="grid gap-16 lg:grid-cols-[1.1fr_0.9fr]">
-          <article className="space-y-8">
-            <InkUnderline width={140} variant="wispy" strokeOpacity={0.4} />
-            <p className="text-base leading-relaxed text-[var(--hb-smoke)] opacity-80 max-w-lg">
+        <div className="grid gap-20 lg:grid-cols-[1.1fr_0.9fr]">
+          <article className="space-y-10">
+            <InkUnderline width={160} variant="wispy" strokeOpacity={0.4} />
+            <p className="text-lg leading-relaxed text-[var(--hb-smoke)] opacity-85 max-w-lg">
               Every garment is treated like an artifact. We shoot them on matte
               backgrounds, annotate with gothic typography, and log them into a
               living archive. Sustainability is not a tagline; it&rsquo;s recorded in
               our care notes and fabric provenance.
             </p>
-            <div className="grid gap-6 md:grid-cols-2">
-              <SketchFrame tilt="left" strokeOpacity={0.25} className="p-5">
-                <div className="space-y-3">
+            <div className="grid gap-8 md:grid-cols-2">
+              <SketchFrame tilt="left" strokeOpacity={0.25} className="p-6">
+                <div className="space-y-4">
                   <p className="uppercase text-xs tracking-[0.35em] text-[var(--hb-smoke)] font-script opacity-70">
                     Studios
                   </p>
@@ -48,8 +48,8 @@ export default function AboutPage() {
                   </p>
                 </div>
               </SketchFrame>
-              <SketchFrame tilt="right" strokeOpacity={0.25} className="p-5">
-                <div className="space-y-3">
+              <SketchFrame tilt="right" strokeOpacity={0.25} className="p-6">
+                <div className="space-y-4">
                   <p className="uppercase text-xs tracking-[0.35em] text-[var(--hb-smoke)] font-script opacity-70">
                     Techniques
                   </p>
@@ -58,15 +58,15 @@ export default function AboutPage() {
               </SketchFrame>
             </div>
           </article>
-          <section className="space-y-8">
+          <section className="space-y-10">
             {CHAPTERS.map((chapter, index) => (
               <SketchFrame key={chapter.title} tilt={index % 2 === 0 ? "left" : "right"} strokeOpacity={0.3} className="p-6">
-                <div className="space-y-4">
+                <div className="space-y-5">
                   <p className="uppercase text-xs tracking-[0.35em] text-[var(--hb-smoke)] font-script opacity-70">
                     {chapter.title}
                   </p>
                   <p className="font-serif text-2xl leading-tight">{chapter.title}</p>
-                  <InkUnderline width={80} variant="delicate" strokeOpacity={0.3} />
+                  <InkUnderline width={90} variant="delicate" strokeOpacity={0.3} />
                   <p className="text-sm text-[var(--hb-smoke)] opacity-80 leading-relaxed">{chapter.copy}</p>
                 </div>
               </SketchFrame>

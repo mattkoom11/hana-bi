@@ -55,11 +55,17 @@ body {
   color: var(--hb-ink);
   font-family: var(--font-hanabi-sans), "Helvetica Neue", Arial, sans-serif;
   letter-spacing: 0.01em;
-  /* Subtle paper grain texture */
+  /* Enhanced paper grain texture with layered depth */
   background-image: 
-    url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"),
-    linear-gradient(to bottom, transparent 0%, rgba(26, 26, 26, 0.01) 100%);
-  background-size: 200px 200px, 100% 100%;
+    /* Vignette effect */
+    radial-gradient(ellipse at center, transparent 0%, rgba(26, 26, 26, 0.008) 100%),
+    /* Subtle gradient overlay */
+    linear-gradient(to bottom, rgba(250, 248, 244, 0.5) 0%, rgba(245, 242, 237, 0.3) 100%),
+    /* Paper grain texture */
+    url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"),
+    /* Canvas texture */
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(26, 26, 26, 0.015) 2px, rgba(26, 26, 26, 0.015) 4px);
+  background-size: 100% 100%, 100% 100%, 200px 200px, 100% 100%;
   background-attachment: fixed;
 }
 
@@ -104,13 +110,63 @@ img {
   filter: blur(0.3px);
 }
 
-/* Wispy hover effects */
+/* Wispy hover effects - like lifting a sketch from paper */
 .hover-wispy {
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.3s ease;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.4s ease,
+    box-shadow 0.5s ease;
 }
 
 .hover-wispy:hover {
-  transform: translateY(-2px);
-  opacity: 0.9;
+  transform: translateY(-3px) rotate(0.3deg);
+  opacity: 0.92;
+  box-shadow: 0 8px 24px rgba(26, 26, 26, 0.08);
+}
+
+/* Page transition fade - like turning a page */
+.page-transition {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Editorial spacing utilities */
+.editorial-margin {
+  padding-left: clamp(1rem, 5vw, 4rem);
+  padding-right: clamp(1rem, 5vw, 4rem);
+}
+
+/* Hand-drawn button styles */
+.btn-sketch {
+  border: 1px dashed var(--hb-border);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-sketch::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--hb-ink);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-sketch:hover::before {
+  opacity: 0.3;
+}
+
+.btn-sketch:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(26, 26, 26, 0.06);
 }

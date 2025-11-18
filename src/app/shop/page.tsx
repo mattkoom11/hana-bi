@@ -26,18 +26,20 @@ export default async function ShopPage() {
   }
 
   return (
-    <PageShell
-      eyebrow="Shop"
-      title="Limited garments, ready to study."
-      intro={
-        <>
-          Non-archived pieces live here first. Adjust filters to find specific
-          silhouettes or sizes. Products are fetched from Shopify Storefront API.
-        </>
-      }
-    >
-      <ShopContent products={shopifyProducts} />
-    </PageShell>
+    <main className="page-transition">
+      <PageShell
+        eyebrow="Shop"
+        title="Limited garments, ready to study."
+        intro={
+          <>
+            Non-archived pieces live here first. Adjust filters to find specific
+            silhouettes or sizes. Products are fetched from Shopify Storefront API.
+          </>
+        }
+      >
+        <ShopContent products={shopifyProducts} />
+      </PageShell>
+    </main>
   );
 }
 

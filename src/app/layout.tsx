@@ -1,21 +1,24 @@
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import type { Metadata } from "next";
-import { Playfair_Display, Space_Grotesk, Kalam } from "next/font/google";
+import { Spectral, Inter, Kalam } from "next/font/google";
 import "./globals.css";
 
-const hanabiSerif = Playfair_Display({
+// Editorial serif for headers - Spectral (magazine-style, elegant)
+const hanabiSerif = Spectral({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-hanabi-serif",
   weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
-const hanabiSans = Space_Grotesk({
+// Clean sans-serif for body text - Inter (readable, modern)
+const hanabiSans = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-hanabi-sans",
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600"],
 });
 
 // Handwritten/script font for captions and delicate notes
