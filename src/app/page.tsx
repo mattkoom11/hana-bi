@@ -1,9 +1,8 @@
 import { HandDrawnDivider } from "@/components/common/HandDrawnDivider";
 import { InkUnderline } from "@/components/common/InkUnderline";
-import { MarginNote } from "@/components/common/MarginNote";
 import { PaperBackground } from "@/components/common/PaperBackground";
 import { SketchFrame } from "@/components/common/SketchFrame";
-import { Button } from "@/components/common/Button";
+import { SketchbookHero } from "@/components/home/SketchbookHero";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { getAllProducts, getCollectionProducts } from "@/lib/shopify";
 import { mapShopifyProductToHanaBiProduct } from "@/lib/shopify-mappers";
@@ -12,7 +11,6 @@ import {
   featuredProducts as fallbackFeatured,
   products as fallbackProducts,
 } from "@/data/products";
-import Image from "next/image";
 import Link from "next/link";
 
 /**
@@ -61,110 +59,10 @@ export default async function Home() {
     archiveSlices = fallbackArchived.slice(0, 2);
   }
 
-  const heroFeature = featured[0] ?? allProducts[0] ?? fallbackProducts[0];
   return (
     <main className="page-transition">
-      {/* Full-bleed editorial hero section */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-        <PaperBackground intensity="subtle" texture="both" className="absolute inset-0" />
-        
-        {/* Full-bleed hero image with sketched border */}
-        {heroFeature && (
-          <div className="absolute inset-0 w-full h-full">
-            <div className="relative w-full h-full">
-              <Image
-                src={heroFeature.heroImage}
-                alt={heroFeature.name}
-                fill
-                className="object-cover opacity-20"
-                priority
-                sizes="100vw"
-              />
-              {/* Subtle ink strokes radiating outward */}
-              <div className="absolute inset-0 pointer-events-none">
-                <svg className="w-full h-full" viewBox="0 0 1000 1000" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="radial-stroke" x1="50%" y1="50%" x2="50%" y2="0%">
-                      <stop offset="0%" stopColor="var(--hb-ink)" stopOpacity="0.15" />
-                      <stop offset="100%" stopColor="var(--hb-ink)" stopOpacity="0" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M 500,500 Q 300,200 200,200 Q 100,200 100,300 Q 100,400 200,400 Q 300,400 500,500"
-                    fill="none"
-                    stroke="url(#radial-stroke)"
-                    strokeWidth="1.5"
-                    opacity="0.3"
-                  />
-                  <path
-                    d="M 500,500 Q 700,200 800,200 Q 900,200 900,300 Q 900,400 800,400 Q 700,400 500,500"
-                    fill="none"
-                    stroke="url(#radial-stroke)"
-                    strokeWidth="1.5"
-                    opacity="0.3"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Editorial content overlay */}
-        <div className="relative z-10 px-4 sm:px-8 md:px-12 lg:px-20 py-24 w-full max-w-6xl mx-auto">
-          <div className="grid gap-16 lg:grid-cols-[1.1fr_0.9fr] items-center">
-            <div className="space-y-8">
-              <p className="uppercase text-xs tracking-[0.5em] text-[var(--hb-smoke)] font-script opacity-70">
-                Hana-Bi — Editions of Denim
-              </p>
-              <h1 className="font-serif text-5xl lg:text-7xl leading-[1.05] tracking-tight">
-                Archival garments documented like museum pieces.
-              </h1>
-              <InkUnderline width={220} variant="wispy" strokeOpacity={0.4} />
-              <p className="text-lg leading-relaxed text-[var(--hb-smoke)] opacity-85 max-w-lg">
-                Hana-Bi traces Japanese magazine spreads and gothic annotations to
-                tell the story of sustainable denim. Limited drops move swiftly from
-                studio floor to archive shelves.
-              </p>
-              <div className="flex gap-5 flex-wrap pt-4">
-                <Link href="/shop">
-                  <Button variant="primary">
-                    Enter Shop
-                  </Button>
-                </Link>
-                <Link href="/about">
-                  <Button variant="secondary">
-                    What is Hana-Bi?
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            {heroFeature && (
-              <SketchFrame tilt="right" className="w-full" strokeOpacity={0.3}>
-                <div className="space-y-5">
-                  <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)] font-script opacity-70">
-                    Featured Garment
-                  </p>
-                  <h2 className="font-serif text-3xl leading-tight">{heroFeature.name}</h2>
-                  <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80">
-                    {heroFeature.story}
-                  </p>
-                  <Link
-                    href={`/product/${heroFeature.slug}`}
-                    className="text-xs uppercase tracking-[0.4em] border-b border-dashed border-[var(--hb-border)] pb-1 inline-block hover-wispy opacity-70 hover:opacity-100"
-                  >
-                    View Piece
-                  </Link>
-                </div>
-              </SketchFrame>
-            )}
-          </div>
-        </div>
-
-        {/* Handwritten signature */}
-        <MarginNote position="bottom-right" variant="script" size="sm" className="!opacity-50 z-10">
-          Hana-Bi
-        </MarginNote>
-      </section>
+      {/* New Sketchbook-inspired Hero Section */}
+      <SketchbookHero />
 
       <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-24 relative">
         <PaperBackground intensity="subtle" texture="grain">

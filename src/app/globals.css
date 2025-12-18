@@ -162,6 +162,41 @@ img {
   transform: translate(-50%, -50%);
 }
 
+/* Organic sketchbook animations */
+@keyframes sketchFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) rotate(0.5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes sketchDrawIn {
+  0% {
+    stroke-dashoffset: 1000;
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+.animate-sketch-fade {
+  animation: sketchFadeIn 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.animate-sketch-draw {
+  stroke-dasharray: 1000;
+  animation: sketchDrawIn 2s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
 /* Editorial spacing utilities */
 .editorial-margin {
   padding-left: clamp(1rem, 5vw, 4rem);
