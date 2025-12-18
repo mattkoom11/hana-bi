@@ -3,6 +3,7 @@ import { InkUnderline } from "@/components/common/InkUnderline";
 import { MarginNote } from "@/components/common/MarginNote";
 import { PaperBackground } from "@/components/common/PaperBackground";
 import { SketchFrame } from "@/components/common/SketchFrame";
+import { Button } from "@/components/common/Button";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { getAllProducts, getCollectionProducts } from "@/lib/shopify";
 import { mapShopifyProductToHanaBiProduct } from "@/lib/shopify-mappers";
@@ -125,18 +126,15 @@ export default async function Home() {
                 studio floor to archive shelves.
               </p>
               <div className="flex gap-5 flex-wrap pt-4">
-                <Link
-                  href="/shop"
-                  className="border border-[var(--hb-ink)] bg-[var(--hb-ink)] text-[var(--hb-paper)] uppercase tracking-[0.4em] px-8 py-4 text-xs hover-wispy opacity-90 hover:opacity-100 transition-opacity btn-sketch"
-                >
-                  Enter Shop
+                <Link href="/shop">
+                  <Button variant="primary">
+                    Enter Shop
+                  </Button>
                 </Link>
-                <Link
-                  href="/about"
-                  className="border border-[var(--hb-border)] border-dashed uppercase tracking-[0.4em] px-8 py-4 text-xs hover-wispy opacity-70 hover:opacity-100 transition-opacity btn-sketch"
-                  style={{ borderWidth: "1px" }}
-                >
-                  What is Hana-Bi?
+                <Link href="/about">
+                  <Button variant="secondary">
+                    What is Hana-Bi?
+                  </Button>
                 </Link>
               </div>
             </div>

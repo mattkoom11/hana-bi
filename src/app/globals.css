@@ -139,6 +139,29 @@ img {
   }
 }
 
+/* Refined ripple animation for buttons */
+@keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.animate-ripple {
+  animation: ripple 800ms cubic-bezier(0.19, 1, 0.22, 1);
+  transform: translate(-50%, -50%);
+}
+
 /* Editorial spacing utilities */
 .editorial-margin {
   padding-left: clamp(1rem, 5vw, 4rem);

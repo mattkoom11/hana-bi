@@ -3,9 +3,10 @@
 import { Product } from "@/data/products";
 import type { ShopifyProductNode } from "@/lib/shopify";
 import { findVariantIdBySize } from "@/lib/shopify-mappers";
-import { cn, formatCurrency } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 import { useCartStore } from "@/store/cart";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { Button } from "@/components/common/Button";
 
 interface AddToCartButtonProps {
   product: Product;
@@ -19,16 +20,24 @@ export function AddToCartButton({
   shopifyProductNode,
 }: AddToCartButtonProps) {
   const addItem = useCartStore((state) => state.addItem);
+  const [loading, setLoading] = useState(false);
+  
   const disabled = useMemo(
     () => product.status !== "available" || !selectedSize,
     [product.status, selectedSize]
   );
 
   return (
-    <button
+    <Button
+      variant="primary"
       disabled={disabled}
+      loading={loading}
+      className="w-full"
       onClick={() => {
         if (!selectedSize) return;
+
+        // Simulate brief loading state for better UX
+        setLoading(true);
 
         // Find variant ID from Shopify product node if available
         let variantId = "";
@@ -60,17 +69,13 @@ export function AddToCartButton({
           },
           1
         );
+
+        // Reset loading state after a brief moment
+        setTimeout(() => setLoading(false), 600);
       }}
-      className={cn(
-        "w-full border border-[var(--hb-ink)] px-6 py-4 uppercase tracking-[0.35em] text-xs",
-        "transition hover:-translate-y-0.5",
-        disabled
-          ? "bg-[var(--hb-paper-muted)] text-[var(--hb-smoke)] cursor-not-allowed"
-          : "bg-[var(--hb-ink)] text-[var(--hb-paper)]"
-      )}
     >
       {disabled ? "Select Size" : `Add to Cart — ${formatCurrency(product.price)}`}
-    </button>
+    </Button>
   );
 }
 

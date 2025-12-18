@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: "/shop", label: "Shop" },
   { href: "/archive", label: "Archive" },
   { href: "/about", label: "About" },
+  { href: "/buttons-demo", label: "Buttons" },
 ];
 
 export function SiteHeader() {
