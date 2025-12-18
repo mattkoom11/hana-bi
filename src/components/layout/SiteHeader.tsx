@@ -13,7 +13,7 @@ const NAV_LINKS = [
   { href: "/archive", label: "Archive" },
   { href: "/about", label: "About" },
   { href: "/hero-demo", label: "Hero" },
-  { href: "/buttons-demo", label: "Buttons" },
+  { href: "/handdrawn-buttons-demo", label: "Hand-Drawn" },
 ];
 
 export function SiteHeader() {

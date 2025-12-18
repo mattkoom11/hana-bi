@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/common/Button";
+import { HandDrawnButton } from "@/components/common/HandDrawnButton";
 import { ScribbleUnderline } from "./ScribbleUnderline";
 import { HandDrawnArrow } from "./HandDrawnArrow";
 import Link from "next/link";
@@ -131,14 +131,14 @@ export function SketchbookHero() {
               </div>
 
               <Link href="/shop">
-                <Button variant="primary" className="w-full sm:w-auto">
+                <HandDrawnButton variant="primary" className="w-full sm:w-auto">
                   Explore Collection
-                </Button>
+                </HandDrawnButton>
               </Link>
               <Link href="/about">
-                <Button variant="ghost" className="w-full sm:w-auto">
+                <HandDrawnButton variant="ghost" className="w-full sm:w-auto">
                   Our Story
-                </Button>
+                </HandDrawnButton>
               </Link>
             </div>
 
