@@ -1,0 +1,5 @@
+{"type":"click","text":"A\n    \n      User Experience & Design\n      Smoother interactions, better mobile layout, animation polish, cart/checkout flow","choice":"ux","id":null,"timestamp":1773692609436}
+{"type":"click","text":"C\n    \n      Backend & Data Layer\n      Cart persistence, Shopify reliability, Stripe webhook handling, error states","choice":"backend","id":null,"timestamp":1773692611377}
+{"type":"click","text":"D\n    \n      New Features\n      Wishlist, search, auth/accounts, newsletter, filtering improvements","choice":"features","id":null,"timestamp":1773692614477}
+{"type":"click","text":"E\n    \n      Code Quality & Maintainability\n      Reduce bundle size, clean up the 6500-line data file, type safety, remove duplication","choice":"code","id":null,"timestamp":1773692615622}
+{"type":"click","text":"B\n    \n      Performance & SEO\n      Faster load times, image optimization, metadata, static generation","choice":"perf","id":null,"timestamp":1773692616694}

@@ -1,0 +1,182 @@
+<h2>Hana-Bi — Prioritized Improvement Roadmap</h2>
+<p class="subtitle">Ordered by impact and pre-launch necessity. Scroll down to see all phases.</p>
+
+<style>
+  .phase { margin-bottom: 2rem; border-left: 3px solid var(--accent, #8b6f47); padding-left: 1.25rem; }
+  .phase-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent, #8b6f47); margin-bottom: 0.4rem; }
+  .phase h3 { margin: 0 0 0.75rem 0; font-size: 1.1rem; }
+  .issue { background: rgba(0,0,0,0.04); border-radius: 6px; padding: 0.6rem 0.85rem; margin-bottom: 0.5rem; display: flex; gap: 0.75rem; align-items: flex-start; }
+  .issue-tag { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 6px; border-radius: 3px; white-space: nowrap; margin-top: 1px; flex-shrink: 0; }
+  .tag-critical { background: #fee2e2; color: #991b1b; }
+  .tag-backend { background: #dbeafe; color: #1e40af; }
+  .tag-perf { background: #d1fae5; color: #065f46; }
+  .tag-ux { background: #ede9fe; color: #5b21b6; }
+  .tag-code { background: #fef3c7; color: #92400e; }
+  .tag-feature { background: #fce7f3; color: #9d174d; }
+  .issue-text { font-size: 0.875rem; line-height: 1.5; }
+  .issue-text strong { display: block; margin-bottom: 0.15rem; }
+  .issue-text span { color: #666; font-size: 0.8rem; }
+  .phase-critical { border-left-color: #dc2626; }
+  .phase-critical .phase-label { color: #dc2626; }
+</style>
+
+<div class="phase phase-critical">
+  <div class="phase-label">Phase 1 — Must Fix Before Launch (Broken)</div>
+  <h3>🔴 Critical Issues</h3>
+
+  <div class="issue">
+    <span class="issue-tag tag-critical">Critical</span>
+    <div class="issue-text">
+      <strong>Checkout is fundamentally broken</strong>
+      <span>The Stripe route always charges a single hardcoded STRIPE_PRICE_ID regardless of what's in the cart. Real cart items, variants, and quantities are completely ignored. Needs dynamic line_items built from the Zustand cart.</span>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-tag tag-critical">Critical</span>
+    <div class="issue-text">
+      <strong>No Stripe webhook handler</strong>
+      <span>Without a /api/webhooks/stripe route, there's no reliable way to confirm payment success. The current success page trusts the URL parameter alone — easily spoofed. Need to verify session_id server-side.</span>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-tag tag-backend">Backend</span>
+    <div class="issue-text">
+      <strong>Cart resets on every page refresh</strong>
+      <span>The Zustand store is in-memory only. Users lose their cart when they reload. Add localStorage persistence via zustand/middleware persist.</span>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-tag tag-backend">Backend</span>
+    <div class="issue-text">
+      <strong>Shopify checkout mutation is unused</strong>
+      <span>createCheckout() in shopify.ts is correctly implemented but never called. The app bypasses Shopify's native checkout entirely and goes straight to Stripe — losing inventory management and order tracking.</span>
+    </div>
+  </div>
+</div>
+
+<div class="phase">
+  <div class="phase-label">Phase 2 — Code Quality & Architecture</div>
+  <h3>🟡 Foundational Cleanup</h3>
+
+  <div class="issue">
+    <span class="issue-tag tag-code">Code</span>
+    <div class="issue-text">
+      <strong>6,500-line products.ts fallback file</strong>
+      <span>This is the single largest file in the project. Split into per-collection JSON files or move to a local SQLite/JSON database. Lazy-load with dynamic import() so it doesn't bloat the initial bundle.</span>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-tag tag-code">Code</span>
+    <div class="issue-text">
+      <strong>Two animation libraries doing overlapping work</strong>
+      <span>Framer Motion and GSAP are both installed. Pick one as the primary — Framer Motion is already the better fit for React component animations. Reserve GSAP only for scroll-based timelines if needed.</span>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-tag tag-code">Code</span>
+    <div class="issue-text">
+      <strong>Environment variable validation</strong>
+      <span>Currently spread across multiple files with console.warn/error. Centralize into a single validated env.ts module that throws clearly on startup if required vars are missing.</span>
+    </div>
+  </div>
+</div>
+
+<div class="phase">
+  <div class="phase-label">Phase 3 — Performance & SEO</div>
+  <h3>🟢 Visibility & Speed</h3>
+
+  <div class="issue">
+    <span class="issue-tag tag-perf">Perf</span>
+    <div class="issue-text">
+      <strong>No metadata / Open Graph config</strong>
+      <span>Product pages and the home page have no title, description, or OG image tags. Add generateMetadata() to each route and a root metadata object in layout.tsx.</span>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-tag tag-perf">Perf</span>
+    <div class="issue-text">
+      <strong>Static generation not leveraged</strong>
+      <span>Product pages use dynamic rendering by default. Add generateStaticParams() to /product/[slug] and /projects/[slug] for static generation with ISR revalidation (already set to 60s in shopify.ts).</span>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-tag tag-perf">Perf</span>
+    <div class="issue-text">
+      <strong>No sitemap or robots.txt</strong>
+      <span>Add app/sitemap.ts and app/robots.ts — both are trivial in Next.js 13+ App Router and meaningfully help SEO for a new store.</span>
+    </div>
+  </div>
+</div>
+
+<div class="phase">
+  <div class="phase-label">Phase 4 — UX Polish</div>
+  <h3>🟣 User Experience</h3>
+
+  <div class="issue">
+    <span class="issue-tag tag-ux">UX</span>
+    <div class="issue-text">
+      <strong>No loading/skeleton states</strong>
+      <span>Product pages and shop grid have no loading.tsx or skeleton components. Add these so the editorial feel isn't broken by layout shift during data fetching.</span>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-tag tag-ux">UX</span>
+    <div class="issue-text">
+      <strong>No error boundaries on shop/product pages</strong>
+      <span>If Shopify is down and fallback data doesn't cover the slug, the user gets a blank/crashed page. Add error.tsx at the route segment level.</span>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-tag tag-ux">UX</span>
+    <div class="issue-text">
+      <strong>Mobile cart / checkout flow untested</strong>
+      <span>The cart drawer and product size selector need audit on small screens. Drawer swipe-to-close, tap target sizes, and sticky CTA button on product pages are common pain points.</span>
+    </div>
+  </div>
+</div>
+
+<div class="phase">
+  <div class="phase-label">Phase 5 — New Features</div>
+  <h3>🩷 Enhancements</h3>
+
+  <div class="issue">
+    <span class="issue-tag tag-feature">Feature</span>
+    <div class="issue-text">
+      <strong>Product search</strong>
+      <span>Shopify Storefront API supports searchProducts. Add a search bar + results page — especially useful once the catalog grows.</span>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-tag tag-feature">Feature</span>
+    <div class="issue-text">
+      <strong>Wishlist / save for later</strong>
+      <span>localStorage-backed wishlist with a heart icon on product cards. Low complexity, high perceived value for a fashion brand.</span>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-tag tag-feature">Feature</span>
+    <div class="issue-text">
+      <strong>Newsletter signup</strong>
+      <span>A minimal email capture (Mailchimp/Resend) in the footer or as a slide-in. Particularly valuable pre-launch for building a drop waitlist.</span>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-tag tag-feature">Feature</span>
+    <div class="issue-text">
+      <strong>Shop filter improvements</strong>
+      <span>Add URL-synced filters (size, price range, collection) so filtered views are shareable and back-navigable.</span>
+    </div>
+  </div>
+</div>

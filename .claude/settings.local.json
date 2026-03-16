@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(npm run:*)",
+      "Bash(grep -n \"statusTone\\\\|gold\\\\|tone\" src/app/projects/[slug]/page.tsx)",
+      "Bash(git diff:*)",
+      "Bash(gh pr:*)"
+    ]
+  }
+}

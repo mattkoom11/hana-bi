@@ -1,0 +1,8 @@
+{"type":"server-started","port":50078,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:50078","screen_dir":"c:/hana-bi/.superpowers/brainstorm/578-1773692536"}
+{"type":"screen-added","file":"c:\\hana-bi\\.superpowers\\brainstorm\\578-1773692536\\priorities.html"}
+{"type":"server-stopped","reason":"owner process exited"}
+{"source":"user-event","type":"click","text":"A\n    \n      User Experience & Design\n      Smoother interactions, better mobile layout, animation polish, cart/checkout flow","choice":"ux","id":null,"timestamp":1773692609436}
+{"source":"user-event","type":"click","text":"C\n    \n      Backend & Data Layer\n      Cart persistence, Shopify reliability, Stripe webhook handling, error states","choice":"backend","id":null,"timestamp":1773692611377}
+{"source":"user-event","type":"click","text":"D\n    \n      New Features\n      Wishlist, search, auth/accounts, newsletter, filtering improvements","choice":"features","id":null,"timestamp":1773692614477}
+{"source":"user-event","type":"click","text":"E\n    \n      Code Quality & Maintainability\n      Reduce bundle size, clean up the 6500-line data file, type safety, remove duplication","choice":"code","id":null,"timestamp":1773692615622}
+{"source":"user-event","type":"click","text":"B\n    \n      Performance & SEO\n      Faster load times, image optimization, metadata, static generation","choice":"perf","id":null,"timestamp":1773692616694}
