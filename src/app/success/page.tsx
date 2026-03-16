@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from "react";
+import { useCartStore } from "@/store/cart";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -8,6 +10,56 @@ import { Suspense } from "react";
 function SuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
+
+  const [verified, setVerified] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (!sessionId) {
+      setVerified(false);
+      return;
+    }
+
+    fetch(`/api/checkout/verify?session_id=${encodeURIComponent(sessionId)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        const isVerified = data.verified === true;
+        setVerified(isVerified);
+        if (isVerified) {
+          // Clear cart after confirmed payment — use getState() inside useEffect
+          useCartStore.getState().clearCart();
+        }
+      })
+      .catch(() => setVerified(false));
+  }, [sessionId]);
+
+  // Loading — waiting for verification
+  if (verified === null) {
+    return (
+      <div className="min-h-screen bg-[var(--hb-paper)] flex items-center justify-center">
+        <p className="text-[var(--hb-smoke)] font-script">Confirming your order...</p>
+      </div>
+    );
+  }
+
+  // Unverified — payment not confirmed
+  if (!verified) {
+    return (
+      <div className="min-h-screen bg-[var(--hb-paper)] text-[var(--hb-ink)] flex items-center justify-center px-4">
+        <div className="max-w-md text-center space-y-6">
+          <h1 className="font-serif text-3xl">Order not found</h1>
+          <p className="text-[var(--hb-smoke)]">
+            We couldn&apos;t verify your order. If you completed a purchase, check your email for confirmation.
+          </p>
+          <Link
+            href="/"
+            className="inline-block px-8 py-4 bg-[var(--hb-ink)] text-[var(--hb-paper)] rounded-2xl font-serif text-lg"
+          >
+            Return Home
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[var(--hb-paper)] text-[var(--hb-ink)] flex items-center justify-center px-4 sm:px-6 lg:px-8">
