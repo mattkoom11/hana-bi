@@ -1,4 +1,5 @@
-'use client';
+// Client-only module: only import this store from client components.
+// localStorage access in persist middleware will throw if imported server-side.
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";

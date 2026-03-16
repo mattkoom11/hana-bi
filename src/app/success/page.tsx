@@ -19,17 +19,37 @@ function SuccessContent() {
       return;
     }
 
-    fetch(`/api/checkout/verify?session_id=${encodeURIComponent(sessionId)}`)
-      .then((res) => res.json())
-      .then((data) => {
-        const isVerified = data.verified === true;
-        setVerified(isVerified);
-        if (isVerified) {
-          // Clear cart after confirmed payment — use getState() inside useEffect
-          useCartStore.getState().clearCart();
-        }
-      })
-      .catch(() => setVerified(false));
+    let attempts = 0;
+    const maxAttempts = 5;
+    const retryDelayMs = 1000;
+
+    const verify = () => {
+      fetch(`/api/checkout/verify?session_id=${encodeURIComponent(sessionId)}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.verified === true) {
+            setVerified(true);
+            useCartStore.getState().clearCart();
+          } else {
+            attempts += 1;
+            if (attempts < maxAttempts) {
+              setTimeout(verify, retryDelayMs);
+            } else {
+              setVerified(false);
+            }
+          }
+        })
+        .catch(() => {
+          attempts += 1;
+          if (attempts < maxAttempts) {
+            setTimeout(verify, retryDelayMs);
+          } else {
+            setVerified(false);
+          }
+        });
+    };
+
+    verify();
   }, [sessionId]);
 
   // Loading — waiting for verification
