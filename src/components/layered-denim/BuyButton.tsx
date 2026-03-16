@@ -5,9 +5,10 @@ import { useState } from "react";
 
 interface BuyButtonProps {
   className?: string;
+  price?: number; // price in dollars, e.g. 198
 }
 
-export function BuyButton({ className }: BuyButtonProps) {
+export function BuyButton({ className, price = 198 }: BuyButtonProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,15 +19,23 @@ export function BuyButton({ className }: BuyButtonProps) {
     try {
       const response = await fetch("/api/checkout", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: [
+            {
+              name: "Layered Denim",
+              price: Math.round(price * 100), // convert dollars to cents
+              quantity: 1,
+            },
+          ],
+          cancelUrl: `${window.location.origin}/layered-denim`,
+        }),
       });
 
       let data;
       try {
         data = await response.json();
-      } catch (jsonError) {
+      } catch {
         throw new Error("Invalid response from server");
       }
 
@@ -38,7 +47,6 @@ export function BuyButton({ className }: BuyButtonProps) {
         throw new Error("No checkout URL received");
       }
 
-      // Redirect to Stripe Checkout
       window.location.href = data.url;
     } catch (err) {
       console.error("Checkout error:", err);
@@ -62,7 +70,7 @@ export function BuyButton({ className }: BuyButtonProps) {
       >
         {loading ? "Processing..." : "Buy Layered Denim"}
       </motion.button>
-      
+
       {error && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -81,4 +89,3 @@ export function BuyButton({ className }: BuyButtonProps) {
     </div>
   );
 }
-
