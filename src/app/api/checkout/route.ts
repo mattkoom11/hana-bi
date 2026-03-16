@@ -51,13 +51,13 @@ export async function POST(request: NextRequest) {
   }
 
   for (const item of body.items) {
-    if (!item.name || typeof item.name !== "string") {
+    if (!item.name || typeof item.name !== "string" || item.name.length > 500) {
       return NextResponse.json({ error: "Invalid item name" }, { status: 400 });
     }
     if (typeof item.price !== "number" || item.price <= 0) {
       return NextResponse.json({ error: "Invalid item price" }, { status: 400 });
     }
-    if (typeof item.quantity !== "number" || item.quantity < 1) {
+    if (typeof item.quantity !== "number" || !Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > 1000) {
       return NextResponse.json({ error: "Invalid item quantity" }, { status: 400 });
     }
   }
@@ -65,7 +65,12 @@ export async function POST(request: NextRequest) {
   try {
     const stripe = getStripe();
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-    const cancelUrl = body.cancelUrl ?? `${siteUrl}/cart`;
+    // Validate cancelUrl is internal to prevent open redirect via Stripe cancel
+    const rawCancelUrl = body.cancelUrl;
+    const cancelUrl =
+      rawCancelUrl && rawCancelUrl.startsWith(siteUrl)
+        ? rawCancelUrl
+        : `${siteUrl}/cart`;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -76,6 +81,8 @@ export async function POST(request: NextRequest) {
             name: item.name,
             ...(item.image ? { images: [item.image] } : {}),
           },
+          // TODO: Before launch, validate price server-side against Shopify product prices.
+          // Client-supplied prices are a security risk in production.
           unit_amount: Math.round(item.price), // price is already in cents
         },
         quantity: item.quantity,
