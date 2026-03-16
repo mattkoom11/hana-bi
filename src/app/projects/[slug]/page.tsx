@@ -29,9 +29,9 @@ const STATUS_LABELS: Record<ProjectStatus, string> = {
   planning: "Planning",
 };
 
-const STATUS_TONES: Record<ProjectStatus, "sienna" | "smoke" | "gold"> = {
+const STATUS_TONES: Record<ProjectStatus, "sienna" | "smoke" | "ink"> = {
   completed: "sienna",
-  in_progress: "gold",
+  in_progress: "ink",
   on_hold: "smoke",
   planning: "smoke",
 };
