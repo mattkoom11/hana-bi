@@ -1,6 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
+export interface CheckoutLineItem {
+  name: string;
+  price: number; // in cents (e.g. 19800 = $198.00)
+  quantity: number;
+  image?: string;
+}
+
+export interface CheckoutRequestBody {
+  items: CheckoutLineItem[];
+  cancelUrl?: string;
+}
+
 function getStripe() {
   const secretKey = process.env.STRIPE_SECRET_KEY;
   if (!secretKey) {
@@ -13,56 +25,69 @@ function getStripe() {
 }
 
 export async function POST(request: NextRequest) {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    return NextResponse.json(
+      { error: "Server configuration error" },
+      { status: 500 }
+    );
+  }
+
+  if (!process.env.NEXT_PUBLIC_SITE_URL) {
+    return NextResponse.json(
+      { error: "Server configuration error" },
+      { status: 500 }
+    );
+  }
+
+  let body: CheckoutRequestBody;
   try {
-    // Validate environment variables
-    if (!process.env.STRIPE_SECRET_KEY) {
-      console.error("STRIPE_SECRET_KEY is not set");
-      return NextResponse.json(
-        { error: "Server configuration error" },
-        { status: 500 }
-      );
-    }
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
 
-    if (!process.env.STRIPE_PRICE_ID) {
-      console.error("STRIPE_PRICE_ID is not set");
-      return NextResponse.json(
-        { error: "Server configuration error" },
-        { status: 500 }
-      );
-    }
+  if (!body.items || body.items.length === 0) {
+    return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
+  }
 
-    if (!process.env.NEXT_PUBLIC_SITE_URL) {
-      console.error("NEXT_PUBLIC_SITE_URL is not set");
-      return NextResponse.json(
-        { error: "Server configuration error" },
-        { status: 500 }
-      );
+  for (const item of body.items) {
+    if (!item.name || typeof item.name !== "string") {
+      return NextResponse.json({ error: "Invalid item name" }, { status: 400 });
     }
+    if (typeof item.price !== "number" || item.price <= 0) {
+      return NextResponse.json({ error: "Invalid item price" }, { status: 400 });
+    }
+    if (typeof item.quantity !== "number" || item.quantity < 1) {
+      return NextResponse.json({ error: "Invalid item quantity" }, { status: 400 });
+    }
+  }
 
-    // Initialize Stripe client
+  try {
     const stripe = getStripe();
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+    const cancelUrl = body.cancelUrl ?? `${siteUrl}/cart`;
 
-    // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
-      line_items: [
-        {
-          price: process.env.STRIPE_PRICE_ID,
-          quantity: 1,
+      line_items: body.items.map((item) => ({
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: item.name,
+            ...(item.image ? { images: [item.image] } : {}),
+          },
+          unit_amount: Math.round(item.price), // price is already in cents
         },
-      ],
+        quantity: item.quantity,
+      })),
       mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/layered-denim`,
-      metadata: {
-        product: "Layered Denim",
-      },
+      success_url: `${siteUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: cancelUrl,
     });
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
     console.error("Stripe checkout error:", error);
-    
     return NextResponse.json(
       {
         error:
@@ -74,4 +99,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
