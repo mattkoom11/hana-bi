@@ -15,25 +15,22 @@ interface CartDrawerProps {
 }
 
 async function handleCheckout(items: CartItem[], onClose: () => void) {
-  // Filter out items without variantId (fallback data)
-  const validItems = items.filter((item) => item.variantId);
-
-  if (validItems.length === 0) {
-    alert(
-      "Cannot checkout: items are missing variant IDs. This may happen if products were added from fallback data."
-    );
+  if (items.length === 0) {
     return;
   }
 
   try {
-    const response = await fetch("/api/shopify/checkout", {
+    const response = await fetch("/api/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        lineItems: validItems.map((item) => ({
-          variantId: item.variantId,
+        items: items.map((item) => ({
+          name: `${item.name} — Size ${item.size}`,
+          price: Math.round(item.price * 100), // convert dollars to cents
           quantity: item.quantity,
+          ...(item.image ? { image: item.image } : {}),
         })),
+        cancelUrl: `${window.location.origin}/cart`,
       }),
     });
 
@@ -42,9 +39,9 @@ async function handleCheckout(items: CartItem[], onClose: () => void) {
       throw new Error(error.error || "Failed to create checkout");
     }
 
-    const { checkoutUrl } = await response.json();
-    onClose(); // Close drawer before redirect
-    window.location.href = checkoutUrl;
+    const { url } = await response.json();
+    onClose();
+    window.location.href = url;
   } catch (error) {
     console.error("Checkout error:", error);
     alert(
