@@ -11,10 +11,7 @@ export default async function ShopPage() {
     const shopifyData = await getAllProducts();
     shopifyProducts = shopifyData.map(mapShopifyProductToHanaBiProduct);
   } catch (error) {
-    console.warn(
-      "Failed to fetch products from Shopify, using fallback data:",
-      error
-    );
+    console.warn("Failed to fetch from Shopify, using fallback data:", error);
   }
 
   return (
@@ -23,12 +20,7 @@ export default async function ShopPage() {
         variant="dark"
         eyebrow="Shop"
         title="Limited garments, ready to study."
-        intro={
-          <>
-            Non-archived pieces live here first. Adjust filters to find specific
-            silhouettes or sizes.
-          </>
-        }
+        intro={<>Filter by size, category, or availability.</>}
       >
         <ShopContent products={shopifyProducts} variant="dark" />
       </PageShell>
