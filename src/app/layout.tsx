@@ -43,7 +43,7 @@ export default function RootLayout({
       <body
         className={`${hanabiSerif.variable} ${hanabiSans.variable} ${hanabiScript.variable} antialiased min-h-screen`}
       >
-        <div className="flex min-h-screen flex-col bg-[var(--hb-paper)] text-[var(--hb-ink)]">
+        <div className="flex min-h-screen flex-col">
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <SiteFooter />

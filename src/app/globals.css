@@ -17,6 +17,11 @@
   --hb-border: #d4ccc0;
   --hb-tag: #ede8e0;
   --hb-accent: #7a6a5a;
+  --hb-dark:         #0e0c0b;
+  --hb-dark-surface: #171310;
+  --hb-dark-border:  rgba(250, 248, 244, 0.08);
+  --hb-dark-muted:   rgba(250, 248, 244, 0.45);
+  --hb-dark-kanji:   rgba(250, 248, 244, 0.07);
 
   /* Handwritten font variable */
   --font-hanabi-script: var(--font-hanabi-script);
@@ -123,22 +128,8 @@
 }
 
 body {
-  background-color: var(--hb-paper);
-  color: var(--hb-ink);
   font-family: var(--font-hanabi-sans), "Helvetica Neue", Arial, sans-serif;
   letter-spacing: 0.01em;
-  /* Enhanced paper grain texture with layered depth */
-  background-image: 
-    /* Vignette effect */
-    radial-gradient(ellipse at center, transparent 0%, rgba(26, 26, 26, 0.008) 100%),
-    /* Subtle gradient overlay */
-    linear-gradient(to bottom, rgba(250, 248, 244, 0.5) 0%, rgba(245, 242, 237, 0.3) 100%),
-    /* Paper grain texture */
-    url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"),
-    /* Canvas texture */
-    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(26, 26, 26, 0.015) 2px, rgba(26, 26, 26, 0.015) 4px);
-  background-size: 100% 100%, 100% 100%, 200px 200px, 100% 100%;
-  background-attachment: fixed;
 }
 
 ::selection {
