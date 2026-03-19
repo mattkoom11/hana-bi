@@ -1,0 +1,130 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300;1,400&family=DM+Mono:wght@300&display=swap" rel="stylesheet">
+
+<h2>Accent color</h2>
+<p class="subtitle">Each shown with Cormorant + DM Mono on the dark grain foundation</p>
+
+<style>
+  .accent-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1.5rem; }
+  .accent-card { border: 1.5px solid #ddd; border-radius: 6px; overflow: hidden; cursor: pointer; transition: all 0.2s; }
+  .accent-card:hover { border-color: #888; transform: translateY(-2px); }
+  .accent-card.selected { border-width: 2.5px; }
+
+  .ap {
+    background: #0a0906;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.25rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .ap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .ap .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    position: relative; z-index: 1;
+  }
+  .ap .headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    line-height: 1;
+    color: #f5f2ed;
+    font-weight: 300;
+    font-style: italic;
+    position: relative; z-index: 1;
+    letter-spacing: -0.01em;
+  }
+  .ap .cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    margin-top: 0.75rem;
+    position: relative; z-index: 1;
+    display: inline-block;
+    padding-bottom: 2px;
+    border-bottom: 1px solid;
+  }
+  .ap .rule {
+    width: 32px;
+    height: 1px;
+    margin-top: 0.5rem;
+    position: relative; z-index: 1;
+  }
+
+  .ab { padding: 0.75rem 1rem 1rem; background: white; }
+  .ab h3 { margin: 0 0 0.2rem; font-size: 0.85rem; font-weight: 600; }
+  .ab p { margin: 0; font-size: 0.72rem; color: #666; }
+  .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+</style>
+
+<!-- A: Muted Sienna (existing) -->
+<div class="accent-grid">
+  <div class="accent-card" data-choice="a" onclick="toggleSelect(this)" style="--ac:#7a6050">
+    <div class="ap">
+      <div class="eyebrow" style="color:#7a6050">HB-001 / Archive</div>
+      <div class="headline">Indigo<br>Serenade.</div>
+      <div class="rule" style="background:#7a6050"></div>
+      <div class="cta" style="color:#7a6050;border-color:#7a6050">View piece →</div>
+    </div>
+    <div class="ab">
+      <h3><span class="swatch" style="background:#7a6050"></span>A — Muted Sienna</h3>
+      <p>Familiar from the last overhaul. Warm, earthy, quiet.</p>
+    </div>
+  </div>
+
+  <!-- B: Rust/Terracotta -->
+  <div class="accent-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="ap">
+      <div class="eyebrow" style="color:#c45a2a">HB-001 / Archive</div>
+      <div class="headline">Indigo<br>Serenade.</div>
+      <div class="rule" style="background:#c45a2a"></div>
+      <div class="cta" style="color:#c45a2a;border-color:#c45a2a">View piece →</div>
+    </div>
+    <div class="ab">
+      <h3><span class="swatch" style="background:#c45a2a"></span>B — Rust / Terracotta</h3>
+      <p>Punchy, fashion-forward. Commands attention against dark.</p>
+    </div>
+  </div>
+
+  <!-- C: Raw Brass -->
+  <div class="accent-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="ap">
+      <div class="eyebrow" style="color:#b8963e">HB-001 / Archive</div>
+      <div class="headline">Indigo<br>Serenade.</div>
+      <div class="rule" style="background:#b8963e"></div>
+      <div class="cta" style="color:#b8963e;border-color:#b8963e">View piece →</div>
+    </div>
+    <div class="ab">
+      <h3><span class="swatch" style="background:#b8963e"></span>C — Raw Brass</h3>
+      <p>Luxury atelier. Warm gold that feels aged, not flashy.</p>
+    </div>
+  </div>
+
+  <!-- D: Chalk White -->
+  <div class="accent-card" data-choice="d" onclick="toggleSelect(this)">
+    <div class="ap">
+      <div class="eyebrow" style="color:rgba(245,242,237,0.5)">HB-001 / Archive</div>
+      <div class="headline">Indigo<br>Serenade.</div>
+      <div class="rule" style="background:rgba(245,242,237,0.4)"></div>
+      <div class="cta" style="color:rgba(245,242,237,0.6);border-color:rgba(245,242,237,0.3)">View piece →</div>
+    </div>
+    <div class="ab">
+      <h3><span class="swatch" style="background:#d0ccc5;border:1px solid #ddd"></span>D — Chalk / No accent</h3>
+      <p>Let typography carry it. Monochromatic, pure atelier restraint.</p>
+    </div>
+  </div>
+</div>
+
+<p style="margin-top:1.25rem;font-size:0.8rem;color:#666;">Click to select or mix in terminal.</p>

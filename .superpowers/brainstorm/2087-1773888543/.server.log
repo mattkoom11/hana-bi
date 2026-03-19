@@ -1,0 +1,3 @@
+{"type":"server-started","port":58295,"host":"0.0.0.0","url_host":"localhost","url":"http://localhost:58295","screen_dir":"c:/hana-bi/.superpowers/brainstorm/2087-1773888543"}
+{"type":"screen-added","file":"c:\\hana-bi\\.superpowers\\brainstorm\\2087-1773888543\\typography.html"}
+{"type":"server-stopped","reason":"owner process exited"}

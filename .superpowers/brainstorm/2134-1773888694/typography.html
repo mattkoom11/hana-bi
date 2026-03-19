@@ -1,0 +1,143 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300;1,9..144,700&family=DM+Sans:wght@300;400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+
+<h2>Typography direction</h2>
+<p class="subtitle">All three on the same dark textured base — pick the type system for the B+C hybrid</p>
+
+<style>
+  .type-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 1.5rem; }
+  .type-card { border: 1.5px solid #ddd; border-radius: 6px; overflow: hidden; cursor: pointer; transition: all 0.2s; }
+  .type-card:hover { border-color: #888; transform: translateY(-2px); }
+  .type-card.selected { border-color: #2a2a2a; border-width: 2px; }
+
+  .type-preview {
+    background: #0a0906;
+    padding: 1.5rem;
+    height: 210px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    overflow: hidden;
+  }
+  .type-preview::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .type-body { padding: 1rem 1.25rem 1.25rem; background: white; }
+  .type-body h3 { margin: 0 0 0.25rem; font-size: 0.9rem; font-weight: 600; }
+  .type-body p { margin: 0; font-size: 0.75rem; color: #666; line-height: 1.45; }
+
+  .cat-num {
+    font-size: 0.55rem;
+    letter-spacing: 0.55em;
+    text-transform: uppercase;
+    color: #7a6050;
+    margin-bottom: 0.6rem;
+    position: relative; z-index: 1;
+  }
+
+  /* A: Cormorant + DM Mono */
+  .opt-a .headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.6rem;
+    line-height: 1;
+    color: #f5f2ed;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    font-style: italic;
+    position: relative; z-index: 1;
+  }
+  .opt-a .detail {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    color: rgba(245,242,237,0.35);
+    letter-spacing: 0.15em;
+    margin-top: 0.6rem;
+    position: relative; z-index: 1;
+  }
+
+  /* B: Fraunces + DM Sans */
+  .opt-b .headline {
+    font-family: 'Fraunces', serif;
+    font-size: 2.4rem;
+    line-height: 1.0;
+    color: #f5f2ed;
+    font-weight: 700;
+    font-style: italic;
+    position: relative; z-index: 1;
+  }
+  .opt-b .detail {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.6rem;
+    color: rgba(245,242,237,0.35);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-top: 0.6rem;
+    position: relative; z-index: 1;
+    font-weight: 300;
+  }
+
+  /* C: EB Garamond + Syne */
+  .opt-c .headline {
+    font-family: 'EB Garamond', serif;
+    font-size: 2.5rem;
+    line-height: 1.0;
+    color: #f5f2ed;
+    font-weight: 400;
+    position: relative; z-index: 1;
+  }
+  .opt-c .detail {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.58rem;
+    color: rgba(245,242,237,0.35);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-top: 0.6rem;
+    font-weight: 800;
+    position: relative; z-index: 1;
+  }
+</style>
+
+<div class="type-cards">
+  <div class="type-card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="type-preview opt-a">
+      <div class="cat-num">HB-001 / Indigo Serenade</div>
+      <div class="opt-a headline">Archival<br>garments.</div>
+      <div class="opt-a detail">RAW SELVEDGE DENIM — JAPAN 2025</div>
+    </div>
+    <div class="type-body">
+      <h3>A — Cormorant + DM Mono</h3>
+      <p>Whisper-thin italic serif + monospace utility. Maximum elegance with technical precision — museum catalog feel.</p>
+    </div>
+  </div>
+
+  <div class="type-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="type-preview opt-b">
+      <div class="cat-num">HB-001 / Indigo Serenade</div>
+      <div class="opt-b headline">Archival<br>garments.</div>
+      <div class="opt-b detail">RAW SELVEDGE DENIM — JAPAN 2025</div>
+    </div>
+    <div class="type-body">
+      <h3>B — Fraunces + DM Sans</h3>
+      <p>Optically quirky bold italic serif + clean light sans. Unusual for fashion, very distinctive and memorable.</p>
+    </div>
+  </div>
+
+  <div class="type-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="type-preview opt-c">
+      <div class="cat-num">HB-001 / Indigo Serenade</div>
+      <div class="opt-c headline">Archival<br>garments.</div>
+      <div class="opt-c detail">RAW SELVEDGE DENIM — JAPAN 2025</div>
+    </div>
+    <div class="type-body">
+      <h3>C — EB Garamond + Syne</h3>
+      <p>Classical Garamond warmth + Syne's geometric ultra-bold labels. Strong contrast, editorial yet structured.</p>
+    </div>
+  </div>
+</div>
+
+<p style="margin-top:1.25rem;font-size:0.8rem;color:#666;">Click to select. Fonts load from Google Fonts — allow a moment.</p>

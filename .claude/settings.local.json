@@ -7,7 +7,12 @@
       "Bash(npm run:*)",
       "Bash(grep -n \"statusTone\\\\|gold\\\\|tone\" src/app/projects/[slug]/page.tsx)",
       "Bash(git diff:*)",
-      "Bash(gh pr:*)"
+      "Bash(gh pr:*)",
+      "Bash(xargs grep:*)",
+      "Bash(grep -v \"//\")",
+      "Bash(npx eslint:*)",
+      "Bash(grep -n \"ProductCard\" src/app/product/[slug]/page.tsx -A 2 -B 2)",
+      "Bash(find C:/hana-bi/.worktrees/visual-overhaul/src -name SiteHeader* -o -name SiteFooter* -o -name CartDrawer* -o -name PageShell*)"
     ]
   }
 }

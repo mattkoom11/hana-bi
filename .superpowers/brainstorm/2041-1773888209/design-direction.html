@@ -1,0 +1,177 @@
+<h2>Redo — Which aesthetic direction?</h2>
+<p class="subtitle">The previous overhaul followed a spec closely. frontend-design will be more expressive. Which direction should it push toward?</p>
+
+<style>
+  .dir-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1.5rem; }
+
+  .dir-card { border: 1.5px solid #ddd; border-radius: 6px; overflow: hidden; cursor: pointer; transition: all 0.2s; }
+  .dir-card:hover { border-color: #888; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+  .dir-card.selected { border-color: #2a2a2a; border-width: 2px; box-shadow: 0 0 0 2px rgba(0,0,0,0.15); }
+
+  .preview { height: 220px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.25rem; }
+  .body { padding: 1rem 1.25rem 1.25rem; background: white; }
+  .body h3 { margin: 0 0 0.35rem; font-size: 0.95rem; font-weight: 600; }
+  .body p { margin: 0; font-size: 0.78rem; color: #666; line-height: 1.45; }
+  .tag { display: inline-block; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.2rem 0.5rem; border: 1px solid; margin-top: 0.6rem; }
+
+  /* A — Extreme Typography / Brutalist Editorial */
+  .prev-a {
+    background: #f0ece4;
+    font-family: 'Georgia', serif;
+  }
+  .prev-a .headline {
+    font-size: 3.8rem;
+    line-height: 0.88;
+    font-weight: 900;
+    color: #111;
+    letter-spacing: -0.04em;
+    font-style: italic;
+  }
+  .prev-a .accent-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: repeating-linear-gradient(90deg, #111 0px, #111 12px, #f0ece4 12px, #f0ece4 18px);
+  }
+  .prev-a .sub {
+    font-size: 0.55rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 0.5rem;
+  }
+
+  /* B — Refined Dark / Luxury Atelier */
+  .prev-b {
+    background: #0a0906;
+    font-family: 'Georgia', serif;
+  }
+  .prev-b .noise {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    opacity: 0.4;
+  }
+  .prev-b .inner { position: relative; z-index: 1; }
+  .prev-b .eyebrow {
+    font-size: 0.5rem;
+    letter-spacing: 0.6em;
+    text-transform: uppercase;
+    color: #9a7a5a;
+    margin-bottom: 0.75rem;
+    font-family: sans-serif;
+  }
+  .prev-b .headline {
+    font-size: 2.2rem;
+    line-height: 1.05;
+    color: #f5f2ed;
+    letter-spacing: -0.01em;
+  }
+  .prev-b .rule {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, #9a7a5a, transparent);
+    margin-top: 1rem;
+  }
+  .prev-b .kanji {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    font-size: 5rem;
+    color: rgba(255,255,255,0.04);
+    font-family: serif;
+    line-height: 1;
+  }
+
+  /* C — Contemporary / Color-Forward */
+  .prev-c {
+    background: #e8e2d9;
+    font-family: sans-serif;
+  }
+  .prev-c .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .prev-c .inner { position: relative; z-index: 1; }
+  .prev-c .num {
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.5px #111;
+    letter-spacing: -0.04em;
+  }
+  .prev-c .headline {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #111;
+    letter-spacing: 0.01em;
+    margin-top: -0.5rem;
+  }
+  .prev-c .pill {
+    display: inline-block;
+    background: #c8522a;
+    color: white;
+    font-size: 0.55rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    margin-top: 0.75rem;
+  }
+</style>
+
+<div class="dir-grid">
+  <!-- A -->
+  <div class="dir-card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="preview prev-a">
+      <div class="prev-a accent-bar"></div>
+      <div class="prev-a sub">Hana-Bi / SS 2025</div>
+      <div class="prev-a headline">Denim<br>Archive.</div>
+    </div>
+    <div class="body">
+      <h3>A — Brutalist Editorial</h3>
+      <p>Extreme typography scale, high contrast, raw grid. Feels like a fashion zine — loud and intentional. Light palette, oversized serif, repetition as texture.</p>
+      <span class="tag" style="border-color:#111;color:#111;">Bold · High contrast · Print-inspired</span>
+    </div>
+  </div>
+
+  <!-- B -->
+  <div class="dir-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="preview prev-b">
+      <div class="prev-b noise"></div>
+      <div class="prev-b kanji">花火</div>
+      <div class="prev-b inner">
+        <div class="prev-b eyebrow">Hana-Bi Atelier</div>
+        <div class="prev-b headline">The Archive,<br>refined.</div>
+        <div class="prev-b rule"></div>
+      </div>
+    </div>
+    <div class="body">
+      <h3>B — Luxury Dark Atelier</h3>
+      <p>Elevate the existing dark direction. Add grain texture, tighter editorial spacing, better motion. Feels like a high-end Japanese atelier — whisper, don't shout.</p>
+      <span class="tag" style="border-color:#9a7a5a;color:#9a7a5a;">Refined · Textured · Understated</span>
+    </div>
+  </div>
+
+  <!-- C -->
+  <div class="dir-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="preview prev-c">
+      <div class="prev-c grid-bg"></div>
+      <div class="prev-c inner">
+        <div class="prev-c num">01</div>
+        <div class="prev-c headline">Archival<br>Garments.</div>
+        <div class="prev-c pill">Current Drop →</div>
+      </div>
+    </div>
+    <div class="body">
+      <h3>C — Contemporary System</h3>
+      <p>Grid-forward, structured, modern. Think contemporary art gallery or technical journal. Warm neutrals with a single punchy accent. More architectural, less handmade.</p>
+      <span class="tag" style="border-color:#c8522a;color:#c8522a;">Modern · Structured · Graphic</span>
+    </div>
+  </div>
+</div>
+
+<p style="margin-top:1.5rem;font-size:0.82rem;color:#666;">Click a card to select. You can also mix directions — tell me in the terminal.</p>

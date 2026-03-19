@@ -1,0 +1,87 @@
+<h2>Visual Overhaul — Which Direction Resonates?</h2>
+<p class="subtitle">I see three distinct design languages across your 8 inspirations. Which one feels right for Hana-Bi?</p>
+
+<style>
+  .dir-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 1.5rem; }
+  .dir-card { border: 1.5px solid #ddd; border-radius: 8px; overflow: hidden; cursor: pointer; transition: all 0.2s; }
+  .dir-card:hover { border-color: #8b6f47; transform: translateY(-2px); }
+  .dir-card.selected { border-color: #8b6f47; border-width: 2px; box-shadow: 0 0 0 2px rgba(139,111,71,0.2); }
+  .dir-preview { height: 200px; position: relative; display: flex; flex-direction: column; justify-content: flex-end; padding: 1rem; font-family: serif; overflow: hidden; }
+  .dir-body { padding: 1rem; background: white; }
+  .dir-body h3 { margin: 0 0 0.3rem 0; font-size: 1rem; }
+  .dir-body p { margin: 0; font-size: 0.8rem; color: #666; line-height: 1.4; }
+  .sources { font-size: 0.7rem; color: #999; margin-top: 0.5rem; font-style: italic; }
+
+  /* Direction A preview — Bold Editorial Light */
+  .preview-a { background: #faf8f4; }
+  .preview-a .big-type { font-size: 2.8rem; line-height: 1; color: #1a1a1a; letter-spacing: -0.02em; font-weight: 700; }
+  .preview-a .small-type { font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase; color: #9a7a5a; margin-bottom: 0.5rem; }
+  .preview-a .strip { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #c4a876, #9a7a5a, transparent); }
+
+  /* Direction B preview — Dark Cinematic */
+  .preview-b { background: #111; }
+  .preview-b .big-type { font-size: 2.2rem; line-height: 1.1; color: #faf8f4; letter-spacing: 0.04em; }
+  .preview-b .corner-text { position: absolute; top: 1rem; right: 1rem; font-size: 0.55rem; letter-spacing: 0.35em; text-transform: uppercase; color: rgba(250,248,244,0.4); }
+  .preview-b .img-overlay { position: absolute; inset: 0; background: linear-gradient(160deg, rgba(20,10,5,0.3) 0%, rgba(0,0,0,0.7) 100%); }
+  .preview-b .img-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #2a1a10 0%, #111 60%); }
+
+  /* Direction C preview — Japanese Editorial Hybrid */
+  .preview-c { background: #faf8f4; }
+  .preview-c .asymmetric { display: grid; grid-template-columns: 1fr 2fr; height: 100%; }
+  .preview-c .left-panel { background: #1a1a1a; display: flex; flex-direction: column; justify-content: flex-end; padding: 0.75rem; }
+  .preview-c .left-panel span { writing-mode: vertical-rl; font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: #faf8f4; opacity: 0.7; }
+  .preview-c .right-panel { background: linear-gradient(135deg, #ede8e0 0%, #d4ccc0 100%); position: relative; }
+  .preview-c .right-label { position: absolute; bottom: 0.75rem; left: 0.75rem; font-size: 1.8rem; font-family: serif; color: #1a1a1a; line-height: 1; }
+  .preview-c .right-note { position: absolute; top: 0.75rem; right: 0.75rem; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: #6b6660; opacity: 0.8; }
+</style>
+
+<div class="dir-cards">
+  <!-- Direction A -->
+  <div class="dir-card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="dir-preview preview-a">
+      <div class="preview-a strip"></div>
+      <div class="preview-a small-type">Hana-Bi — Editions of Denim</div>
+      <div class="preview-a big-type">Archival<br>garments.</div>
+    </div>
+    <div class="dir-body">
+      <h3>A — Bold Editorial Light</h3>
+      <p>Keep the warm cream palette but push typography 3–4x bigger. Oversized headlines, strong contrast, gradient accent strips. Clean and modern but still editorial.</p>
+      <div class="sources">Inspired by: nippori.lamm.tokyo, beatfic.jp</div>
+    </div>
+  </div>
+
+  <!-- Direction B -->
+  <div class="dir-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="dir-preview preview-b">
+      <div class="preview-b img-bg"></div>
+      <div class="preview-b img-overlay"></div>
+      <div class="preview-b corner-text">2024 — Archive</div>
+      <div class="preview-b big-type" style="position:relative;z-index:1">花火</div>
+    </div>
+    <div class="dir-body">
+      <h3>B — Dark Cinematic</h3>
+      <p>Shift to dark/black sections. Full-bleed photography at full opacity, high contrast. Documentary-film feel with Japanese calligraphy placed dramatically.</p>
+      <div class="sources">Inspired by: evangelion.jp, claygarden.jp, milez.jp</div>
+    </div>
+  </div>
+
+  <!-- Direction C -->
+  <div class="dir-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="dir-preview preview-c" style="padding:0">
+      <div class="preview-c asymmetric">
+        <div class="preview-c left-panel"><span>Sustainable Denim Studio</span></div>
+        <div class="preview-c right-panel">
+          <div class="preview-c right-label">Hana-Bi</div>
+          <div class="preview-c right-note">Current Drop</div>
+        </div>
+      </div>
+    </div>
+    <div class="dir-body">
+      <h3>C — Japanese Editorial Hybrid</h3>
+      <p>Keep the handmade identity but bolder. Asymmetric grids, split panels, full-bleed photography sections. Warm palette stays, but layout becomes more architectural.</p>
+      <div class="sources">Inspired by: suuhaastudio.com, recruit-yamaguchi-kogyo.jp, daimaru-matsuzakaya.com</div>
+    </div>
+  </div>
+</div>
+
+<p style="margin-top:1.5rem; font-size:0.85rem; color:#666;">You can also mix elements — e.g., "mostly A but with dark sections from B". Click to select, then tell me in the terminal.</p>
