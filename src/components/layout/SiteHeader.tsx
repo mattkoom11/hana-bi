@@ -2,6 +2,7 @@
 
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { InkUnderline } from "@/components/common/InkUnderline";
+import { useHeaderTheme } from "@/hooks/useHeaderTheme";
 import { useCartCount } from "@/store/cart";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -19,45 +20,64 @@ export function SiteHeader() {
   const pathname = usePathname();
   const cartCount = useCartCount();
   const [open, setOpen] = useState(false);
+  const theme = useHeaderTheme();
+  const isDark = theme === "dark";
 
   return (
     <>
       <header className="px-4 sm:px-8 md:px-12 lg:px-20 py-10 flex flex-col gap-8 relative">
-        {/* Hand-drawn bottom border */}
-        <div className="absolute bottom-0 left-0 right-0 flex justify-center">
-          <div className="w-full max-w-6xl mx-auto">
-            <div className="h-px bg-gradient-to-r from-transparent via-[var(--hb-border)] to-transparent opacity-30" />
+        {/* Bottom border — light pages only, nothing on dark */}
+        {!isDark && (
+          <div className="absolute bottom-0 left-0 right-0 flex justify-center">
+            <div className="w-full max-w-6xl mx-auto">
+              <div className="h-px bg-gradient-to-r from-transparent via-[var(--hb-border)] to-transparent opacity-30" />
+            </div>
           </div>
-        </div>
-        
+        )}
+
         <div className="flex items-center justify-between">
-          <Link 
-            href="/" 
-            className="font-serif text-3xl tracking-[0.08em] hover-wispy relative group"
-            style={{
-              textShadow: "0 0 1px rgba(26, 26, 26, 0.1)",
-            }}
+          <Link
+            href="/"
+            className={`font-serif text-3xl tracking-[0.08em] hover-wispy relative group transition-colors ${
+              isDark ? "text-[#faf8f4]" : "text-[var(--hb-ink)]"
+            }`}
           >
             Hana-Bi
-            {/* Subtle hand-drawn underline on hover */}
             <span className="absolute -bottom-1 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
               <InkUnderline width={120} variant="delicate" strokeOpacity={0.3} />
             </span>
           </Link>
+
           <button
             onClick={() => setOpen(true)}
-            className="relative text-xs uppercase tracking-[0.4em] border border-[var(--hb-border)] px-6 py-3 hover-wispy opacity-70 hover:opacity-100 transition-all duration-300 btn-sketch"
-            style={{ borderStyle: "dashed", borderWidth: "1px" }}
+            className={`relative text-xs uppercase tracking-[0.4em] border px-6 py-3 hover-wispy opacity-70 hover:opacity-100 transition-all duration-300 ${
+              isDark
+                ? "bg-[var(--hb-dark-surface)] text-[#faf8f4] border-[var(--hb-dark-border)] hover:border-[var(--hb-sienna)]"
+                : "border-dashed border-[var(--hb-border)] text-[var(--hb-ink)] btn-sketch"
+            }`}
           >
             Cart
             {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-[var(--hb-ink)] text-[var(--hb-paper)] w-5 h-5 text-[0.65rem] rounded-full flex items-center justify-center font-script">
+              <span
+                className={`absolute -top-2 -right-2 w-5 h-5 text-[0.65rem] rounded-full flex items-center justify-center font-script ${
+                  isDark
+                    ? "bg-[var(--hb-sienna)] text-[#faf8f4]"
+                    : "bg-[var(--hb-ink)] text-[var(--hb-paper)]"
+                }`}
+              >
                 {cartCount}
               </span>
             )}
           </button>
         </div>
-        <nav className="flex flex-wrap gap-8 text-xs uppercase tracking-[0.4em] text-[var(--hb-smoke)]">
+
+        <nav
+          className={`flex flex-wrap gap-8 text-xs uppercase tracking-[0.4em] ${
+            isDark
+              ? "text-[var(--hb-dark-muted)]"
+              : "text-[var(--hb-smoke)]"
+          }`}
+        >
           {NAV_LINKS.map((link) => {
             const isActive =
               link.href === "/"
@@ -69,14 +89,18 @@ export function SiteHeader() {
                 href={link.href}
                 className={`pb-2 relative hover-wispy transition-all duration-300 ${
                   isActive
-                    ? "text-[var(--hb-ink)]"
-                    : "text-[var(--hb-smoke)] hover:text-[var(--hb-ink-light)]"
+                    ? isDark
+                      ? "text-[#faf8f4]"
+                      : "text-[var(--hb-ink)]"
+                    : isDark
+                    ? "hover:text-[#faf8f4]"
+                    : "hover:text-[var(--hb-ink-light)]"
                 }`}
               >
                 {link.label}
                 {isActive && (
-                  <span className="absolute bottom-0 left-0 right-0 flex justify-center">
-                    <InkUnderline width={60} variant="wispy" strokeOpacity={0.4} />
+                  <span className="absolute bottom-0 left-0 right-0 flex justify-center text-[var(--hb-sienna)]">
+                    <InkUnderline width={60} variant="wispy" strokeOpacity={0.6} />
                   </span>
                 )}
               </Link>
@@ -84,7 +108,11 @@ export function SiteHeader() {
           })}
           <Link
             href="/cart"
-            className="ml-auto text-[var(--hb-ink-light)] border-b border-dashed border-[var(--hb-border)] border-opacity-40 hover:border-opacity-70 hover-wispy pb-2 transition-all duration-300"
+            className={`ml-auto border-b border-dashed pb-2 hover-wispy transition-all duration-300 ${
+              isDark
+                ? "text-[var(--hb-dark-muted)] border-[var(--hb-dark-border)] hover:text-[#faf8f4]"
+                : "text-[var(--hb-ink-light)] border-[var(--hb-border)] border-opacity-40 hover:border-opacity-70"
+            }`}
           >
             Full Cart →
           </Link>
@@ -94,4 +122,3 @@ export function SiteHeader() {
     </>
   );
 }
-
