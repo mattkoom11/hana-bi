@@ -50,27 +50,39 @@ function SuccessContent() {
     verify();
   }, [sessionId]);
 
-  // Loading state
   if (verified === null) {
     return (
       <div className="min-h-screen bg-[var(--hb-dark)] flex items-center justify-center">
-        <p className="text-[var(--hb-dark-muted)] font-script">Confirming your order...</p>
+        <p
+          className="text-sm"
+          style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
+        >
+          Confirming your order...
+        </p>
       </div>
     );
   }
 
-  // Unverified state
   if (!verified) {
     return (
       <div className="min-h-screen bg-[var(--hb-dark)] flex items-center justify-center px-4">
         <div className="max-w-md text-center space-y-6">
-          <h1 className="font-serif text-3xl text-[#faf8f4]">Order not found</h1>
-          <p className="text-[var(--hb-dark-muted)]">
+          <h1
+            className="text-3xl text-[#faf8f4] italic font-light"
+            style={{ fontFamily: "var(--hb-font-display)" }}
+          >
+            Order not found
+          </h1>
+          <p
+            className="text-sm"
+            style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
+          >
             We couldn&apos;t verify your order. If you completed a purchase, check your email for confirmation.
           </p>
           <Link
             href="/"
             className="inline-block px-8 py-4 bg-[var(--hb-sienna)] text-[#faf8f4] uppercase tracking-[0.4em] text-xs hover:opacity-90 transition-opacity"
+            style={{ fontFamily: "var(--hb-font-mono)" }}
           >
             Return Home
           </Link>
@@ -79,7 +91,6 @@ function SuccessContent() {
     );
   }
 
-  // Confirmed state
   return (
     <div className="min-h-screen bg-[var(--hb-dark)] flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <motion.div
@@ -88,7 +99,6 @@ function SuccessContent() {
         transition={{ duration: 0.8 }}
         className="max-w-2xl mx-auto text-center space-y-8"
       >
-        {/* Success icon */}
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -110,10 +120,16 @@ function SuccessContent() {
         </motion.div>
 
         <div className="space-y-4">
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-[#faf8f4]">
+          <h1
+            className="text-4xl md:text-5xl lg:text-6xl text-[#faf8f4] italic font-light"
+            style={{ fontFamily: "var(--hb-font-display)" }}
+          >
             Order Confirmed
           </h1>
-          <p className="text-lg text-[var(--hb-dark-muted)] max-w-md mx-auto">
+          <p
+            className="text-base max-w-md mx-auto"
+            style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
+          >
             Thank you for your order. We&apos;ve received your payment and will begin processing your garment.
           </p>
         </div>
@@ -125,8 +141,18 @@ function SuccessContent() {
             transition={{ delay: 0.4 }}
             className="p-6 bg-[var(--hb-dark-surface)] border border-[var(--hb-dark-border)]"
           >
-            <p className="text-sm font-script text-[var(--hb-sienna)] mb-2">Order ID</p>
-            <p className="font-mono text-sm text-[var(--hb-dark-muted)] break-all">{sessionId}</p>
+            <p
+              className="text-xs mb-2"
+              style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
+            >
+              Order ID
+            </p>
+            <p
+              className="text-sm break-all"
+              style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
+            >
+              {sessionId}
+            </p>
           </motion.div>
         )}
 
@@ -136,16 +162,31 @@ function SuccessContent() {
           transition={{ delay: 0.6 }}
           className="space-y-4 pt-8"
         >
-          <h2 className="font-serif text-2xl text-[#faf8f4]">What&apos;s Next?</h2>
+          <h2
+            className="text-2xl text-[#faf8f4] italic font-light"
+            style={{ fontFamily: "var(--hb-font-display)" }}
+          >
+            What&apos;s Next?
+          </h2>
           <div className="space-y-3 text-left max-w-md mx-auto">
             {[
               "You'll receive an email confirmation with your order details.",
-              "We'll notify you when your order ships (6-8 weeks for first drop).",
+              "We'll notify you when your order ships (6–8 weeks for first drop).",
               "Your garment will arrive ready to break in and age with you.",
             ].map((text, i) => (
               <div key={i} className="flex items-start gap-3">
-                <span className="font-serif text-lg text-[var(--hb-sienna)]">{i + 1}.</span>
-                <p className="text-[var(--hb-dark-muted)]">{text}</p>
+                <span
+                  className="text-lg"
+                  style={{ fontFamily: "var(--hb-font-display)", color: "var(--hb-sienna)", fontStyle: "italic" }}
+                >
+                  {i + 1}.
+                </span>
+                <p
+                  className="text-sm"
+                  style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
+                >
+                  {text}
+                </p>
               </div>
             ))}
           </div>
@@ -160,12 +201,14 @@ function SuccessContent() {
           <Link
             href="/shop"
             className="px-8 py-4 border border-[var(--hb-dark-border)] text-[var(--hb-dark-muted)] uppercase tracking-[0.4em] text-xs hover:text-[#faf8f4] hover:border-[var(--hb-sienna)] transition-all duration-300"
+            style={{ fontFamily: "var(--hb-font-mono)" }}
           >
             Back to Shop
           </Link>
           <Link
             href="/"
             className="px-8 py-4 bg-[var(--hb-sienna)] text-[#faf8f4] uppercase tracking-[0.4em] text-xs hover:opacity-90 transition-opacity"
+            style={{ fontFamily: "var(--hb-font-mono)" }}
           >
             Return Home
           </Link>
@@ -175,12 +218,14 @@ function SuccessContent() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
-          className="text-sm text-[var(--hb-dark-muted)] font-script pt-8"
+          className="text-sm pt-8"
+          style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
         >
           Questions? Contact us at{" "}
           <a
             href="mailto:hello@hana-bi.com"
-            className="text-[var(--hb-sienna)] hover:opacity-80 transition-opacity"
+            className="hover:opacity-80 transition-opacity"
+            style={{ color: "var(--hb-sienna)" }}
           >
             hello@hana-bi.com
           </a>
@@ -195,7 +240,12 @@ export default function SuccessPage() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-[var(--hb-dark)] flex items-center justify-center">
-          <p className="text-[var(--hb-dark-muted)] font-script">Loading...</p>
+          <p
+            className="text-sm"
+            style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
+          >
+            Loading...
+          </p>
         </div>
       }
     >
