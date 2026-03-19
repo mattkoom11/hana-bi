@@ -10,9 +10,11 @@ export function ProductGrid({ products, variant = "dark" }: ProductGridProps) {
   if (!products.length) {
     return (
       <p
-        className={`text-sm ${
-          variant === "dark" ? "text-[var(--hb-dark-muted)]" : "text-[var(--hb-smoke)]"
-        }`}
+        className="text-sm"
+        style={{
+          fontFamily: "var(--hb-font-mono)",
+          color: variant === "dark" ? "var(--hb-dark-muted)" : "var(--hb-smoke)",
+        }}
       >
         No garments match these filters yet.
       </p>
@@ -21,8 +23,13 @@ export function ProductGrid({ products, variant = "dark" }: ProductGridProps) {
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} variant={variant} />
+      {products.map((product, index) => (
+        <ProductCard
+          key={product.id}
+          product={product}
+          variant={variant}
+          catalogIndex={index}
+        />
       ))}
     </div>
   );
