@@ -26,7 +26,7 @@ export function PageShell({
     <section
       className={cn(
         "px-4 sm:px-8 md:px-12 lg:px-20 py-24 space-airy relative",
-        isDark ? "bg-[var(--hb-dark)]" : "",
+        isDark ? "bg-[var(--hb-dark)] grain" : "",
         className
       )}
     >
@@ -37,18 +37,24 @@ export function PageShell({
       <header className="max-w-4xl mb-20 relative z-10">
         {eyebrow && (
           <span
-            className={`uppercase text-xs tracking-[0.4em] font-script opacity-70 ${
-              isDark ? "text-[var(--hb-sienna)]" : "text-[var(--hb-smoke)]"
+            className={`uppercase text-xs tracking-[0.4em] opacity-70 ${
+              isDark ? "" : "font-script text-[var(--hb-smoke)]"
             }`}
+            style={
+              isDark
+                ? { fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }
+                : undefined
+            }
           >
             {eyebrow}
           </span>
         )}
         <div className="mt-8 space-y-4">
           <h1
-            className={`font-serif text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-[1.05] ${
+            className={`text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-[1.05] italic font-light ${
               isDark ? "text-[#faf8f4]" : ""
             }`}
+            style={{ fontFamily: "var(--hb-font-display)" }}
           >
             {title}
           </h1>
@@ -77,4 +83,3 @@ export function PageShell({
     </section>
   );
 }
-
