@@ -1,12 +1,11 @@
-import { Badge } from "@/components/common/Badge";
 import { HandDrawnDivider } from "@/components/common/HandDrawnDivider";
 import { InkUnderline } from "@/components/common/InkUnderline";
-import { MarginNote } from "@/components/common/MarginNote";
 import { PaperBackground } from "@/components/common/PaperBackground";
 import { SketchFrame } from "@/components/common/SketchFrame";
 import { Tag } from "@/components/common/Tag";
 import { PageShell } from "@/components/layout/PageShell";
 import { ProductCard } from "@/components/shop/ProductCard";
+import { ProductDetailHero } from "@/components/product/ProductDetailHero";
 import {
   getAllProducts,
   getProductByHandle,
@@ -19,7 +18,6 @@ import {
   type Product,
 } from "@/data/products";
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 
 interface ProductPageProps {
@@ -98,6 +96,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
+  const catalogIndex = fallbackProducts.findIndex(p => p.slug === params.slug);
+  const catalogNumber = catalogIndex >= 0
+    ? `HB-${String(catalogIndex + 1).padStart(3, "0")}`
+    : null;
+
   const related = await getRelatedProducts(product.slug);
 
   return (
@@ -106,117 +109,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <section className="relative bg-[var(--hb-dark)] min-h-[70vh] flex items-center justify-center overflow-hidden mb-0">
         <div className="relative z-10 w-full px-4 sm:px-8 md:px-12 lg:px-20 py-16">
           <div className="max-w-7xl mx-auto">
-            <div className="grid gap-12 lg:grid-cols-[1.3fr_0.7fr] items-start">
-              {/* Hero image — full opacity, no SVG sketch border */}
-              <div className="relative space-y-6">
-                <div className="relative w-full aspect-[3/4] overflow-hidden">
-                  {/* Ghost 花火 */}
-                  <span
-                    aria-hidden="true"
-                    className="absolute top-6 right-6 z-20 pointer-events-none select-none font-serif"
-                    style={{ color: "var(--hb-dark-kanji)", fontSize: "8rem", lineHeight: 1 }}
-                  >
-                    花火
-                  </span>
-                  <Image
-                    src={product.heroImage}
-                    alt={product.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 65vw"
-                    priority
-                  />
-                  <div className="absolute top-6 left-6 z-10">
-                    <Badge tone="sienna">
-                      {product.status === "available"
-                        ? "Available"
-                        : product.status === "sold_out"
-                        ? "Sold Out"
-                        : "Archived"}
-                    </Badge>
-                  </div>
-                  <MarginNote position="top-right" variant="script" size="xs">
-                    <span style={{ color: "var(--hb-sienna)" }}>{product.year}</span>
-                  </MarginNote>
-                </div>
-
-                {/* Thumbnail grid — full opacity, no SVG borders */}
-                {product.images.length > 0 && (
-                  <div className="grid grid-cols-3 gap-4">
-                    {product.images.map((image, idx) => (
-                      <div
-                        key={image}
-                        className="relative aspect-[4/5] overflow-hidden"
-                        style={{
-                          transform: `rotate(${idx % 2 === 0 ? "0.8deg" : "-0.8deg"})`,
-                        }}
-                      >
-                        <Image
-                          src={image}
-                          alt={`${product.name} alternate view ${idx + 1}`}
-                          fill
-                          sizes="(max-width: 768px) 33vw, 200px"
-                          className="object-cover"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Details panel — dark surface */}
-              <div className="space-y-6 sticky top-24 bg-[var(--hb-dark-surface)] p-6 border border-[var(--hb-dark-border)]">
-                <div className="space-y-4">
-                  <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-sienna)] font-script opacity-70">
-                    Product Details
-                  </p>
-                  <h1 className="font-serif text-4xl lg:text-5xl leading-tight text-[#faf8f4]">
-                    {product.name}
-                  </h1>
-                </div>
-
-                <div className="space-y-4 pt-4">
-                  <div>
-                    <p className="text-sm uppercase tracking-[0.3em] text-[var(--hb-dark-muted)] mb-2">
-                      Collection
-                    </p>
-                    <p className="font-serif text-lg text-[#faf8f4]">{product.collection}</p>
-                  </div>
-
-                  <div>
-                    <p className="text-sm uppercase tracking-[0.3em] text-[var(--hb-dark-muted)] mb-2">
-                      Price
-                    </p>
-                    <p className="font-serif text-2xl text-[var(--hb-sienna)]">
-                      ${product.price}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-sm uppercase tracking-[0.3em] text-[var(--hb-dark-muted)] mb-2">
-                      Year
-                    </p>
-                    <p className="text-sm text-[var(--hb-dark-muted)]">{product.year}</p>
-                  </div>
-
-                  <div>
-                    <p className="text-sm uppercase tracking-[0.3em] text-[var(--hb-dark-muted)] mb-2">
-                      Tags
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {product.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-xs uppercase tracking-[0.2em] text-[var(--hb-dark-muted)] border border-dashed border-[var(--hb-dark-border)] px-3 py-1.5"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ProductDetailHero product={product} catalogNumber={catalogNumber} />
           </div>
         </div>
       </section>
@@ -230,7 +123,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <div className="max-w-4xl mx-auto mt-16 space-y-12">
             <SketchFrame tilt="none" strokeOpacity={0.25} className="w-full">
               <div className="space-y-4">
-                <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)] font-script opacity-70">
+                <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)] opacity-70" style={{ fontFamily: "var(--hb-font-mono)" }}>
                   Story
                 </p>
                 <InkUnderline width={80} variant="delicate" strokeOpacity={0.3} className="mb-4" />
@@ -243,7 +136,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="grid gap-6 md:grid-cols-3">
               <SketchFrame tilt="right" strokeOpacity={0.2} className="w-full">
                 <div className="space-y-3">
-                  <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] font-script opacity-70">
+                  <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] opacity-70" style={{ fontFamily: "var(--hb-font-mono)" }}>
                     Materials
                   </p>
                   <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80">
@@ -254,7 +147,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
               <SketchFrame tilt="left" strokeOpacity={0.2} className="w-full">
                 <div className="space-y-3">
-                  <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] font-script opacity-70">
+                  <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] opacity-70" style={{ fontFamily: "var(--hb-font-mono)" }}>
                     Care
                   </p>
                   <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80">
@@ -265,7 +158,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
               <SketchFrame tilt="right" strokeOpacity={0.2} className="w-full">
                 <div className="space-y-3">
-                  <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] font-script opacity-70">
+                  <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] opacity-70" style={{ fontFamily: "var(--hb-font-mono)" }}>
                     Notes
                   </p>
                   <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80">
