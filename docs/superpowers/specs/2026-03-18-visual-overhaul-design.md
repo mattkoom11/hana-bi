@@ -46,6 +46,18 @@ All current tokens (`--hb-paper`, `--hb-ink`, `--hb-smoke`, `--hb-sienna`, `--hb
 
 ---
 
+## Root Layout Change
+
+The root layout `div` in `src/app/layout.tsx` currently applies `bg-[var(--hb-paper)] text-[var(--hb-ink)]` globally. These must be removed — individual pages and page sections are responsible for their own backgrounds. The wrapper becomes:
+
+```tsx
+<div className="flex min-h-screen flex-col">
+```
+
+Without this change, page-level dark backgrounds will render correctly but the overall page shell will bleed the paper color in any uncovered gap (e.g., between sections or below the footer).
+
+---
+
 ## Component Changes
 
 ### SiteHeader
@@ -100,9 +112,63 @@ Add a `variant` prop: `"dark"` | `"light"`. Default: `"dark"`.
 **`variant="light"`** (reserved for future use on light surfaces):
 - Existing styles unchanged
 
+### PageShell
+
+`PageShell` is currently used by the shop page (via `ShopContent`) and the cart page. It hardcodes paper background, `PaperBackground`, `HandDrawnDivider`, and `InkUnderline`. Dark pages must not use `PageShell` as their root wrapper.
+
+Add a `variant` prop: `"light"` (default, existing behavior) | `"dark"`.
+
+**`variant="dark"`:**
+- Background: `--hb-dark`
+- No `PaperBackground`
+- No `HandDrawnDivider`
+- Eyebrow label: sienna
+- Title: cream serif
+- Intro text: `--hb-dark-muted`
+- `InkUnderline` removed (or rendered with cream stroke at low opacity)
+
+**`variant="light"`:** existing behavior unchanged — no changes to Projects, About, Archive.
+
+### CartDrawer
+
+`CartDrawer` can open from any page (including dark pages like shop and homepage). It must always use a dark treatment regardless of the current page — it is a floating overlay and a consistent dark style is simpler and more deliberate than switching per page.
+
+- Background: `--hb-dark-surface`
+- Item cards: `--hb-dark` background
+- Item name: cream, price: sienna
+- Quantity controls: `--hb-dark-border` border, cream text
+- "Checkout" button: filled sienna, cream text
+- Close button: `--hb-dark-muted`, cream on hover
+- Overlay backdrop: `rgba(14,12,11,0.7)`
+- No hand-drawn elements
+
+### Ghost Kanji Element (花火)
+
+The 花火 character is **not a new reusable component** — it is inline JSX placed in specific dark sections. Render it as an absolutely positioned `<span>` with `aria-hidden="true"`:
+
+```tsx
+<span
+  aria-hidden="true"
+  className="absolute pointer-events-none select-none font-serif"
+  style={{ color: "var(--hb-dark-kanji)", fontSize: "12rem", lineHeight: 1 }}
+>
+  花火
+</span>
+```
+
+**Used in exactly two places:**
+1. Homepage hero — `bottom-8 right-8`
+2. Product detail page hero image area — `top-6 right-6`
+
+No other pages or components use this element.
+
+### ProjectCard
+
+No changes. `ProjectCard` is used only on light/paper pages (Projects index, Project detail) and does not receive a variant prop. The existing styles are correct.
+
 ### Badge
 
-No structural changes. On dark surfaces, the `"sienna"` tone Badge is preferred for all status labels.
+No structural changes. On dark surfaces, the `"sienna"` tone Badge is preferred for all status labels. Step 10 (consistency pass) audits existing Badge usage on dark surfaces to confirm contrast is acceptable — this is a visual check, not a code change.
 
 ---
 
@@ -142,6 +208,7 @@ No structural changes. On dark surfaces, the `"sienna"` tone Badge is preferred 
 
 ### Shop Page (`/shop`)
 
+- Page wrapper: `PageShell variant="dark"` (replaces current light `PageShell`)
 - Page background: `--hb-dark`
 - Page title / eyebrow: cream and sienna
 - `ProductGrid`: renders `ProductCard` with `variant="dark"`
@@ -173,6 +240,11 @@ No structural changes. On dark surfaces, the `"sienna"` tone Badge is preferred 
 - Text colors revert to existing smoke/ink values
 - Process Notes, Tags: unchanged
 
+**Related Projects section (light, bottom of page):**
+- This section uses `PageShell` (light variant — keep as-is)
+- `ProductCard` here uses `variant="light"` — these render inside a light surface
+- Do not apply dark card styles to related products in this section
+
 ---
 
 ### Projects Pages (`/projects`, `/projects/[slug]`)
@@ -197,12 +269,30 @@ No structural changes. On dark surfaces, the `"sienna"` tone Badge is preferred 
 
 ---
 
-### Cart Page (`/cart`) and Success Page (`/success`)
+### Cart Page (`/cart`)
 
+- Replace `PageShell` wrapper with `PageShell variant="dark"` (or a plain dark wrapper if PageShell is insufficient)
 - Background: `--hb-dark`
 - Cart item rows: `--hb-dark-surface` cards, cream text, sienna accents
-- Checkout button: filled sienna
+- Checkout button: filled sienna, cream text
+- Remove/hide any `PaperBackground` or `HandDrawnDivider` used in the current cart page
 - No hand-drawn elements
+
+### Success Page (`/success`)
+
+The success page has three UI states. **All three states use `--hb-dark` background:**
+
+1. **Loading/verifying** (polling `/api/checkout/verify`, up to 5 retries): dark background, `--hb-dark-muted` loading text, sienna spinner or pulse indicator
+2. **Unverified/error** ("Order not found" fallback): dark background, cream headline, `--hb-dark-muted` body text, sienna "Return to Shop" link
+3. **Confirmed** (payment verified): dark background, cream confirmation headline, sienna accent, order details in `--hb-dark-muted`
+
+No hand-drawn elements on any state.
+
+### Layered Denim Campaign Page (`/layered-denim`)
+
+This page renders its **own internal sticky header and footer** (not SiteHeader/SiteFooter), so the `useHeaderTheme` hook has no visual effect on it. The global SiteHeader and SiteFooter are present in the DOM above and below but are visually overridden by the page's self-contained layout.
+
+**Treatment:** The layered-denim page is a standalone dark experience. Its existing dark background and internal navigation are already compatible with the overhaul direction. **No changes required to this page** — the internal header/footer will naturally sit within the dark page context. The global SiteHeader/SiteFooter should still render correctly since the layout wrapper's paper background is being removed (see Root Layout Change).
 
 ---
 
@@ -223,22 +313,29 @@ No structural changes. On dark surfaces, the `"sienna"` tone Badge is preferred 
 | Project detail | `--hb-paper` | Yes | Sienna |
 | About | `--hb-paper` | Yes | Sienna |
 | Archive | `--hb-paper` | Yes | Sienna |
-| Cart / Success | `--hb-dark` | No | Sienna |
+| Cart | `--hb-dark` | No | Sienna |
+| Success (all states) | `--hb-dark` | No | Sienna |
+| Layered Denim | Dark (existing) | Existing | Existing |
+| CartDrawer (overlay) | `--hb-dark-surface` | No | Sienna |
 
 ---
 
 ## Implementation Order (Foundation-First)
 
-1. **Global tokens** — add dark track to `globals.css`
-2. **`useHeaderTheme` hook** — new file, route-based theme detection
-3. **SiteHeader** — adaptive transparent header
-4. **SiteFooter** — dark treatment
-5. **Homepage** — hero, product grid sections
-6. **ProductCard** — add `variant` prop, dark styles
-7. **Shop page** — dark background, pass `variant="dark"` to grid
-8. **Product detail page** — dark top, light bottom seam
-9. **Cart / Success pages** — dark treatment
-10. **Consistency pass** — sienna accent audit across all remaining pages
+1. **Root layout** — remove `bg-[var(--hb-paper)] text-[var(--hb-ink)]` from layout wrapper
+2. **Global tokens** — add dark track to `globals.css`
+3. **`useHeaderTheme` hook** — new file `src/hooks/useHeaderTheme.ts`, route-based theme detection
+4. **SiteHeader** — adaptive transparent header using `useHeaderTheme`
+5. **SiteFooter** — dark treatment
+6. **CartDrawer** — always-dark overlay treatment
+7. **PageShell** — add `variant` prop
+8. **ProductCard** — add `variant` prop, dark styles
+9. **Homepage** — hero, product grid sections, ghost kanji
+10. **Shop page** — `PageShell variant="dark"`, `ProductCard variant="dark"`, dark filters
+11. **Product detail page** — dark top section, light bottom seam, related products `variant="light"`
+12. **Cart page** — `PageShell variant="dark"`, dark item rows
+13. **Success page** — dark treatment for all three UI states
+14. **Consistency pass** — sienna accent audit across all pages, Badge contrast check on dark surfaces
 
 ---
 
@@ -248,5 +345,7 @@ No structural changes. On dark surfaces, the `"sienna"` tone Badge is preferred 
 - All hand-drawn component logic (SketchFrame, InkUnderline, HandDrawnDivider, MarginNote, PaperBackground) — unchanged, just not rendered on dark surfaces
 - All spacing/layout patterns — unchanged
 - Projects, About, Archive pages — untouched
+- Layered Denim page — untouched (already dark, self-contained)
+- ProjectCard — no changes, light-only pages only
 - Stripe/cart/checkout logic — untouched
 - Shopify data fetching — untouched
