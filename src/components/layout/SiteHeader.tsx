@@ -26,7 +26,6 @@ export function SiteHeader() {
   return (
     <>
       <header className="px-4 sm:px-8 md:px-12 lg:px-20 py-10 flex flex-col gap-8 relative">
-        {/* Bottom border — light pages only, nothing on dark */}
         {!isDark && (
           <div className="absolute bottom-0 left-0 right-0 flex justify-center">
             <div className="w-full max-w-6xl mx-auto">
@@ -38,9 +37,10 @@ export function SiteHeader() {
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className={`font-serif text-3xl tracking-[0.08em] hover-wispy relative group transition-colors ${
+            className={`text-3xl tracking-[0.08em] hover-wispy relative group transition-colors italic font-light ${
               isDark ? "text-[#faf8f4]" : "text-[var(--hb-ink)]"
             }`}
+            style={{ fontFamily: "var(--hb-font-display)" }}
           >
             Hana-Bi
             <span className="absolute -bottom-1 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -55,15 +55,17 @@ export function SiteHeader() {
                 ? "bg-[var(--hb-dark-surface)] text-[#faf8f4] border-[var(--hb-dark-border)] hover:border-[var(--hb-sienna)]"
                 : "border-dashed border-[var(--hb-border)] text-[var(--hb-ink)] btn-sketch"
             }`}
+            style={{ fontFamily: "var(--hb-font-mono)" }}
           >
             Cart
             {cartCount > 0 && (
               <span
-                className={`absolute -top-2 -right-2 w-5 h-5 text-[0.65rem] rounded-full flex items-center justify-center font-script ${
+                className={`absolute -top-2 -right-2 w-5 h-5 text-[0.65rem] rounded-full flex items-center justify-center ${
                   isDark
                     ? "bg-[var(--hb-sienna)] text-[#faf8f4]"
                     : "bg-[var(--hb-ink)] text-[var(--hb-paper)]"
                 }`}
+                style={{ fontFamily: "var(--hb-font-mono)" }}
               >
                 {cartCount}
               </span>
@@ -73,28 +75,21 @@ export function SiteHeader() {
 
         <nav
           className={`flex flex-wrap gap-8 text-xs uppercase tracking-[0.4em] ${
-            isDark
-              ? "text-[var(--hb-dark-muted)]"
-              : "text-[var(--hb-smoke)]"
+            isDark ? "text-[var(--hb-dark-muted)]" : "text-[var(--hb-smoke)]"
           }`}
+          style={{ fontFamily: "var(--hb-font-mono)" }}
         >
           {NAV_LINKS.map((link) => {
             const isActive =
-              link.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(link.href);
+              link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 className={`pb-2 relative hover-wispy transition-all duration-300 ${
                   isActive
-                    ? isDark
-                      ? "text-[#faf8f4]"
-                      : "text-[var(--hb-ink)]"
-                    : isDark
-                    ? "hover:text-[#faf8f4]"
-                    : "hover:text-[var(--hb-ink-light)]"
+                    ? isDark ? "text-[#faf8f4]" : "text-[var(--hb-ink)]"
+                    : isDark ? "hover:text-[#faf8f4]" : "hover:text-[var(--hb-ink-light)]"
                 }`}
               >
                 {link.label}
