@@ -32,6 +32,7 @@ export function ProductFilters({
           ? "border-[var(--hb-dark-border)] bg-[var(--hb-dark-surface)]"
           : "border-[var(--hb-border)]"
       }`}
+      style={{ fontFamily: "var(--hb-font-mono)" }}
     >
       <div className="flex flex-wrap gap-2 items-center text-xs uppercase tracking-[0.3em]">
         <button
@@ -45,6 +46,7 @@ export function ProductFilters({
               ? "border-transparent text-[var(--hb-dark-muted)]"
               : "border-transparent text-[var(--hb-smoke)]"
           }`}
+          style={{ fontFamily: "var(--hb-font-mono)" }}
         >
           Available
         </button>
@@ -59,6 +61,7 @@ export function ProductFilters({
               ? "border-transparent text-[var(--hb-dark-muted)]"
               : "border-transparent text-[var(--hb-smoke)]"
           }`}
+          style={{ fontFamily: "var(--hb-font-mono)" }}
         >
           Archived
         </button>
@@ -69,6 +72,7 @@ export function ProductFilters({
             className={`uppercase text-[0.6rem] tracking-[0.3em] ${
               isDark ? "text-[var(--hb-dark-muted)]" : "text-[var(--hb-smoke)]"
             }`}
+            style={{ fontFamily: "var(--hb-font-mono)" }}
           >
             Category
           </span>
@@ -80,6 +84,7 @@ export function ProductFilters({
                 ? "border-[var(--hb-dark-border)] text-[#faf8f4]"
                 : "border-[var(--hb-border)]"
             }`}
+            style={{ fontFamily: "var(--hb-font-mono)" }}
           >
             <option value="">All</option>
             {tags.map((tag) => (
@@ -94,6 +99,7 @@ export function ProductFilters({
             className={`uppercase text-[0.6rem] tracking-[0.3em] ${
               isDark ? "text-[var(--hb-dark-muted)]" : "text-[var(--hb-smoke)]"
             }`}
+            style={{ fontFamily: "var(--hb-font-mono)" }}
           >
             Size
           </span>
@@ -105,6 +111,7 @@ export function ProductFilters({
                 ? "border-[var(--hb-dark-border)] text-[#faf8f4]"
                 : "border-[var(--hb-border)]"
             }`}
+            style={{ fontFamily: "var(--hb-font-mono)" }}
           >
             <option value="">All</option>
             {sizes.map((size) => (
