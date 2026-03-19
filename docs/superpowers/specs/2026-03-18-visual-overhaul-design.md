@@ -46,15 +46,29 @@ All current tokens (`--hb-paper`, `--hb-ink`, `--hb-smoke`, `--hb-sienna`, `--hb
 
 ---
 
-## Root Layout Change
+## Root Layout & Global CSS Changes
 
-The root layout `div` in `src/app/layout.tsx` currently applies `bg-[var(--hb-paper)] text-[var(--hb-ink)]` globally. These must be removed — individual pages and page sections are responsible for their own backgrounds. The wrapper becomes:
+### 1. Root Layout Wrapper (`src/app/layout.tsx` line 46)
+
+The root layout `div` currently applies `bg-[var(--hb-paper)] text-[var(--hb-ink)]` globally. These must be removed — individual pages and page sections are responsible for their own backgrounds. The wrapper becomes:
 
 ```tsx
 <div className="flex min-h-screen flex-col">
 ```
 
-Without this change, page-level dark backgrounds will render correctly but the overall page shell will bleed the paper color in any uncovered gap (e.g., between sections or below the footer).
+### 2. Body Baseline Styles (`src/app/globals.css` lines 125–142)
+
+The `body` rule applies `background-color: var(--hb-paper)`, `color: var(--hb-ink)`, and a multi-layer paper grain texture (`background-image` with vignette + gradient + SVG noise + canvas repeating gradient). These are page-wide rules that will bleed through any gap between sections on dark pages.
+
+**Required changes to `body` in `globals.css`:**
+- Remove `background-color: var(--hb-paper)`
+- Remove `color: var(--hb-ink)`
+- Remove `background-image` (all four layers), `background-size`, and `background-attachment: fixed`
+- Keep: `font-family`, `letter-spacing`
+
+The paper grain texture currently applied globally will instead be rendered via the `PaperBackground` component which is already used on light sections. Dark sections will have clean dark backgrounds with no texture.
+
+**Do not change any other `globals.css` rules.**
 
 ---
 
@@ -79,10 +93,20 @@ Without this change, page-level dark backgrounds will render correctly but the o
 ```
 
 **`useHeaderTheme` hook** — new file `src/hooks/useHeaderTheme.ts`:
-- Reads `usePathname()`
-- Returns `"dark"` for: `/`, `/shop`, `/product/*`, `/cart`, `/layered-denim`
-- Returns `"light"` for: `/about`, `/projects`, `/projects/*`, `/archive`
-- Default: `"dark"`
+
+```ts
+export type HeaderTheme = "dark" | "light";
+
+export function useHeaderTheme(): HeaderTheme {
+  const pathname = usePathname();
+  const lightPaths = ["/about", "/projects", "/archive"];
+  const isLight =
+    lightPaths.some((p) => pathname === p || pathname.startsWith(p + "/"));
+  return isLight ? "light" : "dark";
+}
+```
+
+Returns `"light"` for `/about`, `/projects`, `/projects/*`, `/archive`. Returns `"dark"` for everything else (home, shop, product pages, cart, layered-denim). Default: `"dark"`.
 
 **Removed:** The thin gradient bottom border. Replaced with nothing on dark pages, and `--hb-border` hairline on light pages.
 
@@ -280,19 +304,22 @@ No structural changes. On dark surfaces, the `"sienna"` tone Badge is preferred 
 
 ### Success Page (`/success`)
 
-The success page has three UI states. **All three states use `--hb-dark` background:**
+The success page has **four** UI surfaces. **All four use `--hb-dark` background:**
 
-1. **Loading/verifying** (polling `/api/checkout/verify`, up to 5 retries): dark background, `--hb-dark-muted` loading text, sienna spinner or pulse indicator
-2. **Unverified/error** ("Order not found" fallback): dark background, cream headline, `--hb-dark-muted` body text, sienna "Return to Shop" link
-3. **Confirmed** (payment verified): dark background, cream confirmation headline, sienna accent, order details in `--hb-dark-muted`
+1. **Suspense fallback** (before `SuccessContent` mounts — currently `bg-[var(--hb-paper)]` at line 221): change to `bg-[var(--hb-dark)]`, `--hb-dark-muted` loading text
+2. **Loading/verifying state** (`verified === null` inside `SuccessContent`, polling `/api/checkout/verify`): dark background, `--hb-dark-muted` loading text
+3. **Unverified/error state** (`verified === false`): dark background, cream headline, `--hb-dark-muted` body text, sienna "Return to Shop" link
+4. **Confirmed state** (`verified === true`): dark background, cream confirmation headline, sienna accent, order details in `--hb-dark-muted`
 
-No hand-drawn elements on any state.
+No hand-drawn elements on any surface.
 
 ### Layered Denim Campaign Page (`/layered-denim`)
 
 This page renders its **own internal sticky header and footer** (not SiteHeader/SiteFooter), so the `useHeaderTheme` hook has no visual effect on it. The global SiteHeader and SiteFooter are present in the DOM above and below but are visually overridden by the page's self-contained layout.
 
-**Treatment:** The layered-denim page is a standalone dark experience. Its existing dark background and internal navigation are already compatible with the overhaul direction. **No changes required to this page** — the internal header/footer will naturally sit within the dark page context. The global SiteHeader/SiteFooter should still render correctly since the layout wrapper's paper background is being removed (see Root Layout Change).
+**Note on current state:** The layered-denim page currently uses light/paper tokens throughout (`--hb-paper`, `--hb-border`, etc.). It is **not** currently dark.
+
+**Treatment for this overhaul:** This page is a self-contained campaign experience. **No changes are made to it in this overhaul** — it is explicitly out of scope. Its existing light theme is acceptable as a standalone campaign page. The global SiteHeader/SiteFooter will render correctly above/below it since the layout wrapper's paper background is being removed (see Root Layout & Global CSS Changes).
 
 ---
 
