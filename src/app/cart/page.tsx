@@ -7,9 +7,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 async function handleCheckout(items: CartItem[]) {
-  if (items.length === 0) {
-    return;
-  }
+  if (items.length === 0) return;
 
   try {
     const response = await fetch("/api/checkout", {
@@ -18,7 +16,7 @@ async function handleCheckout(items: CartItem[]) {
       body: JSON.stringify({
         items: items.map((item) => ({
           name: `${item.name} — Size ${item.size}`,
-          price: Math.round(item.price * 100), // convert dollars to cents
+          price: Math.round(item.price * 100),
           quantity: item.quantity,
           ...(item.image ? { image: item.image } : {}),
         })),
@@ -55,16 +53,17 @@ export default function CartPage() {
 
   return (
     <PageShell
+      variant="dark"
       eyebrow="Cart"
       title="Your current study."
       intro="Cart items are stored locally. Checkout is handled securely by Stripe."
     >
       <div className="space-y-8">
-        <div className="border border-[var(--hb-border)] divide-y divide-[var(--hb-border)]">
+        <div className="border border-[var(--hb-dark-border)] divide-y divide-[var(--hb-dark-border)]">
           {items.length === 0 ? (
-            <div className="p-6 text-sm text-[var(--hb-smoke)]">
+            <div className="p-6 text-sm text-[var(--hb-dark-muted)]">
               Nothing yet. Browse the{" "}
-              <Link href="/shop" className="underline">
+              <Link href="/shop" className="text-[var(--hb-sienna)] underline">
                 shop
               </Link>{" "}
               or revisit the archive.
@@ -73,42 +72,38 @@ export default function CartPage() {
             items.map((item) => (
               <article
                 key={`${item.id}-${item.size}`}
-                className="p-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+                className="p-6 bg-[var(--hb-dark-surface)] flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
               >
                 <div>
-                  <p className="font-serif text-xl">{item.name}</p>
-                  <p className="text-xs uppercase tracking-[0.3em] text-[var(--hb-smoke)]">
+                  <p className="font-serif text-xl text-[#faf8f4]">{item.name}</p>
+                  <p className="text-xs uppercase tracking-[0.3em] text-[var(--hb-dark-muted)]">
                     Size {item.size}
                   </p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center border border-[var(--hb-border)]">
+                  <div className="flex items-center border border-[var(--hb-dark-border)]">
                     <button
                       onClick={() =>
-                        updateQuantity(
-                          item.id,
-                          item.size,
-                          Math.max(1, item.quantity - 1)
-                        )
+                        updateQuantity(item.id, item.size, Math.max(1, item.quantity - 1))
                       }
-                      className="w-8 h-8"
+                      className="w-8 h-8 text-[#faf8f4]"
                     >
                       –
                     </button>
-                    <span className="w-10 text-center">{item.quantity}</span>
+                    <span className="w-10 text-center text-[#faf8f4]">{item.quantity}</span>
                     <button
                       onClick={() =>
                         updateQuantity(item.id, item.size, item.quantity + 1)
                       }
-                      className="w-8 h-8"
+                      className="w-8 h-8 text-[#faf8f4]"
                     >
                       +
                     </button>
                   </div>
-                  <p>{formatCurrency(item.price * item.quantity)}</p>
+                  <p className="text-[var(--hb-sienna)]">{formatCurrency(item.price * item.quantity)}</p>
                   <button
                     onClick={() => removeItem(item.id, item.size)}
-                    className="text-xs uppercase tracking-[0.3em] text-[var(--hb-smoke)]"
+                    className="text-xs uppercase tracking-[0.3em] text-[var(--hb-dark-muted)] hover:text-[#faf8f4] transition-colors"
                   >
                     Remove
                   </button>
@@ -120,8 +115,8 @@ export default function CartPage() {
         {items.length > 0 && (
           <div className="space-y-4">
             <div className="flex items-center justify-between text-sm">
-              <span>Total</span>
-              <span className="font-semibold">{formatCurrency(total)}</span>
+              <span className="text-[var(--hb-dark-muted)]">Total</span>
+              <span className="font-semibold text-[#faf8f4]">{formatCurrency(total)}</span>
             </div>
             <button
               onClick={async () => {
@@ -132,13 +127,13 @@ export default function CartPage() {
                 setCheckingOut(false);
               }}
               disabled={isLoading || isCheckingOut}
-              className="w-full border border-[var(--hb-ink)] bg-[var(--hb-ink)] text-[var(--hb-paper)] uppercase tracking-[0.4em] px-6 py-4 text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[var(--hb-sienna)] text-[#faf8f4] uppercase tracking-[0.4em] px-6 py-4 text-xs hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {isLoading ? "Redirecting to checkout..." : "Checkout"}
             </button>
             <button
               onClick={clearCart}
-              className="text-xs uppercase tracking-[0.3em] text-[var(--hb-smoke)]"
+              className="text-xs uppercase tracking-[0.3em] text-[var(--hb-dark-muted)] hover:text-[#faf8f4] transition-colors"
             >
               Clear cart
             </button>
@@ -148,4 +143,3 @@ export default function CartPage() {
     </PageShell>
   );
 }
-
