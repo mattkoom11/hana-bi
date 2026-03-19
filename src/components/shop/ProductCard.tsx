@@ -8,29 +8,29 @@ import Link from "next/link";
 interface ProductCardProps {
   product: Product;
   variant?: "dark" | "light";
+  catalogIndex?: number;
 }
 
 function getAnnotation(product: Product): string {
-  if (product.tags.some((t) => t.toLowerCase().includes("denim"))) {
-    return "raw denim";
-  }
-  if (product.tags.some((t) => t.toLowerCase().includes("selvedge"))) {
-    return "selvedge";
-  }
-  if (product.collection.toLowerCase().includes("sample")) {
-    return "sample 001";
-  }
+  if (product.tags.some((t) => t.toLowerCase().includes("denim"))) return "raw denim";
+  if (product.tags.some((t) => t.toLowerCase().includes("selvedge"))) return "selvedge";
+  if (product.collection.toLowerCase().includes("sample")) return "sample 001";
   return "edition piece";
 }
 
-export function ProductCard({ product, variant = "dark" }: ProductCardProps) {
+function formatCatalogNumber(index: number): string {
+  return `HB-${String(index + 1).padStart(3, "0")}`;
+}
+
+export function ProductCard({ product, variant = "dark", catalogIndex }: ProductCardProps) {
   const annotation = getAnnotation(product);
   const isDark = variant === "dark";
+  const catalogNumber = catalogIndex !== undefined ? formatCatalogNumber(catalogIndex) : null;
 
   return (
     <Link
       href={`/product/${product.slug}`}
-      className="group flex flex-col gap-5 p-5 hover-wispy relative"
+      className="group flex flex-col gap-3 p-5 hover-wispy relative"
     >
       {/* Hand-drawn frame on hover — light variant only */}
       {!isDark && (
@@ -56,14 +56,28 @@ export function ProductCard({ product, variant = "dark" }: ProductCardProps) {
         </div>
       )}
 
-      {/* Dark variant: sienna bottom border on hover */}
+      {/* Dark variant: sienna bottom rule slides in from left on hover */}
       {isDark && (
-        <div className="absolute bottom-0 left-5 right-5 h-px bg-[var(--hb-sienna)] opacity-0 group-hover:opacity-60 transition-opacity duration-500 pointer-events-none" />
+        <div className="absolute bottom-0 left-5 right-5 h-px bg-[var(--hb-sienna)] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-[400ms] pointer-events-none" />
+      )}
+
+      {/* Catalog number — above image */}
+      {catalogNumber && (
+        <p
+          className={`text-[0.55rem] uppercase tracking-[0.55em] transition-opacity duration-[400ms] ${
+            isDark
+              ? "text-[var(--hb-dark-muted)] opacity-[0.35] group-hover:opacity-100"
+              : "text-[var(--hb-smoke)] opacity-50"
+          }`}
+          style={{ fontFamily: "var(--hb-font-mono)" }}
+        >
+          {catalogNumber}
+        </p>
       )}
 
       <div
         className={`relative w-full aspect-[4/5] overflow-hidden ${
-          isDark ? "bg-[var(--hb-dark-surface)]" : "bg-[var(--hb-paper-muted)]"
+          isDark ? "bg-[var(--hb-dark-surface)] grain" : "bg-[var(--hb-paper-muted)]"
         }`}
       >
         <Image
@@ -71,7 +85,7 @@ export function ProductCard({ product, variant = "dark" }: ProductCardProps) {
           alt={product.name}
           fill
           sizes="(max-width: 768px) 100vw, 33vw"
-          className="object-cover transition duration-700 group-hover:scale-[1.02]"
+          className="object-cover transition duration-700 group-hover:scale-[1.02] relative z-10"
         />
         {product.featured && (
           <div className="absolute top-5 left-5 z-10">
@@ -86,7 +100,7 @@ export function ProductCard({ product, variant = "dark" }: ProductCardProps) {
           </div>
         )}
 
-        {/* Hover-revealed pencil annotation — light variant only */}
+        {/* Hover annotation — light variant only */}
         {!isDark && (
           <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10">
             <MarginNote
@@ -101,24 +115,28 @@ export function ProductCard({ product, variant = "dark" }: ProductCardProps) {
         )}
       </div>
 
-      <div className="space-y-3 relative z-10">
+      <div className="space-y-2 relative z-10 pt-1">
         <p
-          className={`font-serif text-xl leading-tight ${
-            isDark ? "text-[#faf8f4]" : ""
-          }`}
+          className={`text-xl leading-tight italic font-light ${isDark ? "text-[#faf8f4]" : ""}`}
+          style={{ fontFamily: "var(--hb-font-display)" }}
         >
           {product.name}
         </p>
         <p
-          className={`text-sm font-script opacity-70 ${
-            isDark ? "text-[var(--hb-sienna)]" : "text-[var(--hb-smoke)]"
+          className={`text-xs uppercase tracking-[0.3em] opacity-60 ${
+            isDark ? "" : "text-[var(--hb-smoke)]"
           }`}
+          style={{
+            fontFamily: "var(--hb-font-mono)",
+            color: isDark ? "var(--hb-sienna)" : undefined,
+          }}
         >
           {product.collection}
         </p>
-        <div className="flex items-center justify-between text-sm pt-2">
+        <div className="flex items-center justify-between text-sm pt-1">
           <span
-            className={`font-serif ${isDark ? "text-[#faf8f4]" : ""}`}
+            className={isDark ? "text-[#faf8f4]" : ""}
+            style={{ fontFamily: "var(--hb-font-mono)" }}
           >
             {formatCurrency(product.price)}
           </span>
@@ -128,6 +146,7 @@ export function ProductCard({ product, variant = "dark" }: ProductCardProps) {
                 ? "border-[var(--hb-dark-border)] text-[var(--hb-dark-muted)]"
                 : ""
             }`}
+            style={{ fontFamily: "var(--hb-font-mono)" }}
           >
             {product.tags[0]}
           </span>
