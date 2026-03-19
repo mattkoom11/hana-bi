@@ -38,7 +38,7 @@ Unchanged from v1 overhaul:
 - `--hb-dark-border: rgba(250,248,244,0.08)` — subtle borders
 - `--hb-dark-muted: rgba(250,248,244,0.45)` — secondary text
 - `--hb-dark-kanji: rgba(250,248,244,0.07)` — ghost 花火
-- `--hb-sienna: #7a6a5a` — accent (muted sienna)
+- `--hb-sienna: #9a7a5a` — accent (muted sienna, existing value in globals.css — do not change)
 - `#faf8f4` — cream, hardcoded on dark surfaces
 
 ## Grain Texture
@@ -61,34 +61,70 @@ All dark surfaces get a CSS grain overlay via a `.grain` utility class using an 
 
 Applied to: hero section, dark PageShell sections, CartDrawer panel, featured garment card, ProductCard image container (dark variant), details panel on product page, success page confirmed state.
 
+**Stacking context:** All interactive children inside a `.grain` element must have `className="relative z-10"` to render above the `::after` grain layer. Specifically: all `<button>`, `<a>`, and text content blocks inside CartDrawer, PageShell, and the product detail panel must carry `relative z-10`.
+
 ## Catalog Numbering System
 
-Products displayed with catalog numbers in the format `HB-XXX` (zero-padded to 3 digits, e.g. `HB-001`, `HB-002`). The number is derived from the product's index in the displayed array — it is purely presentational, not stored in data.
+Products displayed with catalog numbers in the format `HB-XXX` (zero-padded to 3 digits, e.g. `HB-001`, `HB-002`). Purely presentational — not stored in data.
+
+**ProductCard / ProductGrid:** The number is the post-filter display index (position 0 in the rendered array = `HB-001`). `ProductGrid` passes `catalogIndex={index}` from its `.map((product, index) => ...)`. `ProductCard` receives `catalogIndex?: number` and renders `HB-${String((catalogIndex ?? 0) + 1).padStart(3, "0")}`. If `catalogIndex` is undefined, render nothing.
+
+**Homepage featured garment card:** Always hardcoded to `HB-001` — it is the hero piece, first in the featured array.
+
+**Product detail page (`/product/[slug]`):** Fetch `products` from `@/data/products` (the full static array), find `products.findIndex(p => p.slug === params.slug)`, format as `HB-XXX`. If not found (Shopify-only product), omit the catalog number eyebrow entirely.
 
 - Displayed in DM Mono above product images on ProductCard
-- Displayed as the eyebrow on the product detail page dark section
-- Displayed in the hero featured garment card
+- Displayed as the eyebrow on the product detail page dark section (when found)
+- Displayed in the hero featured garment card (hardcoded `HB-001`)
 
 ## Font Import
 
-Added to `src/app/layout.tsx` via a `<link>` tag in `<head>`:
-```html
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-<link
-  href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300&display=swap"
-  rel="stylesheet"
-/>
+The existing `layout.tsx` uses `next/font/google` for Spectral, Inter, and Kalam. Cormorant Garamond and DM Mono must be loaded the same way to match the project pattern and get Next.js font optimization (preloading, `font-display: swap`, no FOUT).
+
+Add to `src/app/layout.tsx`:
+```tsx
+import { Cormorant_Garamond, DM_Mono } from "next/font/google";
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
+
+const dmMono = DM_Mono({
+  subsets: ["latin"],
+  weight: ["300"],
+  variable: "--font-dm-mono",
+  display: "swap",
+});
+```
+
+Inject both CSS variables into `<body>` alongside the existing font variables:
+```tsx
+<body className={`${existingFonts.variable} ${cormorant.variable} ${dmMono.variable}`}>
+```
+
+Then in `globals.css`, reference via the injected CSS variables:
+```css
+--hb-font-display: var(--font-cormorant), Georgia, serif;
+--hb-font-mono:    var(--font-dm-mono), 'Courier New', monospace;
 ```
 
 ## Motion
 
-**Staggered entry on product detail page:** hero image and details panel use Framer Motion with a 0.15s stagger — image fades/slides from left, panel fades/slides from right.
+**Staggered entry on product detail page:** The current page is an async Server Component — adding Framer Motion directly would require `"use client"` which breaks `generateStaticParams` and `generateMetadata`. Instead, extract the animated section into a new Client Component:
 
-**ProductCard hover (dark variant):**
-- Catalog number brightens (opacity 0.35 → 1)
-- Sienna rule slides up from bottom (height 1px, `scaleX` from 0 to 1)
-- Transition: 400ms ease
+Create `src/components/product/ProductDetailHero.tsx` (new file, `"use client"`):
+- Receives `product` and `catalogNumber` as props
+- Contains the Framer Motion wrappers: image fades+slides from left (`x: -20, opacity: 0`), details panel from right (`x: 20, opacity: 0`), `delay: 0.15` stagger, `duration: 0.6`
+- The Server Component page (`product/[slug]/page.tsx`) imports and renders `<ProductDetailHero>` passing resolved product data
+
+**ProductCard hover (dark variant) — CSS only, no Framer Motion:**
+- Catalog number: `opacity-[0.35] group-hover:opacity-100 transition-opacity duration-400`
+- Sienna rule: `scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-400` (Tailwind CSS transform, no JS needed)
+- ProductCard stays a pure function component with no `"use client"` requirement
 
 **No new animations elsewhere** — existing hover-wispy and page-transition classes are sufficient.
 
@@ -180,8 +216,11 @@ Dark/light/dark/light rhythm retained. Changes:
 
 ## File Map
 
+**Create:**
+- `src/components/product/ProductDetailHero.tsx` — `"use client"` component with Framer Motion staggered entry for product detail page
+
 **Modify:**
-- `src/app/layout.tsx` — add Google Fonts `<link>` tags
+- `src/app/layout.tsx` — add Cormorant Garamond + DM Mono via `next/font/google`, inject CSS variables into `<body>`
 - `src/app/globals.css` — add `--hb-font-display`, `--hb-font-mono` tokens + `.grain` utility class
 - `src/components/layout/SiteHeader.tsx` — Cormorant site name, DM Mono nav
 - `src/components/layout/SiteFooter.tsx` — Cormorant headline, DM Mono links
