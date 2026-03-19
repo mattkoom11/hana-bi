@@ -1,7 +1,7 @@
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import type { Metadata } from "next";
-import { Spectral, Inter, Kalam } from "next/font/google";
+import { Spectral, Inter, Kalam, Cormorant_Garamond, DM_Mono } from "next/font/google";
 import "./globals.css";
 
 // Editorial serif for headers - Spectral (magazine-style, elegant)
@@ -29,6 +29,21 @@ const hanabiScript = Kalam({
   weight: ["300", "400"],
 });
 
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
+
+const dmMono = DM_Mono({
+  subsets: ["latin"],
+  weight: ["300"],
+  variable: "--font-dm-mono",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Hana-Bi — Archival Denim",
   description:
@@ -41,7 +56,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${hanabiSerif.variable} ${hanabiSans.variable} ${hanabiScript.variable} antialiased min-h-screen`}
+        className={`${hanabiSerif.variable} ${hanabiSans.variable} ${hanabiScript.variable} ${cormorant.variable} ${dmMono.variable} antialiased min-h-screen`}
       >
         <div className="flex min-h-screen flex-col">
           <SiteHeader />
