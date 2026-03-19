@@ -7,9 +7,10 @@ import { ProductGrid } from "./ProductGrid";
 
 interface ShopContentProps {
   products: Product[];
+  variant?: "dark" | "light";
 }
 
-export function ShopContent({ products }: ShopContentProps) {
+export function ShopContent({ products, variant = "dark" }: ShopContentProps) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [availability, setAvailability] = useState<"available" | "archived">(
@@ -31,21 +32,10 @@ export function ShopContent({ products }: ShopContentProps) {
   }, [products]);
 
   const filteredProducts = products.filter((product) => {
-    if (availability === "available" && product.status !== "available") {
-      return false;
-    }
-    if (availability === "archived" && product.status === "available") {
-      return false;
-    }
-
-    if (selectedTag && !product.tags.includes(selectedTag)) {
-      return false;
-    }
-
-    if (selectedSize && !product.sizes.includes(selectedSize)) {
-      return false;
-    }
-
+    if (availability === "available" && product.status !== "available") return false;
+    if (availability === "archived" && product.status === "available") return false;
+    if (selectedTag && !product.tags.includes(selectedTag)) return false;
+    if (selectedSize && !product.sizes.includes(selectedSize)) return false;
     return true;
   });
 
@@ -60,9 +50,9 @@ export function ShopContent({ products }: ShopContentProps) {
         onTagChange={setSelectedTag}
         onSizeChange={setSelectedSize}
         onAvailabilityChange={setAvailability}
+        variant={variant}
       />
-      <ProductGrid products={filteredProducts} />
+      <ProductGrid products={filteredProducts} variant={variant} />
     </div>
   );
 }
-
