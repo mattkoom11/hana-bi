@@ -60,6 +60,31 @@ export function GarmentStage({ product, catalogNumber }: GarmentStageProps) {
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
+    // ── Particles ──────────────────────────────────────────────────
+    const PARTICLE_COUNT = 120;
+    const positions = new Float32Array(PARTICLE_COUNT * 3);
+    const velocities = new Float32Array(PARTICLE_COUNT);
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      positions[i * 3]     = (Math.random() - 0.5) * 5;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 4;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 2;
+      velocities[i] = Math.random() * 0.001;
+    }
+
+    const particleGeo = new THREE.BufferGeometry();
+    particleGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+    const particleMat = new THREE.PointsMaterial({
+      color: 0xc8843a,
+      size: 0.012,
+      transparent: true,
+      opacity: 0.6,
+    });
+
+    const particles = new THREE.Points(particleGeo, particleMat);
+    scene.add(particles);
+
     // ── Clock ──────────────────────────────────────────────────────
     const clock = new THREE.Clock();
 
@@ -72,6 +97,15 @@ export function GarmentStage({ product, catalogNumber }: GarmentStageProps) {
       // Idle float + wobble
       mesh.position.y = Math.sin(t * 0.6) * 0.04;
       mesh.rotation.y = Math.sin(t * 0.3) * 0.02;
+
+      // Drift particles upward
+      const posAttr = particleGeo.getAttribute("position") as THREE.BufferAttribute;
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        posAttr.setY(i, posAttr.getY(i) + 0.003 + velocities[i]);
+        posAttr.setX(i, posAttr.getX(i) + Math.sin(t + i) * 0.001);
+        if (posAttr.getY(i) > 2) posAttr.setY(i, -2);
+      }
+      posAttr.needsUpdate = true;
 
       renderer.render(scene, camera);
     };
@@ -96,6 +130,8 @@ export function GarmentStage({ product, catalogNumber }: GarmentStageProps) {
       texture.dispose();
       geometry.dispose();
       material.dispose();
+      particleGeo.dispose();
+      particleMat.dispose();
       if (wrapper.contains(renderer.domElement)) {
         wrapper.removeChild(renderer.domElement);
       }
