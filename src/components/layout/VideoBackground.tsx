@@ -17,6 +17,7 @@ const CLIPS = [
 ];
 
 const TRANSITION_MS = 2000;
+const MIN_DISPLAY_MS = 8000; // each clip stays on screen at least 8s, looping if needed
 
 export function VideoBackground() {
   const [aIsActive, setAIsActive] = useState(true);
@@ -26,13 +27,15 @@ export function VideoBackground() {
 
   const aIsActiveRef = useRef(true);
   const nextClipIndexRef = useRef(0);
-  const crossfadingRef = useRef(false); // prevent double-trigger per clip
+  const crossfadingRef = useRef(false);
+  const clipStartedAtRef = useRef(0); // wall-clock time the current clip first started
 
   // On mount: load a random starting clip into A, preload next into B
   useEffect(() => {
     const startIndex = Math.floor(Math.random() * CLIPS.length);
     const nextIndex = (startIndex + 1) % CLIPS.length;
     nextClipIndexRef.current = nextIndex;
+    clipStartedAtRef.current = Date.now();
 
     if (videoARef.current) {
       videoARef.current.src = CLIPS[startIndex];
@@ -45,17 +48,9 @@ export function VideoBackground() {
     }
   }, []);
 
-  // Crossfade trigger — fires when the active clip is ~2s from its end
   useEffect(() => {
     const triggerCrossfade = () => {
       if (crossfadingRef.current) return;
-
-      const activeVideo = aIsActiveRef.current ? videoARef.current : videoBRef.current;
-      if (!activeVideo || isNaN(activeVideo.duration)) return;
-
-      const timeLeft = activeVideo.duration - activeVideo.currentTime;
-      if (timeLeft > TRANSITION_MS / 1000) return;
-
       crossfadingRef.current = true;
 
       const nextAIsActive = !aIsActiveRef.current;
@@ -64,8 +59,8 @@ export function VideoBackground() {
 
       aIsActiveRef.current = nextAIsActive;
       setAIsActive(nextAIsActive);
+      clipStartedAtRef.current = Date.now();
 
-      // After transition, preload the clip after next into the now-inactive video
       setTimeout(() => {
         const clipToPreload = (nextClipIndexRef.current + 1) % CLIPS.length;
         nextClipIndexRef.current = clipToPreload;
@@ -80,15 +75,53 @@ export function VideoBackground() {
       }, TRANSITION_MS);
     };
 
+    const onTimeUpdate = () => {
+      if (crossfadingRef.current) return;
+
+      const activeVideo = aIsActiveRef.current ? videoARef.current : videoBRef.current;
+      if (!activeVideo || isNaN(activeVideo.duration)) return;
+
+      const elapsed = Date.now() - clipStartedAtRef.current;
+      const timeLeft = activeVideo.duration - activeVideo.currentTime;
+
+      // Only crossfade on final loop — when we're within 2s of end AND we've
+      // been on screen long enough that another loop won't clear the minimum
+      const remainingAfterLoop = MIN_DISPLAY_MS - elapsed - timeLeft * 1000;
+      if (timeLeft <= TRANSITION_MS / 1000 && remainingAfterLoop <= 0) {
+        triggerCrossfade();
+      }
+    };
+
+    const onEnded = () => {
+      if (crossfadingRef.current) return;
+
+      const elapsed = Date.now() - clipStartedAtRef.current;
+      if (elapsed < MIN_DISPLAY_MS - TRANSITION_MS) {
+        // Not on screen long enough — loop seamlessly
+        const activeVideo = aIsActiveRef.current ? videoARef.current : videoBRef.current;
+        if (activeVideo) {
+          activeVideo.currentTime = 0;
+          activeVideo.play().catch(() => {});
+        }
+      } else {
+        // Clip ended right at the boundary — crossfade now
+        triggerCrossfade();
+      }
+    };
+
     const videoA = videoARef.current;
     const videoB = videoBRef.current;
 
-    videoA?.addEventListener("timeupdate", triggerCrossfade);
-    videoB?.addEventListener("timeupdate", triggerCrossfade);
+    videoA?.addEventListener("timeupdate", onTimeUpdate);
+    videoB?.addEventListener("timeupdate", onTimeUpdate);
+    videoA?.addEventListener("ended", onEnded);
+    videoB?.addEventListener("ended", onEnded);
 
     return () => {
-      videoA?.removeEventListener("timeupdate", triggerCrossfade);
-      videoB?.removeEventListener("timeupdate", triggerCrossfade);
+      videoA?.removeEventListener("timeupdate", onTimeUpdate);
+      videoB?.removeEventListener("timeupdate", onTimeUpdate);
+      videoA?.removeEventListener("ended", onEnded);
+      videoB?.removeEventListener("ended", onEnded);
     };
   }, []);
 
