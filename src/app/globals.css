@@ -400,3 +400,20 @@ img {
   pointer-events: none;
   z-index: 0;
 }
+
+/* Loading screen — 花火 kanji stroke draw-in */
+@keyframes hanabi-draw {
+  from {
+    stroke-dashoffset: 2400;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* stroke-dasharray value is empirical: covers full path length of 花火 at 96px serif */
+.hanabi-draw {
+  stroke-dasharray: 2400;
+  stroke-dashoffset: 2400;
+  animation: hanabi-draw 1.8s ease-out forwards;
+}
