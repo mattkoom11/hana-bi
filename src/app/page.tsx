@@ -1,4 +1,5 @@
 import { InkUnderline } from "@/components/common/InkUnderline";
+import { RollText } from "@/components/common/RollText";
 import { SketchFrame } from "@/components/common/SketchFrame";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { getAllProducts, getCollectionProducts } from "@/lib/shopify";
@@ -86,17 +87,17 @@ export default async function Home() {
               <div className="flex gap-5 flex-wrap pt-4">
                 <Link
                   href="/shop"
-                  className="bg-[var(--hb-sienna)] text-[#faf8f4] uppercase tracking-[0.4em] px-8 py-4 text-xs hover-wispy opacity-90 hover:opacity-100 transition-opacity"
+                  className="group bg-[var(--hb-sienna)] text-[#faf8f4] uppercase tracking-[0.4em] px-8 py-4 text-xs opacity-90 hover:opacity-100 transition-opacity"
                   style={{ fontFamily: "var(--hb-font-mono)" }}
                 >
-                  Enter Shop
+                  <RollText>Enter Shop</RollText>
                 </Link>
                 <Link
                   href="/about"
-                  className="border border-[rgba(250,248,244,0.25)] text-[rgba(250,248,244,0.7)] uppercase tracking-[0.4em] px-8 py-4 text-xs hover:text-[#faf8f4] hover:border-[rgba(250,248,244,0.5)] transition-all duration-300"
+                  className="group border border-[rgba(250,248,244,0.25)] text-[rgba(250,248,244,0.7)] uppercase tracking-[0.4em] px-8 py-4 text-xs hover:text-[#faf8f4] hover:border-[rgba(250,248,244,0.5)] transition-all duration-300"
                   style={{ fontFamily: "var(--hb-font-mono)" }}
                 >
-                  What is Hana-Bi?
+                  <RollText>What is Hana-Bi?</RollText>
                 </Link>
               </div>
             </div>
@@ -183,10 +184,10 @@ export default async function Home() {
           </div>
           <Link
             href="/shop"
-            className="text-xs uppercase tracking-[0.4em] border-b border-[var(--hb-dark-border)] pb-1.5 text-[var(--hb-dark-muted)] hover:text-[#faf8f4] hover:border-[var(--hb-sienna)] transition-all duration-300"
+            className="group text-xs uppercase tracking-[0.4em] border-b border-[var(--hb-dark-border)] pb-1.5 text-[var(--hb-dark-muted)] hover:text-[#faf8f4] hover:border-[var(--hb-sienna)] transition-all duration-300"
             style={{ fontFamily: "var(--hb-font-mono)" }}
           >
-            View All
+            <RollText>View All</RollText>
           </Link>
         </div>
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
@@ -221,10 +222,10 @@ export default async function Home() {
           </div>
           <Link
             href="/archive"
-            className="text-xs uppercase tracking-[0.4em] border-b border-dashed border-[var(--hb-dark-border)] pb-1.5 text-[var(--hb-dark-muted)] opacity-70 hover:opacity-100 transition-opacity"
+            className="group text-xs uppercase tracking-[0.4em] border-b border-dashed border-[var(--hb-dark-border)] pb-1.5 text-[var(--hb-dark-muted)] opacity-70 hover:opacity-100 transition-opacity"
             style={{ fontFamily: "var(--hb-font-mono)" }}
           >
-            Enter Archive
+            <RollText>Enter Archive</RollText>
           </Link>
         </div>
         <div className="grid gap-8 md:grid-cols-2">
@@ -253,10 +254,10 @@ export default async function Home() {
                 </p>
                 <Link
                   href={`/product/${piece.slug}`}
-                  className="text-xs uppercase tracking-[0.4em] border-b border-dashed border-[var(--hb-dark-border)] pb-1 inline-block opacity-70 hover:opacity-100 transition-opacity"
+                  className="group text-xs uppercase tracking-[0.4em] border-b border-dashed border-[var(--hb-dark-border)] pb-1 inline-block opacity-70 hover:opacity-100 transition-opacity"
                   style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
                 >
-                  View Dossier
+                  <RollText>View Dossier</RollText>
                 </Link>
               </div>
             </SketchFrame>
