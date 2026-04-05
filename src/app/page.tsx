@@ -1,6 +1,4 @@
-import { HandDrawnDivider } from "@/components/common/HandDrawnDivider";
 import { InkUnderline } from "@/components/common/InkUnderline";
-import { PaperBackground } from "@/components/common/PaperBackground";
 import { SketchFrame } from "@/components/common/SketchFrame";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { getAllProducts, getCollectionProducts } from "@/lib/shopify";
@@ -46,28 +44,8 @@ export default async function Home() {
 
   return (
     <main className="page-transition">
-      {/* ── Dark Hero ─────────────────────────────────────────── */}
-      <section className="grain relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-[var(--hb-dark)]">
-        {heroFeature && (
-          <div className="absolute inset-0 w-full h-full">
-            <Image
-              src={heroFeature.heroImage}
-              alt={heroFeature.name}
-              fill
-              className="object-cover"
-              priority
-              sizes="100vw"
-            />
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to top, rgba(14,12,11,0.85) 0%, rgba(14,12,11,0.3) 60%, transparent 100%)",
-              }}
-            />
-          </div>
-        )}
-
+      {/* ── Hero ──────────────────────────────────────────────────── */}
+      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
         {/* Ghost 花火 */}
         <span
           aria-hidden="true"
@@ -123,10 +101,25 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* Featured garment card */}
+            {/* Featured garment portrait card */}
             {heroFeature && (
-              <div className="grain bg-[var(--hb-dark-surface)] p-6 space-y-5 border border-[var(--hb-dark-border)]">
-                <div className="relative z-10 space-y-5">
+              <div className="relative overflow-hidden aspect-[3/4] border border-[var(--hb-dark-border)]">
+                <Image
+                  src={heroFeature.heroImage}
+                  alt={heroFeature.name}
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(max-width: 1024px) 90vw, 40vw"
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(to top, rgba(14,12,11,0.6) 0%, transparent 60%)",
+                  }}
+                />
+                <div className="absolute bottom-4 left-4 space-y-1">
                   <p
                     className="uppercase text-xs tracking-[0.55em] opacity-60"
                     style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
@@ -134,27 +127,11 @@ export default async function Home() {
                     HB-001
                   </p>
                   <p
-                    className="uppercase text-xs tracking-[0.4em] opacity-70"
-                    style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
-                  >
-                    Featured Garment
-                  </p>
-                  <h2
-                    className="text-3xl leading-tight text-[#faf8f4] italic font-light"
+                    className="text-xl leading-tight text-[#faf8f4] italic font-light"
                     style={{ fontFamily: "var(--hb-font-display)" }}
                   >
                     {heroFeature.name}
-                  </h2>
-                  <p className="text-sm leading-relaxed text-[var(--hb-dark-muted)]">
-                    {heroFeature.story}
                   </p>
-                  <Link
-                    href={`/product/${heroFeature.slug}`}
-                    className="text-xs uppercase tracking-[0.4em] border-b border-[var(--hb-sienna)] pb-1 inline-block hover:opacity-80 transition-opacity"
-                    style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
-                  >
-                    View Piece
-                  </Link>
                 </div>
               </div>
             )}
@@ -162,36 +139,34 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Light: What is Hana-Bi? ───────────────────────────── */}
-      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-24 relative">
-        <PaperBackground intensity="subtle" texture="grain">
-          <div className="absolute top-0 left-0 right-0 flex justify-center">
-            <HandDrawnDivider variant="wispy" strokeOpacity={0.3} />
-          </div>
-          <div className="grid gap-16 lg:grid-cols-2 mt-12 items-center">
-            <div className="space-y-6">
-              <p className="uppercase text-xs tracking-[0.5em] text-[var(--hb-smoke)] font-script opacity-70">
-                What is Hana-Bi?
-              </p>
-              <h3
-                className="text-4xl lg:text-5xl leading-tight italic font-light"
-                style={{ fontFamily: "var(--hb-font-display)" }}
-              >
-                Retail, but archival.
-              </h3>
-              <InkUnderline width={140} variant="delicate" strokeOpacity={0.35} className="mt-3" />
-            </div>
-            <p className="text-base leading-relaxed text-[var(--hb-smoke)] opacity-85 max-w-lg">
-              We work like an editorial studio. Each garment is catalogued, nodded to with
-              doodled borders and inked underlines throughout the site.
+      {/* ── What is Hana-Bi? ──────────────────────────────────────── */}
+      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 relative">
+        <div className="grid gap-16 lg:grid-cols-2 items-center">
+          <div className="space-y-6">
+            <p
+              className="uppercase text-xs tracking-[0.5em] opacity-70"
+              style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
+            >
+              What is Hana-Bi?
             </p>
+            <h3
+              className="text-4xl lg:text-5xl leading-tight italic font-light text-[#faf8f4]"
+              style={{ fontFamily: "var(--hb-font-display)" }}
+            >
+              Retail, but archival.
+            </h3>
+            <InkUnderline width={140} variant="delicate" strokeOpacity={0.35} className="mt-3" />
           </div>
-        </PaperBackground>
+          <p className="text-base leading-relaxed text-[var(--hb-dark-muted)] max-w-lg">
+            We work like an editorial studio. Each garment is catalogued, nodded to with
+            doodled borders and inked underlines throughout the site.
+          </p>
+        </div>
       </section>
 
-      {/* ── Dark: Current Drop ────────────────────────────────── */}
-      <section className="grain px-4 sm:px-8 md:px-12 lg:px-20 py-24 space-y-16 bg-[var(--hb-dark)]">
-        <div className="flex items-center justify-between relative z-10">
+      {/* ── Current Drop ──────────────────────────────────────────── */}
+      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 space-y-16">
+        <div className="flex items-center justify-between">
           <div className="space-y-3">
             <p
               className="uppercase text-xs tracking-[0.4em] opacity-70"
@@ -214,7 +189,7 @@ export default async function Home() {
             View All
           </Link>
         </div>
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3 relative z-10">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
           {featured.map((product, index) => (
             <ProductCard
               key={product.id}
@@ -226,65 +201,66 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Light: Archive Strip ──────────────────────────────── */}
-      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-24 relative space-y-12">
-        <PaperBackground intensity="subtle" texture="both">
-          <div className="absolute top-0 left-0 right-0 flex justify-center">
-            <HandDrawnDivider variant="delicate" strokeOpacity={0.25} />
-          </div>
-          <div className="flex items-center justify-between mt-12">
-            <div className="space-y-3">
-              <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)] font-script opacity-70">
-                From The Archive
-              </p>
-              <h3
-                className="text-4xl lg:text-5xl leading-tight italic font-light"
-                style={{ fontFamily: "var(--hb-font-display)" }}
-              >
-                Lookbook strips
-              </h3>
-              <InkUnderline width={140} variant="delicate" strokeOpacity={0.35} className="mt-2" />
-            </div>
-            <Link
-              href="/archive"
-              className="text-xs uppercase tracking-[0.4em] border-b border-dashed border-[var(--hb-border)] pb-1.5 hover-wispy opacity-70 hover:opacity-100"
-              style={{ fontFamily: "var(--hb-font-mono)" }}
+      {/* ── Archive Strip ─────────────────────────────────────────── */}
+      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 space-y-12">
+        <div className="flex items-center justify-between">
+          <div className="space-y-3">
+            <p
+              className="uppercase text-xs tracking-[0.4em] opacity-70"
+              style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
             >
-              Enter Archive
-            </Link>
+              From The Archive
+            </p>
+            <h3
+              className="text-4xl lg:text-5xl leading-tight text-[#faf8f4] italic font-light"
+              style={{ fontFamily: "var(--hb-font-display)" }}
+            >
+              Lookbook strips
+            </h3>
+            <InkUnderline width={140} variant="delicate" strokeOpacity={0.35} className="mt-2" />
           </div>
-          <div className="grid gap-8 md:grid-cols-2">
-            {archiveSlices.map((piece) => (
-              <SketchFrame
-                key={piece.id}
-                tilt={piece.id.includes("sea") ? "left" : "right"}
-                strokeOpacity={0.3}
-              >
-                <div className="space-y-4">
-                  <p className="uppercase text-[0.65rem] tracking-[0.4em] text-[var(--hb-smoke)] font-script opacity-70">
-                    {piece.year}
-                  </p>
-                  <h4
-                    className="text-2xl leading-tight italic font-light"
-                    style={{ fontFamily: "var(--hb-font-display)" }}
-                  >
-                    {piece.name}
-                  </h4>
-                  <p className="text-sm text-[var(--hb-smoke)] opacity-80 leading-relaxed">
-                    {piece.description}
-                  </p>
-                  <Link
-                    href={`/product/${piece.slug}`}
-                    className="text-xs uppercase tracking-[0.4em] border-b border-dashed border-[var(--hb-border)] pb-1 inline-block hover-wispy opacity-70 hover:opacity-100"
-                    style={{ fontFamily: "var(--hb-font-mono)" }}
-                  >
-                    View Dossier
-                  </Link>
-                </div>
-              </SketchFrame>
-            ))}
-          </div>
-        </PaperBackground>
+          <Link
+            href="/archive"
+            className="text-xs uppercase tracking-[0.4em] border-b border-dashed border-[var(--hb-dark-border)] pb-1.5 text-[var(--hb-dark-muted)] opacity-70 hover:opacity-100 transition-opacity"
+            style={{ fontFamily: "var(--hb-font-mono)" }}
+          >
+            Enter Archive
+          </Link>
+        </div>
+        <div className="grid gap-8 md:grid-cols-2">
+          {archiveSlices.map((piece) => (
+            <SketchFrame
+              key={piece.id}
+              tilt={piece.id.includes("sea") ? "left" : "right"}
+              strokeOpacity={0.3}
+            >
+              <div className="space-y-4">
+                <p
+                  className="uppercase text-[0.65rem] tracking-[0.4em] opacity-70"
+                  style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
+                >
+                  {piece.year}
+                </p>
+                <h4
+                  className="text-2xl leading-tight text-[#faf8f4] italic font-light"
+                  style={{ fontFamily: "var(--hb-font-display)" }}
+                >
+                  {piece.name}
+                </h4>
+                <p className="text-sm text-[var(--hb-dark-muted)] leading-relaxed">
+                  {piece.description}
+                </p>
+                <Link
+                  href={`/product/${piece.slug}`}
+                  className="text-xs uppercase tracking-[0.4em] border-b border-dashed border-[var(--hb-dark-border)] pb-1 inline-block opacity-70 hover:opacity-100 transition-opacity"
+                  style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
+                >
+                  View Dossier
+                </Link>
+              </div>
+            </SketchFrame>
+          ))}
+        </div>
       </section>
     </main>
   );
