@@ -12,56 +12,59 @@ const INTERVAL_MS = 20000;
 const TRANSITION_MS = 2000;
 
 export function VideoBackground() {
-  // Which physical video element is currently showing
   const [aIsActive, setAIsActive] = useState(true);
 
-  // Refs to the two video elements
   const videoARef = useRef<HTMLVideoElement>(null);
   const videoBRef = useRef<HTMLVideoElement>(null);
 
-  // Track clip index for next load — use ref to avoid stale closures in interval
+  // Ref mirror of aIsActive — lets the interval read current value without stale closure
+  const aIsActiveRef = useRef(true);
+
+  // Index of the clip currently preloaded and ready to play in the inactive video
   const nextClipIndexRef = useRef<number>(
     (Math.floor(Math.random() * CLIPS.length) + 1) % CLIPS.length
   );
 
-  // On mount: set video A to a random starting clip and start playing
+  // On mount: load a random starting clip into video A, preload next into video B
   useEffect(() => {
     const startIndex = Math.floor(Math.random() * CLIPS.length);
+    const nextIndex = (startIndex + 1) % CLIPS.length;
+    nextClipIndexRef.current = nextIndex;
+
     if (videoARef.current) {
       videoARef.current.src = CLIPS[startIndex];
       videoARef.current.load();
       videoARef.current.play().catch(() => {});
     }
-    // Preload first "next" clip into video B
-    const nextIndex = (startIndex + 1) % CLIPS.length;
-    nextClipIndexRef.current = nextIndex;
     if (videoBRef.current) {
       videoBRef.current.src = CLIPS[nextIndex];
       videoBRef.current.load();
     }
   }, []);
 
-  // Crossfade timer
+  // Crossfade timer — all side effects happen here, NOT inside the state updater
   useEffect(() => {
     const timer = setInterval(() => {
-      setAIsActive((prev) => {
-        const nowAIsActive = !prev;
-        // The video that just became active is already loaded and ready
-        // Start it playing
-        const activeVideo = nowAIsActive ? videoARef.current : videoBRef.current;
-        activeVideo?.play().catch(() => {});
+      const currentAIsActive = aIsActiveRef.current;
+      const nextAIsActive = !currentAIsActive;
 
-        // Preload the NEXT clip into the video that just became inactive
-        const inactiveVideo = nowAIsActive ? videoBRef.current : videoARef.current;
-        const nextIndex = (nextClipIndexRef.current + 1) % CLIPS.length;
-        nextClipIndexRef.current = nextIndex;
-        if (inactiveVideo) {
-          inactiveVideo.src = CLIPS[nextIndex];
-          inactiveVideo.load();
-        }
+      // The inactive video is already preloaded — start playing it
+      const nextActiveVideo = nextAIsActive ? videoARef.current : videoBRef.current;
+      nextActiveVideo?.play().catch(() => {});
 
-        return nowAIsActive;
-      });
+      // Swap visibility
+      aIsActiveRef.current = nextAIsActive;
+      setAIsActive(nextAIsActive);
+
+      // Preload the NEXT clip into the video that just became inactive
+      // Consume current nextClipIndexRef, then advance it
+      const clipToPreloadNext = (nextClipIndexRef.current + 1) % CLIPS.length;
+      nextClipIndexRef.current = clipToPreloadNext;
+      const nowInactiveVideo = nextAIsActive ? videoBRef.current : videoARef.current;
+      if (nowInactiveVideo) {
+        nowInactiveVideo.src = CLIPS[clipToPreloadNext];
+        nowInactiveVideo.load();
+      }
     }, INTERVAL_MS);
 
     return () => clearInterval(timer);
