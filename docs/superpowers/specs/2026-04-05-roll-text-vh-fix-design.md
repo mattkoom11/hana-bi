@@ -41,7 +41,7 @@ interface RollTextProps {
 
 - Outer element: `<span>` (inline, works inside `<a>` and `<button>`)
 - Uses Tailwind `group-hover:` — the parent `<Link>` or `<button>` must have the `group` class
-- Custom easing: `ease-out-quint` — `cubic-bezier(0.23, 1, 0.32, 1)` — added to `globals.css` as a Tailwind `@theme` extension or inline via `style` prop. Use inline style for simplicity: `style={{ transitionTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)' }}`
+- Custom easing: `cubic-bezier(0.23, 1, 0.32, 1)` applied inline via `style` prop on each copy span: `style={{ transitionTimingFunction: 'cubic-bezier(0.23, 1, 0.32, 1)' }}`
 - Duration: 600ms (faster than MILEZ's 1.3s to match Hana-Bi's tempo)
 
 ### Usage
@@ -56,7 +56,7 @@ interface RollTextProps {
 ## Where RollText Is Applied
 
 ### SiteHeader nav links (`src/components/layout/SiteHeader.tsx`)
-- Each `<Link>` in `NAV_LINKS.map(...)` — add `group` to the `<Link>`, wrap `{link.label}` with `<RollText>`
+- Each `<Link>` in `NAV_LINKS.map(...)` — add `group` to the `<Link>`, wrap `{link.label}` with `<RollText>`. Remove `hover-wispy` from these links — it applies a `translateY(-3px)` on hover that conflicts with RollText's vertical animation.
 - The active `InkUnderline` indicator stays on the `<Link>` — unchanged
 - "Full Cart →" link — wrap text with `<RollText>`
 - "Hana-Bi" logo link — skip (it has its own `InkUnderline` hover effect, adding RollText would conflict)
@@ -104,13 +104,23 @@ export function VhFix() {
 - Mounted once in `src/app/layout.tsx` inside `<body>`, before `<VideoBackground />`
 
 ### Layout integration
+
+Add `<VhFix />` as the first element inside `<body>`, immediately before `<VideoBackground />`. The existing overlay div and `relative z-10` wrapper remain unchanged:
+
 ```tsx
 // src/app/layout.tsx
 import { VhFix } from "@/components/common/VhFix";
 
-// In <body>:
-<VhFix />
-<VideoBackground />
+<body className={`...`}>
+  <VhFix />
+  <VideoBackground />
+  <div className="fixed inset-0 z-0 bg-[#0e0c0b]/60 pointer-events-none" />
+  <div className="relative z-10 flex min-h-screen flex-col">
+    <SiteHeader />
+    <main className="flex-1">{children}</main>
+    <SiteFooter />
+  </div>
+</body>
 ```
 
 ---
