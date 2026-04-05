@@ -358,6 +358,36 @@ img {
   color: var(--hb-accent);
 }
 
+/* Spotlight animation (aceternity/spotlight) */
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+    transform: translate(-72%, -62%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -40%) scale(1);
+  }
+}
+
+.animate-spotlight {
+  animation: spotlight 2s ease 0.75s 1 forwards;
+}
+
+/* Loader spinner (SplineScene fallback) */
+.loader {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(250, 248, 244, 0.15);
+  border-top-color: rgba(250, 248, 244, 0.6);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Grain texture overlay for dark surfaces */
 .grain {
   position: relative;
