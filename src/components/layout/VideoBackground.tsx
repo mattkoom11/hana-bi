@@ -16,7 +16,6 @@ const CLIPS = [
   "/videos/clip-11.mp4",
 ];
 
-const INTERVAL_MS = 20000;
 const TRANSITION_MS = 2000;
 
 export function VideoBackground() {
@@ -25,15 +24,11 @@ export function VideoBackground() {
   const videoARef = useRef<HTMLVideoElement>(null);
   const videoBRef = useRef<HTMLVideoElement>(null);
 
-  // Ref mirror of aIsActive — lets the interval read current value without stale closure
   const aIsActiveRef = useRef(true);
+  const nextClipIndexRef = useRef(0);
+  const crossfadingRef = useRef(false); // prevent double-trigger per clip
 
-  // Index of the clip currently preloaded and ready to play in the inactive video
-  const nextClipIndexRef = useRef<number>(
-    (Math.floor(Math.random() * CLIPS.length) + 1) % CLIPS.length
-  );
-
-  // On mount: load a random starting clip into video A, preload next into video B
+  // On mount: load a random starting clip into A, preload next into B
   useEffect(() => {
     const startIndex = Math.floor(Math.random() * CLIPS.length);
     const nextIndex = (startIndex + 1) % CLIPS.length;
@@ -50,59 +45,51 @@ export function VideoBackground() {
     }
   }, []);
 
-  // Seamless loop — reset currentTime just before each clip ends to avoid the
-  // browser's decode gap that causes a flash on the `loop` attribute
+  // Crossfade trigger — fires when the active clip is ~2s from its end
   useEffect(() => {
-    const makeSeamless = (ref: React.RefObject<HTMLVideoElement | null>) => {
-      const video = ref.current;
-      if (!video) return () => {};
-      const onTimeUpdate = () => {
-        if (!isNaN(video.duration) && video.currentTime >= video.duration - 0.1) {
-          video.currentTime = 0;
-        }
-      };
-      const onEnded = () => {
-        video.currentTime = 0;
-        video.play().catch(() => {});
-      };
-      video.addEventListener('timeupdate', onTimeUpdate);
-      video.addEventListener('ended', onEnded);
-      return () => {
-        video.removeEventListener('timeupdate', onTimeUpdate);
-        video.removeEventListener('ended', onEnded);
-      };
-    };
-    const cleanA = makeSeamless(videoARef);
-    const cleanB = makeSeamless(videoBRef);
-    return () => { cleanA(); cleanB(); };
-  }, []);
+    const triggerCrossfade = () => {
+      if (crossfadingRef.current) return;
 
-  // Crossfade timer — all side effects happen here, NOT inside the state updater
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const currentAIsActive = aIsActiveRef.current;
-      const nextAIsActive = !currentAIsActive;
+      const activeVideo = aIsActiveRef.current ? videoARef.current : videoBRef.current;
+      if (!activeVideo || isNaN(activeVideo.duration)) return;
 
-      // The inactive video is already preloaded — start playing it
+      const timeLeft = activeVideo.duration - activeVideo.currentTime;
+      if (timeLeft > TRANSITION_MS / 1000) return;
+
+      crossfadingRef.current = true;
+
+      const nextAIsActive = !aIsActiveRef.current;
       const nextActiveVideo = nextAIsActive ? videoARef.current : videoBRef.current;
       nextActiveVideo?.play().catch(() => {});
 
-      // Swap visibility
       aIsActiveRef.current = nextAIsActive;
       setAIsActive(nextAIsActive);
 
-      // Preload the NEXT clip into the video that just became inactive
-      // Consume current nextClipIndexRef, then advance it
-      const clipToPreloadNext = (nextClipIndexRef.current + 1) % CLIPS.length;
-      nextClipIndexRef.current = clipToPreloadNext;
-      const nowInactiveVideo = nextAIsActive ? videoBRef.current : videoARef.current;
-      if (nowInactiveVideo) {
-        nowInactiveVideo.src = CLIPS[clipToPreloadNext];
-        nowInactiveVideo.load();
-      }
-    }, INTERVAL_MS);
+      // After transition, preload the clip after next into the now-inactive video
+      setTimeout(() => {
+        const clipToPreload = (nextClipIndexRef.current + 1) % CLIPS.length;
+        nextClipIndexRef.current = clipToPreload;
 
-    return () => clearInterval(timer);
+        const nowInactive = nextAIsActive ? videoBRef.current : videoARef.current;
+        if (nowInactive) {
+          nowInactive.src = CLIPS[clipToPreload];
+          nowInactive.load();
+        }
+
+        crossfadingRef.current = false;
+      }, TRANSITION_MS);
+    };
+
+    const videoA = videoARef.current;
+    const videoB = videoBRef.current;
+
+    videoA?.addEventListener("timeupdate", triggerCrossfade);
+    videoB?.addEventListener("timeupdate", triggerCrossfade);
+
+    return () => {
+      videoA?.removeEventListener("timeupdate", triggerCrossfade);
+      videoB?.removeEventListener("timeupdate", triggerCrossfade);
+    };
   }, []);
 
   return (
