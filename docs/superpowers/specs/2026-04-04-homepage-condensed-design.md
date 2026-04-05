@@ -27,14 +27,15 @@ No other files are touched. `PaperBackground`, `HandDrawnDivider`, `InkUnderline
 **Current:** Full-bleed `<Image>` as `absolute inset-0` background, `bg-[var(--hb-dark)]` on the section.
 
 **New:**
-- Section: `bg-transparent` (remove `bg-[var(--hb-dark)]`)
+- Section: `bg-transparent` — remove both `bg-[var(--hb-dark)]` and `grain` from the section className
 - Remove the `<div className="absolute inset-0 w-full h-full">` image block entirely
 - Grid becomes `lg:grid-cols-[1.1fr_0.9fr]` (unchanged) — left column has text + CTAs, right column has the product portrait card
 - Right column product card:
   - `relative overflow-hidden` wrapper with `aspect-[3/4]` and `border border-[var(--hb-dark-border)]`
   - `<Image fill className="object-cover" />` of `heroFeature.heroImage`
   - Thin dark gradient overlay at bottom: `linear-gradient(to top, rgba(14,12,11,0.6) 0%, transparent 60%)`
-  - Catalog number + name labels overlaid at bottom of the image (already present in the featured card block — keep as-is, just reposition inside the image)
+  - Catalog number and garment name overlaid at the bottom of the image: move the `HB-001` `<p>` and the `heroFeature.name` `<h2>` from the existing card block into the image wrapper div, positioned `absolute bottom-4 left-4`. The catalog number remains hardcoded `HB-001`. The `heroFeature.story` paragraph and "View Piece" link are removed from this card — the image with name label is sufficient.
+  - The outer `grain bg-[var(--hb-dark-surface)] p-6 border border-[var(--hb-dark-border)]` card wrapper is removed; the image card is bare.
 - `花火` ghost kanji stays
 - `min-h-[85vh]` unchanged
 
