@@ -1,4 +1,4 @@
-# Hana-Bi — Full Improvement Roadmap Design
+read# Hana-Bi — Full Improvement Roadmap Design
 **Date:** 2026-03-16
 **Status:** Approved by user
 **Scope:** Pre-launch improvements across all 5 areas: backend, code quality, performance/SEO, UX, and new features
