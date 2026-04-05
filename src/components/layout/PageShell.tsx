@@ -26,7 +26,7 @@ export function PageShell({
     <section
       className={cn(
         "px-4 sm:px-8 md:px-12 lg:px-20 py-24 space-airy relative",
-        isDark ? "bg-[var(--hb-dark)] grain" : "",
+        isDark ? "bg-[var(--hb-dark)]/80 grain" : "bg-[var(--hb-paper)]/85",
         className
       )}
     >
