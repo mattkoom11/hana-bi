@@ -14,6 +14,14 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 export function GarmentStage({ product, catalogNumber }: GarmentStageProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
+  const [overlayVisible, setOverlayVisible] = useState(false);
+  const [cursorPointer, setCursorPointer] = useState(false);
+
+  const targetZRef = useRef(4.0);
+  const isFocusedRef = useRef(false);
+  const setOverlayVisibleRef = useRef(setOverlayVisible);
+  setOverlayVisibleRef.current = setOverlayVisible;
+
   useEffect(() => {
     const wrapper = wrapperRef.current;
     if (!wrapper) return;
@@ -85,6 +93,28 @@ export function GarmentStage({ product, catalogNumber }: GarmentStageProps) {
     const particles = new THREE.Points(particleGeo, particleMat);
     scene.add(particles);
 
+    // ── Raycaster ──────────────────────────────────────────────────
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    const onMouseMove = (e: MouseEvent) => {
+      const rect = wrapper.getBoundingClientRect();
+      mouse.x =  ((e.clientX - rect.left) / rect.width)  * 2 - 1;
+      mouse.y = -((e.clientY - rect.top)  / rect.height) * 2 + 1;
+    };
+
+    const onClick = () => {
+      raycaster.setFromCamera(mouse, camera);
+      const hits = raycaster.intersectObject(mesh);
+      if (hits.length > 0 && !isFocusedRef.current) {
+        isFocusedRef.current = true;
+        targetZRef.current = 1.4;
+      }
+    };
+
+    wrapper.addEventListener("mousemove", onMouseMove);
+    wrapper.addEventListener("click", onClick);
+
     // ── Clock ──────────────────────────────────────────────────────
     const clock = new THREE.Clock();
 
@@ -107,6 +137,24 @@ export function GarmentStage({ product, catalogNumber }: GarmentStageProps) {
       }
       posAttr.needsUpdate = true;
 
+      // Camera lerp toward target Z
+      camera.position.z = lerp(camera.position.z, targetZRef.current, 0.05);
+
+      // Show overlay once camera is close enough
+      if (isFocusedRef.current && Math.abs(camera.position.z - 1.4) < 0.05) {
+        setOverlayVisibleRef.current(true);
+      }
+
+      // Hover detection
+      raycaster.setFromCamera(mouse, camera);
+      const hits = raycaster.intersectObject(mesh);
+      const hovered = hits.length > 0 && !isFocusedRef.current;
+      setCursorPointer(hovered);
+
+      // Spotlight intensity lerp
+      const targetIntensity = isFocusedRef.current ? 4.5 : hovered ? 3.5 : 2.5;
+      spotLight.intensity = lerp(spotLight.intensity, targetIntensity, 0.05);
+
       renderer.render(scene, camera);
     };
     animate();
@@ -126,6 +174,8 @@ export function GarmentStage({ product, catalogNumber }: GarmentStageProps) {
     return () => {
       cancelAnimationFrame(animId);
       resizeObserver.disconnect();
+      wrapper.removeEventListener("mousemove", onMouseMove);
+      wrapper.removeEventListener("click", onClick);
       renderer.dispose();
       texture.dispose();
       geometry.dispose();
@@ -142,7 +192,63 @@ export function GarmentStage({ product, catalogNumber }: GarmentStageProps) {
     <div
       ref={wrapperRef}
       className="w-full h-[60vh] relative"
-      style={{ cursor: "default" }}
-    />
+      style={{ cursor: cursorPointer ? "pointer" : "default" }}
+    >
+      {/* Product overlay — fades in after camera fly-in */}
+      <div
+        className={`absolute inset-0 flex flex-col items-center justify-end pb-12 pointer-events-none transition-opacity duration-500 ${
+          overlayVisible ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <div className="pointer-events-auto text-center space-y-3 px-6 py-8 bg-[var(--hb-dark)]/70 backdrop-blur-sm border border-[var(--hb-dark-border)] max-w-sm w-full mx-4 relative">
+          {/* Dismiss */}
+          <button
+            onClick={() => {
+              isFocusedRef.current = false;
+              targetZRef.current = 4.0;
+              setOverlayVisible(false);
+            }}
+            className="absolute top-3 right-4 text-[var(--hb-dark-muted)] hover:text-[#faf8f4] transition-colors text-lg leading-none"
+            style={{ fontFamily: "var(--hb-font-mono)" }}
+            aria-label="Dismiss"
+          >
+            ×
+          </button>
+
+          {/* Catalog number */}
+          <p
+            className="text-xs uppercase tracking-[0.4em]"
+            style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
+          >
+            {catalogNumber}
+          </p>
+
+          {/* Name */}
+          <p
+            className="text-3xl text-[#faf8f4] italic font-light"
+            style={{ fontFamily: "var(--hb-font-display)" }}
+          >
+            {product.name}
+          </p>
+
+          {/* Price */}
+          <p
+            className="text-sm"
+            style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
+          >
+            ${product.price.toLocaleString()}
+          </p>
+
+          {/* CTA */}
+          <a
+            href={`/product/${product.slug}`}
+            className="inline-block mt-2 px-8 py-3 bg-[var(--hb-sienna)] text-[#faf8f4] uppercase tracking-[0.4em] text-xs hover:opacity-90 transition-opacity"
+            style={{ fontFamily: "var(--hb-font-mono)" }}
+          >
+            View Piece
+          </a>
+        </div>
+      </div>
+    </div>
   );
 }
