@@ -1,8 +1,20 @@
+import type { Metadata } from "next";
 import { PageShell } from "@/components/layout/PageShell";
 import { ShopContent } from "@/components/shop/ShopContent";
 import { getAllProducts } from "@/lib/shopify";
 import { mapShopifyProductToHanaBiProduct } from "@/lib/shopify-mappers";
 import { products as fallbackProducts } from "@/data/products";
+
+export const metadata: Metadata = {
+  title: "Shop — Hana-Bi",
+  description:
+    "Browse limited denim garments from the Hana-Bi archive. Each piece is documented like an artifact.",
+  openGraph: {
+    title: "Shop — Hana-Bi",
+    description:
+      "Browse limited denim garments from the Hana-Bi archive. Each piece is documented like an artifact.",
+  },
+};
 
 export default async function ShopPage() {
   let shopifyProducts = fallbackProducts;

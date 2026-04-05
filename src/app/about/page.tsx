@@ -1,6 +1,18 @@
+import type { Metadata } from "next";
 import { InkUnderline } from "@/components/common/InkUnderline";
 import { SketchFrame } from "@/components/common/SketchFrame";
 import { PageShell } from "@/components/layout/PageShell";
+
+export const metadata: Metadata = {
+  title: "About — Hana-Bi",
+  description:
+    "Hana-Bi is a sustainable denim house with an editorial mindset. Each garment is treated like an artifact.",
+  openGraph: {
+    title: "About — Hana-Bi",
+    description:
+      "Hana-Bi is a sustainable denim house with an editorial mindset. Each garment is treated like an artifact.",
+  },
+};
 
 const CHAPTERS = [
   {

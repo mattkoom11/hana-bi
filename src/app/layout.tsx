@@ -48,6 +48,12 @@ export const metadata: Metadata = {
   title: "Hana-Bi — Archival Denim",
   description:
     "Hana-Bi is a sustainable denim house documenting each garment like an artifact.",
+  openGraph: {
+    title: "Hana-Bi — Archival Denim",
+    description:
+      "Hana-Bi is a sustainable denim house documenting each garment like an artifact.",
+    images: ["/og-default.jpg"],
+  },
 };
 
 export default function RootLayout({

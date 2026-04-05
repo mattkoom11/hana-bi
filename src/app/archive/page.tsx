@@ -1,9 +1,21 @@
+import type { Metadata } from "next";
 import { SketchFrame } from "@/components/common/SketchFrame";
 import { PageShell } from "@/components/layout/PageShell";
 import { getAllProducts, getCollectionProducts } from "@/lib/shopify";
 import { mapShopifyProductToHanaBiProduct } from "@/lib/shopify-mappers";
 import { archivedProducts as fallbackArchived } from "@/data/products";
 import type { Product } from "@/data/products";
+
+export const metadata: Metadata = {
+  title: "Archive — Hana-Bi",
+  description:
+    "Sold-out and archived Hana-Bi garments, preserved with editorial annotations and fabric provenance.",
+  openGraph: {
+    title: "Archive — Hana-Bi",
+    description:
+      "Sold-out and archived Hana-Bi garments, preserved with editorial annotations and fabric provenance.",
+  },
+};
 
 /**
  * Archive page - fetches archived products from Shopify
