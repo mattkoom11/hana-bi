@@ -57,6 +57,11 @@ export async function generateMetadata({
   return {
     title: `${project.name} — Hana-Bi Projects`,
     description: project.description,
+    openGraph: {
+      title: `${project.name} — Hana-Bi Projects`,
+      description: project.description,
+      images: [project.heroImage],
+    },
   };
 }
 
