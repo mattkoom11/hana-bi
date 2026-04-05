@@ -38,10 +38,8 @@ export function SiteHeader() {
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className={`text-3xl tracking-[0.08em] hover-wispy relative group transition-colors italic font-light ${
-              isDark ? "text-[#faf8f4]" : "text-[var(--hb-ink)]"
-            }`}
-            style={{ fontFamily: "var(--hb-font-display)" }}
+            className="text-3xl tracking-[0.08em] hover-wispy relative group transition-colors italic font-light text-white"
+            style={{ fontFamily: "var(--hb-font-display)", mixBlendMode: "exclusion" }}
           >
             Hana-Bi
             <span className="absolute -bottom-1 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
