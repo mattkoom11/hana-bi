@@ -58,6 +58,24 @@ export function GarmentStage({ product, catalogNumber }: GarmentStageProps) {
     scene.add(spotLight);
     scene.add(spotLight.target);
 
+    // ── Video Background Plane ────────────────────────────────────
+    const videoCanvas = document.createElement('canvas');
+    videoCanvas.width = 640;
+    videoCanvas.height = 360;
+    const videoCtx = videoCanvas.getContext('2d')!;
+    const videoTexture = new THREE.CanvasTexture(videoCanvas);
+    videoTexture.colorSpace = THREE.SRGBColorSpace;
+
+    const bgGeo = new THREE.PlaneGeometry(10, 5.6);
+    const bgMat = new THREE.MeshStandardMaterial({
+      map: videoTexture,
+      roughness: 0.9,
+      metalness: 0.0,
+    });
+    const bgMesh = new THREE.Mesh(bgGeo, bgMat);
+    bgMesh.position.z = -1.5;
+    scene.add(bgMesh);
+
     // ── Garment Plane ──────────────────────────────────────────────
     const textureLoader = new THREE.TextureLoader();
     const texture = textureLoader.load(product.heroImage);
@@ -155,6 +173,21 @@ export function GarmentStage({ product, catalogNumber }: GarmentStageProps) {
       const targetIntensity = isFocusedRef.current ? 4.5 : hovered ? 3.5 : 2.5;
       spotLight.intensity = lerp(spotLight.intensity, targetIntensity, 0.05);
 
+      // Composite live video elements onto the background plane texture
+      videoCtx.fillStyle = '#0e0c0b';
+      videoCtx.fillRect(0, 0, videoCanvas.width, videoCanvas.height);
+      document.querySelectorAll<HTMLVideoElement>('video[muted]').forEach((vid) => {
+        if (vid.readyState >= 2) {
+          const opacity = parseFloat(window.getComputedStyle(vid).opacity);
+          if (opacity > 0.01) {
+            videoCtx.globalAlpha = opacity;
+            videoCtx.drawImage(vid, 0, 0, videoCanvas.width, videoCanvas.height);
+          }
+        }
+      });
+      videoCtx.globalAlpha = 1;
+      videoTexture.needsUpdate = true;
+
       renderer.render(scene, camera);
     };
     animate();
@@ -182,6 +215,9 @@ export function GarmentStage({ product, catalogNumber }: GarmentStageProps) {
       material.dispose();
       particleGeo.dispose();
       particleMat.dispose();
+      videoTexture.dispose();
+      bgGeo.dispose();
+      bgMat.dispose();
       if (wrapper.contains(renderer.domElement)) {
         wrapper.removeChild(renderer.domElement);
       }

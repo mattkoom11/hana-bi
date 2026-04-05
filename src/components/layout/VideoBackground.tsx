@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const CLIPS = [
   "/videos/clip-01.mp4",
@@ -50,6 +50,33 @@ export function VideoBackground() {
     }
   }, []);
 
+  // Seamless loop — reset currentTime just before each clip ends to avoid the
+  // browser's decode gap that causes a flash on the `loop` attribute
+  useEffect(() => {
+    const makeSeamless = (ref: React.RefObject<HTMLVideoElement | null>) => {
+      const video = ref.current;
+      if (!video) return () => {};
+      const onTimeUpdate = () => {
+        if (!isNaN(video.duration) && video.currentTime >= video.duration - 0.1) {
+          video.currentTime = 0;
+        }
+      };
+      const onEnded = () => {
+        video.currentTime = 0;
+        video.play().catch(() => {});
+      };
+      video.addEventListener('timeupdate', onTimeUpdate);
+      video.addEventListener('ended', onEnded);
+      return () => {
+        video.removeEventListener('timeupdate', onTimeUpdate);
+        video.removeEventListener('ended', onEnded);
+      };
+    };
+    const cleanA = makeSeamless(videoARef);
+    const cleanB = makeSeamless(videoBRef);
+    return () => { cleanA(); cleanB(); };
+  }, []);
+
   // Crossfade timer — all side effects happen here, NOT inside the state updater
   useEffect(() => {
     const timer = setInterval(() => {
@@ -83,7 +110,6 @@ export function VideoBackground() {
       <video
         ref={videoARef}
         muted
-        loop
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
         style={{
@@ -94,7 +120,6 @@ export function VideoBackground() {
       <video
         ref={videoBRef}
         muted
-        loop
         playsInline
         className="absolute inset-0 w-full h-full object-cover"
         style={{
