@@ -1,6 +1,7 @@
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { VideoBackground } from "@/components/layout/VideoBackground";
+import { VhFix } from "@/components/common/VhFix";
 import type { Metadata } from "next";
 import { Spectral, Inter, Kalam, Cormorant_Garamond, DM_Mono } from "next/font/google";
 import "./globals.css";
@@ -65,6 +66,7 @@ export default function RootLayout({
       <body
         className={`${hanabiSerif.variable} ${hanabiSans.variable} ${hanabiScript.variable} ${cormorant.variable} ${dmMono.variable} antialiased min-h-screen`}
       >
+        <VhFix />
         <VideoBackground />
         {/* Dark ambient overlay — suppresses video to ~20-30% presence */}
         <div className="fixed inset-0 z-0 bg-[#0e0c0b]/60 pointer-events-none" />
