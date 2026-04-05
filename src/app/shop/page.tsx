@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageShell } from "@/components/layout/PageShell";
 import { ShopContent } from "@/components/shop/ShopContent";
+import { GarmentStage } from "@/components/shop/GarmentStage";
 import { getAllProducts } from "@/lib/shopify";
 import { mapShopifyProductToHanaBiProduct } from "@/lib/shopify-mappers";
 import { products as fallbackProducts } from "@/data/products";
@@ -26,8 +27,20 @@ export default async function ShopPage() {
     console.warn("Failed to fetch from Shopify, using fallback data:", error);
   }
 
+  const featuredProduct =
+    shopifyProducts.find((p) => p.status === "available") ?? shopifyProducts[0];
+
+  const catalogIndex = fallbackProducts.findIndex(
+    (p) => p.slug === featuredProduct.slug
+  );
+  const catalogNumber =
+    catalogIndex >= 0
+      ? `HB-${String(catalogIndex + 1).padStart(3, "0")}`
+      : "HB-001";
+
   return (
     <main className="page-transition">
+      <GarmentStage product={featuredProduct} catalogNumber={catalogNumber} />
       <PageShell
         variant="dark"
         eyebrow="Shop"
