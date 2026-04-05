@@ -11,12 +11,14 @@ interface AddToCartButtonProps {
   product: Product;
   selectedSize: string | null;
   shopifyProductNode?: ShopifyProductNode | null;
+  compact?: boolean;
 }
 
 export function AddToCartButton({
   product,
   selectedSize,
   shopifyProductNode,
+  compact,
 }: AddToCartButtonProps) {
   const addItem = useCartStore((state) => state.addItem);
   const disabled = useMemo(
@@ -69,7 +71,7 @@ export function AddToCartButton({
           : "bg-[var(--hb-ink)] text-[var(--hb-paper)]"
       )}
     >
-      {disabled ? "Select Size" : `Add to Cart — ${formatCurrency(product.price)}`}
+      {disabled ? "Select Size" : compact ? "Add" : `Add to Cart — ${formatCurrency(product.price)}`}
     </button>
   );
 }

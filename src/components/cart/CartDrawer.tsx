@@ -91,7 +91,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
           </div>
           <button
             onClick={onClose}
-            className="text-xs uppercase tracking-[0.3em] text-[var(--hb-dark-muted)] hover:text-[#faf8f4] transition-colors"
+            className="flex items-center justify-center min-h-[44px] min-w-[44px] text-xs uppercase tracking-[0.3em] text-[var(--hb-dark-muted)] hover:text-[#faf8f4] transition-colors"
             style={{ fontFamily: "var(--hb-font-mono)" }}
           >
             Close
@@ -138,20 +138,20 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                   <div className="flex items-center border border-[var(--hb-dark-border)]">
                     <button
                       onClick={() => updateQuantity(item.id, item.size, Math.max(1, item.quantity - 1))}
-                      className="w-8 h-8 text-[#faf8f4]"
+                      className="w-11 h-11 text-[#faf8f4] flex items-center justify-center"
                       style={{ fontFamily: "var(--hb-font-mono)" }}
                     >
                       –
                     </button>
                     <span
-                      className="w-10 text-center text-[#faf8f4] text-sm"
+                      className="w-10 text-center text-[#faf8f4] text-sm self-center"
                       style={{ fontFamily: "var(--hb-font-mono)" }}
                     >
                       {item.quantity}
                     </span>
                     <button
                       onClick={() => updateQuantity(item.id, item.size, item.quantity + 1)}
-                      className="w-8 h-8 text-[#faf8f4]"
+                      className="w-11 h-11 text-[#faf8f4] flex items-center justify-center"
                       style={{ fontFamily: "var(--hb-font-mono)" }}
                     >
                       +

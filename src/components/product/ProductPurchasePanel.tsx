@@ -52,7 +52,7 @@ export function ProductPurchasePanel({
               <button
                 key={size}
                 onClick={() => setSelectedSize(size)}
-                className={`px-5 py-2.5 border text-xs uppercase tracking-[0.3em] transition-all duration-300 hover-wispy ${
+                className={`px-5 py-2.5 min-h-[44px] border text-xs uppercase tracking-[0.3em] transition-all duration-300 hover-wispy ${
                   selectedSize === size
                     ? "border-[var(--hb-ink)] bg-[var(--hb-ink)] text-[var(--hb-paper)]"
                     : "border-[var(--hb-border)] border-dashed text-[var(--hb-smoke)] hover:border-[var(--hb-ink-light)]"
@@ -76,6 +76,32 @@ export function ProductPurchasePanel({
         <p className="text-[0.75rem] text-[var(--hb-smoke)] opacity-70 mt-6 leading-relaxed">
           Need a custom tailoring note? Add it during checkout or email studio@hana-bi.example.
         </p>
+      </div>
+
+      {/* Sticky mobile Add to Cart — visible only below md breakpoint */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden border-t border-[var(--hb-dark-border)] bg-[var(--hb-dark)]/95 backdrop-blur-sm px-4 py-3 flex items-center gap-4">
+        <div className="flex-1 min-w-0">
+          <p
+            className="text-xs uppercase tracking-[0.3em] truncate"
+            style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
+          >
+            {selectedSize ? `Size ${selectedSize}` : "Select a size"}
+          </p>
+          <p
+            className="text-base text-[#faf8f4] italic font-light truncate"
+            style={{ fontFamily: "var(--hb-font-display)" }}
+          >
+            {formatCurrency(product.price)}
+          </p>
+        </div>
+        <div className="shrink-0">
+          <AddToCartButton
+            product={product}
+            selectedSize={selectedSize}
+            shopifyProductNode={shopifyProductNode}
+            compact
+          />
+        </div>
       </div>
     </div>
   );
