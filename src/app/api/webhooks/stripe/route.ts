@@ -1,13 +1,14 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
+import { STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET } from "@/lib/env";
 
 // In-memory store for verified session IDs.
 // In production, replace with a database write (Redis, Postgres, etc.)
 export const verifiedSessions = new Set<string>();
 
 function getStripe() {
-  const secretKey = process.env.STRIPE_SECRET_KEY;
+  const secretKey = STRIPE_SECRET_KEY;
   if (!secretKey) throw new Error("STRIPE_SECRET_KEY is not set");
   return new Stripe(secretKey, {
     apiVersion: "2025-12-15.clover",
@@ -20,7 +21,7 @@ function getStripe() {
 // has no effect here and is NOT used.
 
 export async function POST(request: Request) {
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const webhookSecret = STRIPE_WEBHOOK_SECRET;
   if (!webhookSecret) {
     console.error("STRIPE_WEBHOOK_SECRET is not set");
     return NextResponse.json(

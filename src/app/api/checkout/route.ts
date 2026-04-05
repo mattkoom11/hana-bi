@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { STRIPE_SECRET_KEY, NEXT_PUBLIC_SITE_URL } from "@/lib/env";
 
 export interface CheckoutLineItem {
   name: string;
@@ -14,7 +15,7 @@ export interface CheckoutRequestBody {
 }
 
 function getStripe() {
-  const secretKey = process.env.STRIPE_SECRET_KEY;
+  const secretKey = STRIPE_SECRET_KEY;
   if (!secretKey) {
     throw new Error("STRIPE_SECRET_KEY is not set");
   }
@@ -25,14 +26,14 @@ function getStripe() {
 }
 
 export async function POST(request: NextRequest) {
-  if (!process.env.STRIPE_SECRET_KEY) {
+  if (!STRIPE_SECRET_KEY) {
     return NextResponse.json(
       { error: "Server configuration error" },
       { status: 500 }
     );
   }
 
-  if (!process.env.NEXT_PUBLIC_SITE_URL) {
+  if (!NEXT_PUBLIC_SITE_URL) {
     return NextResponse.json(
       { error: "Server configuration error" },
       { status: 500 }
@@ -64,7 +65,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const stripe = getStripe();
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+    const siteUrl = NEXT_PUBLIC_SITE_URL;
     // Validate cancelUrl is internal to prevent open redirect via Stripe cancel
     const rawCancelUrl = body.cancelUrl;
     const cancelUrl =

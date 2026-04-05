@@ -13,10 +13,11 @@
  *    Shopify Admin → Settings → Apps and sales channels → Develop apps → Storefront API
  */
 
-const SHOPIFY_STORE_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN;
-const SHOPIFY_STOREFRONT_ACCESS_TOKEN =
-  process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
-const SHOPIFY_API_VERSION = process.env.SHOPIFY_API_VERSION || "2025-01";
+import {
+  SHOPIFY_STORE_DOMAIN,
+  SHOPIFY_STOREFRONT_ACCESS_TOKEN,
+  SHOPIFY_API_VERSION,
+} from "@/lib/env";
 
 if (!SHOPIFY_STORE_DOMAIN || !SHOPIFY_STOREFRONT_ACCESS_TOKEN) {
   console.warn(
