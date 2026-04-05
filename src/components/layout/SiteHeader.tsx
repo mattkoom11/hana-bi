@@ -2,6 +2,7 @@
 
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { InkUnderline } from "@/components/common/InkUnderline";
+import { RollText } from "@/components/common/RollText";
 import { useHeaderTheme } from "@/hooks/useHeaderTheme";
 import { useCartCount } from "@/store/cart";
 import Link from "next/link";
@@ -86,13 +87,13 @@ export function SiteHeader() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`pb-2 relative hover-wispy transition-all duration-300 ${
+                className={`group pb-2 relative transition-all duration-300 ${
                   isActive
                     ? isDark ? "text-[#faf8f4]" : "text-[var(--hb-ink)]"
                     : isDark ? "hover:text-[#faf8f4]" : "hover:text-[var(--hb-ink-light)]"
                 }`}
               >
-                {link.label}
+                <RollText>{link.label}</RollText>
                 {isActive && (
                   <span className="absolute bottom-0 left-0 right-0 flex justify-center text-[var(--hb-sienna)]">
                     <InkUnderline width={60} variant="wispy" strokeOpacity={0.6} />
@@ -103,13 +104,13 @@ export function SiteHeader() {
           })}
           <Link
             href="/cart"
-            className={`ml-auto border-b border-dashed pb-2 hover-wispy transition-all duration-300 ${
+            className={`group ml-auto border-b border-dashed pb-2 transition-all duration-300 ${
               isDark
                 ? "text-[var(--hb-dark-muted)] border-[var(--hb-dark-border)] hover:text-[#faf8f4]"
                 : "text-[var(--hb-ink-light)] border-[var(--hb-border)] border-opacity-40 hover:border-opacity-70"
             }`}
           >
-            Full Cart →
+            <RollText>Full Cart →</RollText>
           </Link>
         </nav>
       </header>
