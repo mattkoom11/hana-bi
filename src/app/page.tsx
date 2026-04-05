@@ -126,12 +126,12 @@ export default async function Home() {
                   >
                     HB-001
                   </p>
-                  <p
+                  <h2
                     className="text-xl leading-tight text-[#faf8f4] italic font-light"
                     style={{ fontFamily: "var(--hb-font-display)" }}
                   >
                     {heroFeature.name}
-                  </p>
+                  </h2>
                 </div>
               </div>
             )}
@@ -233,6 +233,7 @@ export default async function Home() {
               key={piece.id}
               tilt={piece.id.includes("sea") ? "left" : "right"}
               strokeOpacity={0.3}
+              className="border-[var(--hb-dark-border)]"
             >
               <div className="space-y-4">
                 <p
