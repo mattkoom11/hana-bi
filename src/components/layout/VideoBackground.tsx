@@ -5,7 +5,15 @@ import { useEffect, useRef, useState } from "react";
 const CLIPS = [
   "/videos/clip-01.mp4",
   "/videos/clip-02.mp4",
-  "/videos/clip-03.mp4",
+  "/videos/clip-03.MP4",
+  "/videos/clip-04.mp4",
+  "/videos/clip-05.mp4",
+  "/videos/clip-06.mp4",
+  "/videos/clip-07.mp4",
+  "/videos/clip-08.mp4",
+  "/videos/clip-09.mp4",
+  "/videos/clip-10.mp4",
+  "/videos/clip-11.mp4",
 ];
 
 const INTERVAL_MS = 20000;
