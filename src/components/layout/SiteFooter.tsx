@@ -15,7 +15,6 @@ const KANJI_CHARS = ['花', '火'];
 
 export function SiteFooter() {
   const [revealed, setRevealed] = useState(false);
-  const kanjiRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -81,7 +80,6 @@ export function SiteFooter() {
 
       {/* Oversized kanji reveal */}
       <div
-        ref={kanjiRef}
         className="absolute bottom-0 right-0 select-none pointer-events-none overflow-hidden"
         aria-hidden="true"
       >
