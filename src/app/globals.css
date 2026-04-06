@@ -457,6 +457,12 @@ img {
   transform: scaleX(1);
 }
 
+.fill-link:hover span:last-child,
+.fill-link:focus-visible span:last-child {
+  color: #faf8f4;
+  transition: color 0.25s ease;
+}
+
 /* ── CulturalExplainer slide-in panel ── */
 .cultural-explainer__panel {
   display: inline-flex;
