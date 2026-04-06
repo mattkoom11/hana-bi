@@ -24,6 +24,14 @@ export function SplitText({
     if (!el) return;
     const spans = el.querySelectorAll<HTMLSpanElement>('.split-char');
 
+    // Immediately reveal all characters for reduced-motion users
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      spans.forEach((span) => {
+        span.style.animationPlayState = 'running';
+      });
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
