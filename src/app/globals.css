@@ -436,3 +436,22 @@ img {
   animation: split-char-in 0.55s cubic-bezier(0.23, 1, 0.32, 1) forwards;
   animation-play-state: paused;
 }
+
+/* ── FillLink hover background fill ── */
+.fill-link {
+  position: relative;
+  overflow: hidden;
+}
+
+.fill-link__bg {
+  position: absolute;
+  inset: 0;
+  background: var(--hb-sienna);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.fill-link:hover .fill-link__bg {
+  transform: scaleX(1);
+}
