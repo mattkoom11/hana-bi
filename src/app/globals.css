@@ -456,3 +456,44 @@ img {
 .fill-link:focus-visible .fill-link__bg {
   transform: scaleX(1);
 }
+
+/* ── CulturalExplainer slide-in panel ── */
+.cultural-explainer__panel {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--hb-dark-border);
+  background: rgba(14, 12, 11, 0.88);
+  backdrop-filter: blur(12px);
+  transform: translateX(-1.5rem);
+  opacity: 0;
+  transition: transform 0.55s cubic-bezier(0.23, 1, 0.32, 1),
+              opacity 0.45s ease;
+}
+
+.cultural-explainer--visible .cultural-explainer__panel {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.cultural-explainer__kanji {
+  font-size: 2.25rem;
+  color: var(--hb-sienna);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.cultural-explainer__reading {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.45em;
+  color: var(--hb-sienna);
+  margin-bottom: 0.3rem;
+}
+
+.cultural-explainer__meaning {
+  font-size: 0.8rem;
+  color: var(--hb-dark-muted);
+  line-height: 1.4;
+}
