@@ -29,19 +29,25 @@ export function StickyScrollSection({
       container.querySelectorAll<HTMLDivElement>('[data-panel]')
     );
 
-    const observers = panelEls.map((el, i) => {
-      const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setActiveIndex(i);
-        },
-        { threshold: 0.5 }
-      );
-      obs.observe(el);
-      return obs;
-    });
+    const obs = new IntersectionObserver(
+      (entries) => {
+        let bestIndex = -1;
+        let bestRatio = 0;
+        entries.forEach((entry) => {
+          const i = panelEls.indexOf(entry.target as HTMLDivElement);
+          if (entry.isIntersecting && entry.intersectionRatio > bestRatio) {
+            bestRatio = entry.intersectionRatio;
+            bestIndex = i;
+          }
+        });
+        if (bestIndex !== -1) setActiveIndex(bestIndex);
+      },
+      { threshold: [0, 0.5, 1] }
+    );
 
-    return () => observers.forEach((o) => o.disconnect());
-  }, []);
+    panelEls.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, [panels]);
 
   const progress =
     panels.length > 1 ? (activeIndex / (panels.length - 1)) * 100 : 100;
@@ -52,7 +58,10 @@ export function StickyScrollSection({
       className={`relative flex ${className}`}
     >
       {/* Sticky sidebar */}
-      <aside className="sticky top-0 h-screen w-40 flex-shrink-0 flex flex-col justify-between py-16 pl-4 pr-6">
+      <aside
+        aria-label={`${sectionLabel} progress`}
+        className="sticky top-0 h-screen w-40 flex-shrink-0 flex flex-col justify-between py-16 pl-4 pr-6"
+      >
         <div className="space-y-4">
           <p
             className="text-[0.6rem] uppercase tracking-[0.45em] text-[var(--hb-sienna)]"
