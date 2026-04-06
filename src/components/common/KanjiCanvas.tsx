@@ -36,6 +36,9 @@ export function KanjiCanvas({
     if (!ctx) return;
 
     const setup = () => {
+      // Skip animation entirely for reduced-motion users
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
       const W = (canvas.width = canvas.offsetWidth);
       const H = (canvas.height = canvas.offsetHeight);
       if (W === 0 || H === 0) return;
