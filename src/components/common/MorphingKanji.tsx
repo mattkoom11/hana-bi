@@ -43,6 +43,8 @@ export function MorphingKanji({ className = '' }: MorphingKanjiProps) {
   return (
     <div
       ref={sectionRef}
+      role="region"
+      aria-label="Hana-Bi name etymology"
       className={`relative ${className}`}
       style={{ height: `${STEPS.length * 100}vh` }}
     >
@@ -51,7 +53,8 @@ export function MorphingKanji({ className = '' }: MorphingKanjiProps) {
           <div
             key={step.kanji}
             className="absolute inset-0 flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out"
-            style={{ opacity: i === activeIndex ? 1 : 0, pointerEvents: i === activeIndex ? 'auto' : 'none' }}
+            style={{ opacity: i === activeIndex ? 1 : 0, pointerEvents: i === activeIndex ? 'auto' : 'none', willChange: 'opacity' }}
+            aria-hidden={i !== activeIndex}
           >
             <span
               aria-hidden="true"
