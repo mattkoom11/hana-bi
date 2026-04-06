@@ -23,7 +23,7 @@ export function FillLink({
   return (
     <Link
       href={href}
-      className={`fill-link group relative overflow-hidden inline-flex items-center ${className}`}
+      className={`fill-link inline-flex items-center ${className}`}
       style={style}
       {...externalProps}
     >

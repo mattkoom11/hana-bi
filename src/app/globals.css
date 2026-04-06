@@ -452,6 +452,7 @@ img {
   transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.fill-link:hover .fill-link__bg {
+.fill-link:hover .fill-link__bg,
+.fill-link:focus-visible .fill-link__bg {
   transform: scaleX(1);
 }
