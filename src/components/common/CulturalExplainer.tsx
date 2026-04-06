@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-interface Term {
+export interface Term {
   kanji: string;
   reading: string;
   meaning: string;
@@ -23,15 +23,15 @@ export function CulturalExplainer({
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (trigger !== 'scroll') return;
-    const el = ref.current;
-    if (!el) return;
-
-    // Immediately show for reduced-motion users
+    // Immediately show for reduced-motion users regardless of trigger mode
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       setVisible(true);
       return;
     }
+
+    if (trigger !== 'scroll') return;
+    const el = ref.current;
+    if (!el) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
