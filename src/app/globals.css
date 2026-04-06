@@ -516,3 +516,11 @@ img {
   animation: kanji-reveal 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
   animation-play-state: paused;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-kanji__char {
+    opacity: 1;
+    clip-path: none;
+    animation: none;
+  }
+}

@@ -16,9 +16,10 @@ const KANJI_CHARS = ['花', '火'];
 export function SiteFooter() {
   const [revealed, setRevealed] = useState(false);
   const kanjiRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const el = kanjiRef.current;
+    const el = footerRef.current;
     if (!el) return;
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -33,14 +34,14 @@ export function SiteFooter() {
           observer.disconnect();
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.1 }
     );
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
   return (
-    <footer className="bg-[var(--hb-dark)] px-4 sm:px-8 md:px-12 lg:px-20 py-12 relative mt-20 grain overflow-hidden">
+    <footer ref={footerRef} className="bg-[var(--hb-dark)] px-4 sm:px-8 md:px-12 lg:px-20 py-12 relative mt-20 grain overflow-hidden">
       {/* Top border */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--hb-dark-border)] to-transparent" />
 
