@@ -1,6 +1,12 @@
 import { InkUnderline } from "@/components/common/InkUnderline";
 import { RollText } from "@/components/common/RollText";
 import { SketchFrame } from "@/components/common/SketchFrame";
+import { SplitText } from "@/components/common/SplitText";
+import { FillLink } from "@/components/common/FillLink";
+import { KanjiCanvas } from "@/components/common/KanjiCanvas";
+import { CulturalExplainer } from "@/components/common/CulturalExplainer";
+import { MorphingKanji } from "@/components/common/MorphingKanji";
+import { StickyScrollSection } from "@/components/common/StickyScrollSection";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { getAllProducts, getCollectionProducts } from "@/lib/shopify";
 import { mapShopifyProductToHanaBiProduct } from "@/lib/shopify-mappers";
@@ -11,6 +17,42 @@ import {
 } from "@/data/products";
 import Image from "next/image";
 import Link from "next/link";
+
+const PHILOSOPHY_PANELS = [
+  {
+    id: "craft",
+    content: (
+      <div className="space-y-6 max-w-xl">
+        <p className="uppercase text-xs tracking-[0.5em] opacity-70" style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}>Craft</p>
+        <h3 className="text-4xl lg:text-5xl leading-tight italic font-light text-[#faf8f4]" style={{ fontFamily: "var(--hb-font-display)" }}>Retail, but archival.</h3>
+        <InkUnderline width={140} variant="delicate" strokeOpacity={0.35} />
+        <p className="text-base leading-relaxed text-[var(--hb-dark-muted)]">We work like an editorial studio. Each garment is catalogued, nodded to with doodled borders and inked underlines throughout the site.</p>
+      </div>
+    ),
+  },
+  {
+    id: "material",
+    content: (
+      <div className="space-y-6 max-w-xl">
+        <p className="uppercase text-xs tracking-[0.5em] opacity-70" style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}>Material</p>
+        <h3 className="text-4xl lg:text-5xl leading-tight italic font-light text-[#faf8f4]" style={{ fontFamily: "var(--hb-font-display)" }}>Denim as document.</h3>
+        <InkUnderline width={140} variant="delicate" strokeOpacity={0.35} />
+        <p className="text-base leading-relaxed text-[var(--hb-dark-muted)]">Japanese selvedge, sourced from the same mills that supplied post-war Americana. Every thread carries provenance you can read like a margin note.</p>
+      </div>
+    ),
+  },
+  {
+    id: "edition",
+    content: (
+      <div className="space-y-6 max-w-xl">
+        <p className="uppercase text-xs tracking-[0.5em] opacity-70" style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}>Edition</p>
+        <h3 className="text-4xl lg:text-5xl leading-tight italic font-light text-[#faf8f4]" style={{ fontFamily: "var(--hb-font-display)" }}>Limited. Numbered. Gone.</h3>
+        <InkUnderline width={140} variant="delicate" strokeOpacity={0.35} />
+        <p className="text-base leading-relaxed text-[var(--hb-dark-muted)]">Once a run closes, it moves to the Archive. No restocks — only records. The garment you hold is the garment that existed.</p>
+      </div>
+    ),
+  },
+];
 
 export default async function Home() {
   let allProducts = fallbackProducts;
@@ -47,19 +89,14 @@ export default async function Home() {
     <main className="page-transition">
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-        {/* Ghost 花火 */}
-        <span
+        {/* KanjiCanvas 花火 */}
+        <div
           aria-hidden="true"
-          className="absolute bottom-8 right-8 pointer-events-none select-none italic"
-          style={{
-            color: "var(--hb-dark-kanji)",
-            fontSize: "12rem",
-            lineHeight: 1,
-            fontFamily: "var(--hb-font-display)",
-          }}
+          className="absolute bottom-8 right-8 pointer-events-none select-none"
+          style={{ width: "420px", height: "280px" }}
         >
-          花火
-        </span>
+          <KanjiCanvas kanji="花火" sampleStep={5} />
+        </div>
 
         <div className="relative z-10 px-4 sm:px-8 md:px-12 lg:px-20 py-24 w-full max-w-6xl mx-auto">
           <div className="grid gap-16 lg:grid-cols-[1.1fr_0.9fr] items-center">
@@ -77,7 +114,7 @@ export default async function Home() {
                   fontSize: "clamp(4rem, 10vw, 8rem)",
                 }}
               >
-                Archival garments documented like museum pieces.
+                <SplitText tag="span" charDelay={35}>Archival garments documented like museum pieces.</SplitText>
               </h1>
               <p className="text-lg leading-relaxed text-[var(--hb-dark-muted)] max-w-lg">
                 Hana-Bi traces Japanese magazine spreads and gothic annotations to
@@ -85,13 +122,13 @@ export default async function Home() {
                 studio floor to archive shelves.
               </p>
               <div className="flex gap-5 flex-wrap pt-4">
-                <Link
+                <FillLink
                   href="/shop"
                   className="group bg-[var(--hb-sienna)] text-[#faf8f4] uppercase tracking-[0.4em] px-8 py-4 text-xs opacity-90 hover:opacity-100 transition-opacity"
                   style={{ fontFamily: "var(--hb-font-mono)" }}
                 >
                   <RollText>Enter Shop</RollText>
-                </Link>
+                </FillLink>
                 <Link
                   href="/about"
                   className="group border border-[rgba(250,248,244,0.25)] text-[rgba(250,248,244,0.7)] uppercase tracking-[0.4em] px-8 py-4 text-xs hover:text-[#faf8f4] hover:border-[rgba(250,248,244,0.5)] transition-all duration-300"
@@ -100,6 +137,11 @@ export default async function Home() {
                   <RollText>What is Hana-Bi?</RollText>
                 </Link>
               </div>
+              <CulturalExplainer
+                trigger="scroll"
+                term={{ kanji: "花火", reading: "Hana-Bi", meaning: "fireworks — lit. flower fire" }}
+                className="mt-6"
+              />
             </div>
 
             {/* Featured garment portrait card */}
@@ -140,30 +182,17 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── What is Hana-Bi? ──────────────────────────────────────── */}
-      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 relative">
-        <div className="grid gap-16 lg:grid-cols-2 items-center">
-          <div className="space-y-6">
-            <p
-              className="uppercase text-xs tracking-[0.5em] opacity-70"
-              style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
-            >
-              What is Hana-Bi?
-            </p>
-            <h3
-              className="text-4xl lg:text-5xl leading-tight italic font-light text-[#faf8f4]"
-              style={{ fontFamily: "var(--hb-font-display)" }}
-            >
-              Retail, but archival.
-            </h3>
-            <InkUnderline width={140} variant="delicate" strokeOpacity={0.35} className="mt-3" />
-          </div>
-          <p className="text-base leading-relaxed text-[var(--hb-dark-muted)] max-w-lg">
-            We work like an editorial studio. Each garment is catalogued, nodded to with
-            doodled borders and inked underlines throughout the site.
-          </p>
-        </div>
+      {/* ── MorphingKanji ─────────────────────────────────────────── */}
+      <section>
+        <MorphingKanji />
       </section>
+
+      {/* ── Philosophy (StickyScrollSection) ─────────────────────── */}
+      <StickyScrollSection
+        sectionLabel="Philosophy"
+        panels={PHILOSOPHY_PANELS}
+        className="px-4 sm:px-8 md:px-12 lg:px-20"
+      />
 
       {/* ── Current Drop ──────────────────────────────────────────── */}
       <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 space-y-16">
@@ -179,7 +208,7 @@ export default async function Home() {
               className="text-4xl lg:text-5xl leading-tight text-[#faf8f4] italic font-light"
               style={{ fontFamily: "var(--hb-font-display)" }}
             >
-              Current Drop
+              <SplitText tag="span" charDelay={30}>Current Drop</SplitText>
             </h3>
           </div>
           <Link
@@ -216,7 +245,7 @@ export default async function Home() {
               className="text-4xl lg:text-5xl leading-tight text-[#faf8f4] italic font-light"
               style={{ fontFamily: "var(--hb-font-display)" }}
             >
-              Lookbook strips
+              <SplitText tag="span" charDelay={35}>Lookbook strips</SplitText>
             </h3>
             <InkUnderline width={140} variant="delicate" strokeOpacity={0.35} className="mt-2" />
           </div>
@@ -252,13 +281,13 @@ export default async function Home() {
                 <p className="text-sm text-[var(--hb-dark-muted)] leading-relaxed">
                   {piece.description}
                 </p>
-                <Link
+                <FillLink
                   href={`/product/${piece.slug}`}
                   className="group text-xs uppercase tracking-[0.4em] border-b border-dashed border-[var(--hb-dark-border)] pb-1 inline-block opacity-70 hover:opacity-100 transition-opacity"
                   style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
                 >
                   <RollText>View Dossier</RollText>
-                </Link>
+                </FillLink>
               </div>
             </SketchFrame>
           ))}
