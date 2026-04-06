@@ -122,13 +122,13 @@ export default async function Home() {
                 studio floor to archive shelves.
               </p>
               <div className="flex gap-5 flex-wrap pt-4">
-                <FillLink
+                <Link
                   href="/shop"
                   className="group bg-[var(--hb-sienna)] text-[#faf8f4] uppercase tracking-[0.4em] px-8 py-4 text-xs opacity-90 hover:opacity-100 transition-opacity"
                   style={{ fontFamily: "var(--hb-font-mono)" }}
                 >
                   <RollText>Enter Shop</RollText>
-                </FillLink>
+                </Link>
                 <Link
                   href="/about"
                   className="group border border-[rgba(250,248,244,0.25)] text-[rgba(250,248,244,0.7)] uppercase tracking-[0.4em] px-8 py-4 text-xs hover:text-[#faf8f4] hover:border-[rgba(250,248,244,0.5)] transition-all duration-300"
@@ -283,7 +283,7 @@ export default async function Home() {
                 </p>
                 <FillLink
                   href={`/product/${piece.slug}`}
-                  className="group text-xs uppercase tracking-[0.4em] border-b border-dashed border-[var(--hb-dark-border)] pb-1 inline-block opacity-70 hover:opacity-100 transition-opacity"
+                  className="text-xs uppercase tracking-[0.4em] border-b border-dashed border-[var(--hb-dark-border)] pb-1 inline-block opacity-70 hover:opacity-100 transition-opacity"
                   style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
                 >
                   <RollText>View Dossier</RollText>
