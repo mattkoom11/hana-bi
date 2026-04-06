@@ -497,3 +497,22 @@ img {
   color: var(--hb-dark-muted);
   line-height: 1.4;
 }
+
+/* ── Footer oversized kanji reveal ── */
+@keyframes kanji-reveal {
+  from {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0 0 0% 0);
+    opacity: 1;
+  }
+}
+
+.footer-kanji__char {
+  display: inline-block;
+  opacity: 0;
+  animation: kanji-reveal 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  animation-play-state: paused;
+}
