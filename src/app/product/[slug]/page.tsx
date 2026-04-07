@@ -1,24 +1,19 @@
-import { HandDrawnDivider } from "@/components/common/HandDrawnDivider";
-import { InkUnderline } from "@/components/common/InkUnderline";
-import { PaperBackground } from "@/components/common/PaperBackground";
-import { SketchFrame } from "@/components/common/SketchFrame";
-import { Tag } from "@/components/common/Tag";
-import { PageShell } from "@/components/layout/PageShell";
-import { ProductCard } from "@/components/shop/ProductCard";
-import { ProductDetailHero } from "@/components/product/ProductDetailHero";
-import {
-  getAllProducts,
-  getProductByHandle,
-  type ShopifyProductNode,
-} from "@/lib/shopify";
-import { mapShopifyProductToHanaBiProduct } from "@/lib/shopify-mappers";
+import { HandDrawnDivider } from '@/components/common/HandDrawnDivider';
+import { InkUnderline } from '@/components/common/InkUnderline';
+import { PaperBackground } from '@/components/common/PaperBackground';
+import { SketchFrame } from '@/components/common/SketchFrame';
+import { Tag } from '@/components/common/Tag';
+import { PageShell } from '@/components/layout/PageShell';
+import { ProductCard } from '@/components/shop/ProductCard';
+import { ProductDetailHero } from '@/components/product/ProductDetailHero';
+import { getStripeCatalog, getStripeProductBySlug } from '@/lib/stripe-catalog';
 import {
   getProductBySlug,
   products as fallbackProducts,
   type Product,
-} from "@/data/products";
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+} from '@/data/products';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 interface ProductPageProps {
   params: { slug: string };
@@ -26,31 +21,19 @@ interface ProductPageProps {
 
 export async function generateStaticParams() {
   try {
-    const shopifyProducts = await getAllProducts();
-    return shopifyProducts.map((product) => ({ slug: product.handle }));
-  } catch {
-    return fallbackProducts.map((product) => ({ slug: product.slug }));
-  }
+    const catalog = await getStripeCatalog();
+    if (catalog.length > 0) return catalog.map((p) => ({ slug: p.slug }));
+  } catch {}
+  return fallbackProducts.map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: ProductPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   let product: Product | null = null;
-
   try {
-    const shopifyProduct = await getProductByHandle(params.slug);
-    if (shopifyProduct) {
-      product = mapShopifyProductToHanaBiProduct(shopifyProduct);
-    }
-  } catch {
-    product = getProductBySlug(params.slug) ?? null;
-  }
-
-  if (!product) {
-    return { title: "Piece not found — Hana-Bi" };
-  }
-
+    product = await getStripeProductBySlug(params.slug);
+  } catch {}
+  if (!product) product = getProductBySlug(params.slug) ?? null;
+  if (!product) return { title: 'Piece not found — Hana-Bi' };
   return {
     title: `${product.name} — Hana-Bi`,
     description: product.description,
@@ -60,46 +43,31 @@ export async function generateMetadata({
 
 async function getRelatedProducts(currentSlug: string): Promise<Product[]> {
   try {
-    const allProducts = await getAllProducts();
-    const mapped = allProducts.map(mapShopifyProductToHanaBiProduct);
-    return mapped
-      .filter((p) => p.slug !== currentSlug && p.status === "available")
-      .slice(0, 3);
-  } catch {
-    return fallbackProducts
-      .filter((p) => p.slug !== currentSlug && p.status === "available")
-      .slice(0, 3);
-  }
+    const catalog = await getStripeCatalog();
+    if (catalog.length > 0) {
+      return catalog.filter((p) => p.slug !== currentSlug && p.status === 'available').slice(0, 3);
+    }
+  } catch {}
+  return fallbackProducts
+    .filter((p) => p.slug !== currentSlug && p.status === 'available')
+    .slice(0, 3);
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
   let product: Product | null = null;
-  let shopifyProductNode: ShopifyProductNode | null = null;
 
   try {
-    shopifyProductNode = await getProductByHandle(params.slug);
-    if (shopifyProductNode) {
-      product = mapShopifyProductToHanaBiProduct(shopifyProductNode);
-    }
+    product = await getStripeProductBySlug(params.slug);
   } catch (error) {
-    console.warn(
-      "Failed to fetch product from Shopify, using fallback:",
-      error
-    );
+    console.warn('Failed to fetch product from Stripe, using fallback:', error);
   }
 
-  if (!product) {
-    product = getProductBySlug(params.slug) ?? null;
-  }
+  if (!product) product = getProductBySlug(params.slug) ?? null;
+  if (!product) notFound();
 
-  if (!product) {
-    notFound();
-  }
-
-  const catalogIndex = fallbackProducts.findIndex(p => p.slug === params.slug);
-  const catalogNumber = catalogIndex >= 0
-    ? `HB-${String(catalogIndex + 1).padStart(3, "0")}`
-    : null;
+  const catalogIndex = fallbackProducts.findIndex((p) => p.slug === params.slug);
+  const catalogNumber =
+    catalogIndex >= 0 ? `HB-${String(catalogIndex + 1).padStart(3, '0')}` : null;
 
   const related = await getRelatedProducts(product.slug);
 

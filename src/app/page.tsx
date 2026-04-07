@@ -8,13 +8,12 @@ import { CulturalExplainer } from "@/components/common/CulturalExplainer";
 import { MorphingKanji } from "@/components/common/MorphingKanji";
 import { StickyScrollSection } from "@/components/common/StickyScrollSection";
 import { ProductCard } from "@/components/shop/ProductCard";
-import { getAllProducts, getCollectionProducts } from "@/lib/shopify";
-import { mapShopifyProductToHanaBiProduct } from "@/lib/shopify-mappers";
+import { getStripeCatalog } from '@/lib/stripe-catalog';
 import {
   archivedProducts as fallbackArchived,
   featuredProducts as fallbackFeatured,
   products as fallbackProducts,
-} from "@/data/products";
+} from '@/data/products';
 import Image from "next/image";
 import Link from "next/link";
 
@@ -60,25 +59,19 @@ export default async function Home() {
   let archiveSlices: typeof allProducts = [];
 
   try {
-    try {
-      const featuredCollection = await getCollectionProducts("featured");
-      featured = featuredCollection.map(mapShopifyProductToHanaBiProduct).slice(0, 3);
-    } catch {
-      const shopifyProducts = await getAllProducts();
-      allProducts = shopifyProducts.map(mapShopifyProductToHanaBiProduct);
-      featured = allProducts.filter((p) => p.featured).slice(0, 3);
+    const catalog = await getStripeCatalog();
+    if (catalog.length > 0) {
+      allProducts = catalog;
+      featured = catalog.filter((p) => p.featured).slice(0, 3);
+      archiveSlices = catalog
+        .filter((p) => p.status === 'archived' || p.status === 'sold_out')
+        .slice(0, 2);
+    } else {
+      featured = fallbackFeatured.slice(0, 3);
+      archiveSlices = fallbackArchived.slice(0, 2);
     }
-
-    archiveSlices = allProducts
-      .filter(
-        (p) =>
-          p.status === "archived" ||
-          p.status === "sold_out" ||
-          p.tags.some((t) => t.toUpperCase().includes("ARCHIVE"))
-      )
-      .slice(0, 2);
   } catch (error) {
-    console.warn("Failed to fetch from Shopify, using fallback data:", error);
+    console.warn('Failed to fetch from Stripe, using fallback data:', error);
     featured = fallbackFeatured.slice(0, 3);
     archiveSlices = fallbackArchived.slice(0, 2);
   }
@@ -111,7 +104,7 @@ export default async function Home() {
                 className="leading-[0.92] tracking-tight text-[#faf8f4] italic font-light"
                 style={{
                   fontFamily: "var(--hb-font-display)",
-                  fontSize: "clamp(4rem, 10vw, 8rem)",
+                  fontSize: "clamp(2.5rem, 7vw, 7rem)",
                 }}
               >
                 <SplitText tag="span" charDelay={35}>Archival garments documented like museum pieces.</SplitText>
