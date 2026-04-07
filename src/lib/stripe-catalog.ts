@@ -1,4 +1,5 @@
 // src/lib/stripe-catalog.ts
+import { cache } from 'react';
 import Stripe from 'stripe';
 import type { Product, ProductStatus } from '@/data/products';
 import { STRIPE_SECRET_KEY } from '@/lib/env';
@@ -54,7 +55,7 @@ export type StripeProduct = Product & { stripePriceId: string };
  * Fetch all active Stripe products with their default prices.
  * Falls back to [] if STRIPE_SECRET_KEY is missing (dev without Stripe configured).
  */
-export async function getStripeCatalog(): Promise<StripeProduct[]> {
+export const getStripeCatalog = cache(async (): Promise<StripeProduct[]> => {
   if (!STRIPE_SECRET_KEY) {
     console.warn('STRIPE_SECRET_KEY not set — returning empty catalog');
     return [];
@@ -82,12 +83,12 @@ export async function getStripeCatalog(): Promise<StripeProduct[]> {
     )
     .map((p) => mapStripeProduct(p, p.default_price as Stripe.Price))
     .filter((p) => p.slug);
-}
+});
 
 /**
  * Fetch a single Stripe product by its metadata slug.
  */
-export async function getStripeProductBySlug(slug: string): Promise<StripeProduct | null> {
+export const getStripeProductBySlug = cache(async (slug: string): Promise<StripeProduct | null> => {
   const catalog = await getStripeCatalog();
   return catalog.find((p) => p.slug === slug) ?? null;
-}
+});
