@@ -18,8 +18,11 @@ export function AddToCartButton({
 }: AddToCartButtonProps) {
   const addItem = useCartStore((state) => state.addItem);
   const disabled = useMemo(
-    () => product.status !== "available" || !selectedSize,
-    [product.status, selectedSize]
+    () =>
+      product.status !== "available" ||
+      !selectedSize ||
+      (product.soldSizes?.includes(selectedSize) ?? false),
+    [product.status, selectedSize, product.soldSizes]
   );
 
   return (
