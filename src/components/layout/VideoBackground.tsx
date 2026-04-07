@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 const CLIPS = [
   "/videos/clip-01.mp4",
   "/videos/clip-02.mp4",
-  "/videos/clip-03.MP4",
+  "/videos/clip-03.mp4",
   "/videos/clip-04.mp4",
   "/videos/clip-05.mp4",
   "/videos/clip-06.mp4",
@@ -14,6 +14,8 @@ const CLIPS = [
   "/videos/clip-09.mp4",
   "/videos/clip-10.mp4",
   "/videos/clip-11.mp4",
+  "/videos/clip-12.mp4",
+  "/videos/clip-13.mp4",
 ];
 
 const TRANSITION_MS = 2000;

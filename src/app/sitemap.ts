@@ -1,6 +1,4 @@
 import type { MetadataRoute } from "next";
-import { getAllProducts } from "@/lib/shopify";
-import { mapShopifyProductToHanaBiProduct } from "@/lib/shopify-mappers";
 import { products as fallbackProducts } from "@/data/products";
 import { projects } from "@/data/projects";
 import { NEXT_PUBLIC_SITE_URL } from "@/lib/env";
@@ -17,14 +15,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/projects`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
   ];
 
-  // Product pages
-  let productSlugs: string[] = fallbackProducts.map((p) => p.slug);
-  try {
-    const shopifyProducts = await getAllProducts();
-    productSlugs = shopifyProducts.map((p) => p.handle);
-  } catch {
-    // fall back to local slugs
-  }
+  // Product pages — use local product data
+  const productSlugs = fallbackProducts.map((p) => p.slug);
 
   const productRoutes: MetadataRoute.Sitemap = productSlugs.map((slug) => ({
     url: `${BASE_URL}/product/${slug}`,

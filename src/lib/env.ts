@@ -12,10 +12,3 @@ export const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 
 // Site
 export const NEXT_PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
-
-// Shopify — optional; app falls back to local data when missing
-export const SHOPIFY_STORE_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN;
-export const SHOPIFY_STOREFRONT_ACCESS_TOKEN =
-  process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
-export const SHOPIFY_API_VERSION =
-  process.env.SHOPIFY_API_VERSION ?? "2025-01";

@@ -2,18 +2,15 @@
 
 import { AddToCartButton } from "@/components/shop/AddToCartButton";
 import { Product } from "@/data/products";
-import type { ShopifyProductNode } from "@/lib/shopify";
 import { formatCurrency } from "@/lib/utils";
 import { useState } from "react";
 
 interface ProductPurchasePanelProps {
   product: Product;
-  shopifyProductNode?: ShopifyProductNode | null;
 }
 
 export function ProductPurchasePanel({
   product,
-  shopifyProductNode,
 }: ProductPurchasePanelProps) {
   const [selectedSize, setSelectedSize] = useState<string | null>(
     product.sizes[0] ?? null
@@ -69,7 +66,6 @@ export function ProductPurchasePanel({
           <AddToCartButton
             product={product}
             selectedSize={selectedSize}
-            shopifyProductNode={shopifyProductNode}
           />
         </div>
         
@@ -98,7 +94,6 @@ export function ProductPurchasePanel({
           <AddToCartButton
             product={product}
             selectedSize={selectedSize}
-            shopifyProductNode={shopifyProductNode}
             compact
           />
         </div>
