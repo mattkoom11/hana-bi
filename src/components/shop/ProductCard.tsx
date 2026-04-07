@@ -80,13 +80,15 @@ export function ProductCard({ product, variant = "dark", catalogIndex }: Product
           isDark ? "bg-[var(--hb-dark-surface)] grain" : "bg-[var(--hb-paper-muted)]"
         }`}
       >
-        <Image
-          src={product.heroImage}
-          alt={product.name}
-          fill
-          sizes="(max-width: 768px) 100vw, 33vw"
-          className="object-cover transition duration-700 group-hover:scale-[1.02] relative z-10"
-        />
+        {product.heroImage && (
+          <Image
+            src={product.heroImage}
+            alt={product.name}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover transition duration-700 group-hover:scale-[1.02] relative z-10"
+          />
+        )}
         {product.featured && (
           <div className="absolute top-5 left-5 z-10">
             <Badge tone="sienna">Featured</Badge>

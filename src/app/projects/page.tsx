@@ -32,12 +32,12 @@ export default function ProjectsPage() {
     <main className="page-transition">
       <PageShell
         eyebrow="Projects"
-        title="Personal sewing documentation."
+        title="Work in progress."
         intro={
           <>
-            Personal projects and experiments in garment construction, pattern
-            drafting, and textile techniques. These pieces are documented for
-            study and reference, not for sale.
+            Personal builds, experiments, and pre-retail development — garments
+            that haven't reached the shop yet. Documented here for reference
+            and study.
           </>
         }
       >

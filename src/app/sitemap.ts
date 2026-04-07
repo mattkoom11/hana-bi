@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { products as fallbackProducts } from "@/data/products";
 import { projects } from "@/data/projects";
+import { getStripeCatalog } from "@/lib/stripe-catalog";
 import { NEXT_PUBLIC_SITE_URL } from "@/lib/env";
 
 const BASE_URL = NEXT_PUBLIC_SITE_URL ?? "https://hana-bi.com";
@@ -15,8 +16,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/projects`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
   ];
 
-  // Product pages — use local product data
-  const productSlugs = fallbackProducts.map((p) => p.slug);
+  // Product pages — prefer Stripe catalog, fall back to local data
+  let productSlugs: string[];
+  try {
+    const catalog = await getStripeCatalog();
+    productSlugs = catalog.length > 0 ? catalog.map((p) => p.slug) : fallbackProducts.map((p) => p.slug);
+  } catch {
+    productSlugs = fallbackProducts.map((p) => p.slug);
+  }
 
   const productRoutes: MetadataRoute.Sitemap = productSlugs.map((slug) => ({
     url: `${BASE_URL}/product/${slug}`,

@@ -13,7 +13,7 @@ export function ProductPurchasePanel({
   product,
 }: ProductPurchasePanelProps) {
   const [selectedSize, setSelectedSize] = useState<string | null>(
-    product.sizes[0] ?? null
+    product.sizes.find((s) => !product.soldSizes?.includes(s)) ?? product.sizes[0] ?? null
   );
   const isAvailable = product.status === "available";
 
@@ -45,20 +45,26 @@ export function ProductPurchasePanel({
             Select Size
           </p>
           <div className="flex flex-wrap gap-3">
-            {product.sizes.map((size) => (
-              <button
-                key={size}
-                onClick={() => setSelectedSize(size)}
-                className={`px-5 py-2.5 min-h-[44px] border text-xs uppercase tracking-[0.3em] transition-all duration-300 hover-wispy ${
-                  selectedSize === size
-                    ? "border-[var(--hb-ink)] bg-[var(--hb-ink)] text-[var(--hb-paper)]"
-                    : "border-[var(--hb-border)] border-dashed text-[var(--hb-smoke)] hover:border-[var(--hb-ink-light)]"
-                }`}
-                style={{ borderWidth: "1px" }}
-              >
-                {size}
-              </button>
-            ))}
+            {product.sizes.map((size) => {
+              const isSoldOut = product.soldSizes?.includes(size);
+              return (
+                <button
+                  key={size}
+                  onClick={() => { if (!isSoldOut) setSelectedSize(size); }}
+                  disabled={isSoldOut}
+                  className={`px-5 py-2.5 min-h-[44px] border text-xs uppercase tracking-[0.3em] transition-all duration-300 ${
+                    selectedSize === size
+                      ? "border-[var(--hb-ink)] bg-[var(--hb-ink)] text-[var(--hb-paper)]"
+                      : isSoldOut
+                      ? "border-[var(--hb-border)] border-dashed text-[var(--hb-smoke)] opacity-30 cursor-not-allowed line-through"
+                      : "border-[var(--hb-border)] border-dashed text-[var(--hb-smoke)] hover:border-[var(--hb-ink-light)] hover-wispy"
+                  }`}
+                  style={{ borderWidth: "1px" }}
+                >
+                  {size}
+                </button>
+              );
+            })}
           </div>
         </div>
 

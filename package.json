@@ -19,6 +19,7 @@
     "next": "16.0.3",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "resend": "^6.10.0",
     "stripe": "^20.1.0",
     "tailwind-merge": "^3.4.0",
     "three": "^0.183.2",

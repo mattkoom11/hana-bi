@@ -5,10 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
 const FOOTER_LINKS = [
-  { label: 'Careers', href: '#' },
-  { label: 'Stockists', href: '#' },
-  { label: 'Press', href: '#' },
-  { label: 'Contact', href: '#' },
+  { label: 'Contact', href: 'mailto:hello@hana-bi.com' },
 ];
 
 const KANJI_CHARS = ['花', '火'];

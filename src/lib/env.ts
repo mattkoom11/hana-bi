@@ -12,3 +12,15 @@ export const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 
 // Site
 export const NEXT_PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
+
+// Shipping
+// Comma-separated Stripe shipping rate IDs, e.g. shr_xxx,shr_yyy
+// Leave unset to collect address only with no shipping rate applied.
+export const STRIPE_SHIPPING_RATE_IDS = process.env.STRIPE_SHIPPING_RATE_IDS;
+// Comma-separated ISO 3166-1 alpha-2 country codes allowed for shipping
+export const STRIPE_SHIPPING_COUNTRIES = process.env.STRIPE_SHIPPING_COUNTRIES ?? 'US,CA,GB,JP,AU';
+
+// Email (Resend)
+export const RESEND_API_KEY = process.env.RESEND_API_KEY;
+// Address that receives waitlist notification emails
+export const WAITLIST_NOTIFY_EMAIL = process.env.WAITLIST_NOTIFY_EMAIL;

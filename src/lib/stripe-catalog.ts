@@ -42,10 +42,11 @@ function mapStripeProduct(
     heroImage: product.images[0] ?? '',
     images: product.images,
     collection: m.collection ?? 'Uncategorized',
-    tags: [], // Stripe products have no native tag array; add tags via a 'tags' metadata key if needed
+    tags: m.tags ? m.tags.split(',').map((t) => t.trim()).filter(Boolean) : [],
     year: isNaN(year) ? new Date().getFullYear() : year,
     notes: m.notes ?? '',
     featured: m.featured === 'true',
+    soldSizes: m.sold_sizes ? m.sold_sizes.split(',').map((s) => s.trim()).filter(Boolean) : [],
   };
 }
 
@@ -62,19 +63,17 @@ export const getStripeCatalog = cache(async (): Promise<StripeProduct[]> => {
   }
 
   const stripe = getStripe();
-  const products = await stripe.products.list({
+  const allProducts: Stripe.Product[] = [];
+
+  for await (const product of stripe.products.list({
     active: true,
     expand: ['data.default_price'],
     limit: 100,
-  });
-
-  if (products.has_more) {
-    console.warn(
-      `stripe-catalog: has_more=true — only the first ${products.data.length} products were returned. Implement autopaging for full catalog.`
-    );
+  })) {
+    allProducts.push(product);
   }
 
-  return products.data
+  return allProducts
     .filter(
       (p) =>
         p.default_price &&

@@ -3,10 +3,6 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET } from "@/lib/env";
 
-// In-memory store for verified session IDs.
-// In production, replace with a database write (Redis, Postgres, etc.)
-export const verifiedSessions = new Set<string>();
-
 function getStripe() {
   const secretKey = STRIPE_SECRET_KEY;
   if (!secretKey) throw new Error("STRIPE_SECRET_KEY is not set");
@@ -50,7 +46,6 @@ export async function POST(request: Request) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
     if (session.payment_status === "paid" && session.id) {
-      verifiedSessions.add(session.id);
       console.log(`Payment verified for session: ${session.id}`);
     }
   }

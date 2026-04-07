@@ -8,11 +8,11 @@ import type { Product } from '@/data/products';
 export const metadata: Metadata = {
   title: 'Archive — Hana-Bi',
   description:
-    'Sold-out and archived Hana-Bi garments, preserved with editorial annotations and fabric provenance.',
+    'Past retail drops from Hana-Bi — sold-out garments preserved with editorial annotations and fabric provenance.',
   openGraph: {
     title: 'Archive — Hana-Bi',
     description:
-      'Sold-out and archived Hana-Bi garments, preserved with editorial annotations and fabric provenance.',
+      'Past retail drops from Hana-Bi — sold-out garments preserved with editorial annotations and fabric provenance.',
   },
 };
 
@@ -47,8 +47,8 @@ export default async function ArchivePage() {
     <main className="page-transition">
       <PageShell
         eyebrow="Archive"
-        title="A museum wall of Hana-Bi silhouettes."
-        intro="Sold out and archived garments live here with editorial annotations. Use this spread as inspiration for future drops or to document provenance."
+        title="Past retail drops, preserved."
+        intro="Every garment that has passed through the shop lives here — sold-out and closed editions catalogued with fabric provenance and editorial notes."
       >
         <div className="space-y-16">
           {years.map((year) => (

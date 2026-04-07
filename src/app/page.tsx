@@ -138,7 +138,7 @@ export default async function Home() {
             </div>
 
             {/* Featured garment portrait card */}
-            {heroFeature && (
+            {heroFeature && heroFeature.heroImage && (
               <div className="relative overflow-hidden aspect-[3/4] border border-[var(--hb-dark-border)]">
                 <Image
                   src={heroFeature.heroImage}

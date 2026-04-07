@@ -1,7 +1,7 @@
 // src/app/api/checkout/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { STRIPE_SECRET_KEY, NEXT_PUBLIC_SITE_URL } from '@/lib/env';
+import { STRIPE_SECRET_KEY, NEXT_PUBLIC_SITE_URL, STRIPE_SHIPPING_RATE_IDS, STRIPE_SHIPPING_COUNTRIES } from '@/lib/env';
 
 export interface CheckoutLineItem {
   priceId: string;
@@ -66,6 +66,17 @@ export async function POST(request: NextRequest) {
         quantity: item.quantity,
       })),
       mode: 'payment',
+      shipping_address_collection: {
+        allowed_countries: STRIPE_SHIPPING_COUNTRIES.split(',').map((c) => c.trim()) as Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[],
+      },
+      ...(STRIPE_SHIPPING_RATE_IDS
+        ? {
+            shipping_options: STRIPE_SHIPPING_RATE_IDS.split(',')
+              .map((id) => id.trim())
+              .filter(Boolean)
+              .map((shipping_rate) => ({ shipping_rate })),
+          }
+        : {}),
       success_url: `${siteUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: cancelUrl,
     });

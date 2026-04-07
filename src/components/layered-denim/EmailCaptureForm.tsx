@@ -19,17 +19,17 @@ export function EmailCaptureForm({ className }: EmailCaptureFormProps) {
     e.preventDefault();
     setFormState('loading');
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    // Simulate success (in real app, check response)
-    const success = Math.random() > 0.2; // 80% success rate for demo
-
-    if (success) {
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email }),
+      });
+      if (!res.ok) throw new Error('Request failed');
       setFormState('success');
       setName('');
       setEmail('');
-    } else {
+    } catch {
       setFormState('error');
     }
   };

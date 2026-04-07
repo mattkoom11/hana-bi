@@ -26,6 +26,7 @@ export interface Product {
   year: number;
   notes: string;
   featured?: boolean;
+  soldSizes?: string[];
 }
 
 export const products: Product[] = [
