@@ -15,20 +15,22 @@ interface CartDrawerProps {
 }
 
 async function handleCheckout(items: CartItem[], onClose: () => void) {
-  if (items.length === 0) {
+  if (items.length === 0) return;
+
+  const missingPrice = items.find((item) => !item.stripePriceId);
+  if (missingPrice) {
+    alert(`"${missingPrice.name}" has no Stripe price ID. Please configure products in the Stripe Dashboard.`);
     return;
   }
 
   try {
-    const response = await fetch("/api/checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const response = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         items: items.map((item) => ({
-          name: `${item.name} — Size ${item.size}`,
-          price: Math.round(item.price * 100),
+          priceId: item.stripePriceId!,
           quantity: item.quantity,
-          ...(item.image ? { image: item.image } : {}),
         })),
         cancelUrl: `${window.location.origin}/cart`,
       }),
@@ -36,18 +38,18 @@ async function handleCheckout(items: CartItem[], onClose: () => void) {
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.error || "Failed to create checkout");
+      throw new Error(error.error || 'Failed to create checkout');
     }
 
     const { url } = await response.json();
     onClose();
     window.location.href = url;
   } catch (error) {
-    console.error("Checkout error:", error);
+    console.error('Checkout error:', error);
     alert(
       error instanceof Error
         ? error.message
-        : "Failed to start checkout. Please try again."
+        : 'Failed to start checkout. Please try again.'
     );
   }
 }
