@@ -1,11 +1,15 @@
 // src/lib/stripe-catalog.ts
 import Stripe from 'stripe';
 import type { Product, ProductStatus } from '@/data/products';
+import { STRIPE_SECRET_KEY } from '@/lib/env';
 
+let _stripe: Stripe | null = null;
 function getStripe(): Stripe {
-  const key = process.env.STRIPE_SECRET_KEY;
+  if (_stripe) return _stripe;
+  const key = STRIPE_SECRET_KEY;
   if (!key) throw new Error('STRIPE_SECRET_KEY is not set');
-  return new Stripe(key, { apiVersion: '2025-12-15.clover', typescript: true });
+  _stripe = new Stripe(key, { apiVersion: '2025-12-15.clover', typescript: true });
+  return _stripe;
 }
 
 function metaStatus(value: string | undefined): ProductStatus {
@@ -37,7 +41,7 @@ function mapStripeProduct(
     heroImage: product.images[0] ?? '',
     images: product.images,
     collection: m.collection ?? 'Uncategorized',
-    tags: [],
+    tags: [], // Stripe products have no native tag array; add tags via a 'tags' metadata key if needed
     year: isNaN(year) ? new Date().getFullYear() : year,
     notes: m.notes ?? '',
     featured: m.featured === 'true',
@@ -51,7 +55,7 @@ export type StripeProduct = Product & { stripePriceId: string };
  * Falls back to [] if STRIPE_SECRET_KEY is missing (dev without Stripe configured).
  */
 export async function getStripeCatalog(): Promise<StripeProduct[]> {
-  if (!process.env.STRIPE_SECRET_KEY) {
+  if (!STRIPE_SECRET_KEY) {
     console.warn('STRIPE_SECRET_KEY not set — returning empty catalog');
     return [];
   }
@@ -63,8 +67,19 @@ export async function getStripeCatalog(): Promise<StripeProduct[]> {
     limit: 100,
   });
 
+  if (products.has_more) {
+    console.warn(
+      `stripe-catalog: has_more=true — only the first ${products.data.length} products were returned. Implement autopaging for full catalog.`
+    );
+  }
+
   return products.data
-    .filter((p) => p.default_price && typeof p.default_price !== 'string')
+    .filter(
+      (p) =>
+        p.default_price &&
+        typeof p.default_price !== 'string' &&
+        (p.default_price as Stripe.Price).unit_amount !== null
+    )
     .map((p) => mapStripeProduct(p, p.default_price as Stripe.Price))
     .filter((p) => p.slug);
 }
