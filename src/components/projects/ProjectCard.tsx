@@ -72,17 +72,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
         <p className="text-sm text-[var(--hb-smoke)] font-script opacity-70">
           {project.year}
         </p>
-        <div className="flex items-center gap-2 flex-wrap pt-2">
-          {project.techniques.slice(0, 2).map((technique) => (
-            <span
-              key={technique}
-              className="text-xs uppercase tracking-[0.2em] text-[var(--hb-smoke)] opacity-70 border border-[var(--hb-border)] border-dashed px-2 py-1"
-              style={{ borderWidth: "1px" }}
-            >
-              {technique}
-            </span>
-          ))}
-        </div>
       </div>
     </Link>
   );

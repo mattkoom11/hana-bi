@@ -1,9 +1,6 @@
 /**
  * Personal Sewing Projects Data
  *
- * This file contains data for personal sewing projects that are documented
- * but not for sale. Projects are separate from products in the shop.
- *
  * Project statuses:
  * - "in_progress" - Currently being worked on
  * - "completed" - Finished project
@@ -20,49 +17,32 @@ export interface Project {
   status: ProjectStatus;
   description: string;
   story: string;
-  materials: string;
-  techniques: string[];
-  pattern?: string; // Pattern name or "self-drafted"
-  fabric?: string; // Fabric details
-  notes: string;
-  processNotes?: string; // Detailed process documentation
+  fabric?: string;
   heroImage: string;
   images: string[];
-  tags: string[];
   year: number;
-  startedDate?: string; // ISO date string (optional)
-  completedDate?: string; // ISO date string (optional)
 }
 
 export const projects: Project[] = [
   {
-    id: "jp-vintage-jacket",
-    slug: "japanese-vintage-jacket",
-    name: "Japanese Vintage-Inspired Denim Jacket",
+    id: "pl-wool-trousers",
+    slug: "pleated-wool-trousers",
+    name: "Pleated Wool Trousers",
     status: "completed",
     description:
-      "A reconstructed denim jacket inspired by 1980s Japanese streetwear, featuring hand-stitched sashiko details and custom pocket arrangements.",
+      "Featuring two inverted box pleats on the front, these trousers flow with the body. Despite being made out of wool, the trousers maintain a light and airy feel.",
     story:
-      "Started this project after finding a vintage pattern in a Kyoto thrift shop. The original was too small, so I scaled it up and added my own modifications. The sashiko stitching along the collar and cuffs took about 12 hours total, but the texture is worth it.",
-    materials:
-      "Deadstock Japanese selvedge denim (12oz), vintage brass buttons, natural cotton thread for sashiko.",
-    techniques: ["sashiko", "pattern-drafting", "hand-stitching"],
-    pattern: "Vintage pattern (modified and scaled up)",
-    fabric: "Indigo selvedge denim from a small Osaka mill",
-    notes:
-      "First time working with selvedge denim - the fabric has beautiful character but required a lot of hand-finishing.",
-    processNotes:
-      "Month 1: Pattern drafting and fabric sourcing. Month 2: Construction and sashiko stitching. Month 3: Finishing and buttonholes. Learned a lot about traditional Japanese construction techniques.",
-    heroImage:
-      "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1000&q=80",
+      "Modern dress trousers are too tight and constricted. They conform to the body rather than flow with it. I wanted to create a pair of trousers that were comfortable and stylish, but also practical and durable. I also needed a pair of winter dress pants to wear to the NieR concert in New York! I took out the back darts typically present on dress pants and used yokes instead. The overall construction is much more reminiscent of a piece of workwear rather than a piece of dresswear.",
+    fabric: "Japanese wool blend herringbone (10 oz) from Yoshiwa Mills. (70%C 25%W 5%N)",
+    heroImage: "/projects/wool-trousers-hero.png",
     images: [
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1504593811423-6dd665756598?auto=format&fit=crop&w=900&q=80",
+      "/projects/wool-trousers-2.png",
+      "/projects/wool-trousers-3.png",
+      "/projects/wool-trousers-4.png",
+      "/projects/wool-trousers-5.png",
+      "/projects/wool-trousers-6.png",
     ],
-    tags: ["denim", "vintage", "japanese", "sashiko", "outerwear"],
-    year: 2025,
-    startedDate: "2025-01-15",
-    completedDate: "2025-03-22",
+    year: 2026,
   },
   {
     id: "linen-wrap-dress",
@@ -73,21 +53,13 @@ export const projects: Project[] = [
       "A midi-length wrap dress in undyed linen with contrasting bias binding and hand-finished hems.",
     story:
       "Inspired by 1970s French fashion photography. Wanted something light and airy for summer that could be dressed up or down. The wrap construction is trickier than it looks - getting the drape right took several muslins.",
-    materials: "Natural linen (7oz), bias binding from vintage haberdashery stash.",
-    techniques: ["bias-binding", "draping", "hand-finishing"],
-    pattern: "Self-drafted",
     fabric: "Italian linen from local fabric shop",
-    notes: "Currently working on the sleeve construction. The fabric is prone to wrinkling but the drape is beautiful.",
-    processNotes:
-      "Week 1-2: Pattern development and muslin fitting. Week 3: Cutting and initial construction. Week 4 (current): Sleeve fitting and adjustments needed.",
     heroImage:
       "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=80",
     images: [
       "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1000&q=80",
     ],
-    tags: ["dress", "linen", "wrap", "summer", "self-drafted"],
     year: 2025,
-    startedDate: "2025-03-10",
   },
 ];
 

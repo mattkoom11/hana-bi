@@ -164,11 +164,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                         {project.year}
                       </MarginNote>
                     )}
-                    {project.pattern && (
-                      <MarginNote position="bottom-left" variant="script" size="xs">
-                        {project.pattern}
-                      </MarginNote>
-                    )}
                   </div>
                 </div>
 
@@ -261,35 +256,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                           <p className="font-serif text-lg">{statusLabel}</p>
                         </div>
 
-                        {project.startedDate && (
-                          <div>
-                            <p className="text-sm uppercase tracking-[0.3em] text-[var(--hb-smoke)] opacity-70 mb-2">
-                              Started
-                            </p>
-                            <p className="text-sm text-[var(--hb-smoke)] opacity-80">
-                              {new Date(project.startedDate).toLocaleDateString("en-US", {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
-                            </p>
-                          </div>
-                        )}
-
-                        {project.completedDate && (
-                          <div>
-                            <p className="text-sm uppercase tracking-[0.3em] text-[var(--hb-smoke)] opacity-70 mb-2">
-                              Completed
-                            </p>
-                            <p className="text-sm text-[var(--hb-smoke)] opacity-80">
-                              {new Date(project.completedDate).toLocaleDateString("en-US", {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
-                            </p>
-                          </div>
-                        )}
                       </div>
                     </div>
                   </PaperBackground>
@@ -326,12 +292,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </div>
             </SketchFrame>
 
-            {/* Tags */}
-            <div className="flex flex-wrap gap-3 pt-4">
-              {project.tags.map((tag) => (
-                <Tag key={tag}>{tag}</Tag>
-              ))}
-            </div>
+            {project.fabric && (
+              <SketchFrame tilt="right" strokeOpacity={0.2} className="w-full">
+                <div className="space-y-3">
+                  <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] font-script opacity-70">
+                    Fabric
+                  </p>
+                  <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80">
+                    {project.fabric}
+                  </p>
+                </div>
+              </SketchFrame>
+            )}
+
           </div>
         </PaperBackground>
       </section>
