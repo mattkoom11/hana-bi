@@ -68,6 +68,7 @@ export function ImageLightbox({ images, initialIndex, alt, onClose }: ImageLight
           className="object-contain"
           sizes="100vw"
           priority
+          unoptimized
         />
       </div>
 

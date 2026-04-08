@@ -73,6 +73,7 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 65vw"
               priority
+              unoptimized
             />
             <div className="absolute top-6 left-6 z-10">
               <Badge tone={statusTone}>{statusLabel}</Badge>
@@ -123,6 +124,7 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
                   fill
                   sizes="(max-width: 768px) 33vw, 200px"
                   className="object-cover relative z-0"
+                  unoptimized
                 />
               </div>
             ))}

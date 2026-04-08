@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
     serverSourceMaps: false,
   },
   images: {
+    dangerouslyAllowSVG: false,
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { InkUnderline } from "@/components/common/InkUnderline";
-import { SketchFrame } from "@/components/common/SketchFrame";
 import { PageShell } from "@/components/layout/PageShell";
+import { ChapterCards } from "@/components/about/ChapterCards";
 
 export const metadata: Metadata = {
   title: "About — Hana-Bi",
@@ -14,76 +14,22 @@ export const metadata: Metadata = {
   },
 };
 
-const CHAPTERS = [
-  {
-    title: "Origin",
-    copy:
-      "Hana-Bi began inside a Kyoto bookstore collecting Japanese fashion magazines from the '80s and '90s. Each lookbook spread influenced how we present garments: generous margins, serif headlines, and hand-drawn arrows.",
-  },
-  {
-    title: "Process",
-    copy:
-      "We draft silhouettes in pencil, then digitize the sketches while preserving smudges. Fabrics are sourced from regenerative mills and all trims are catalogued for future reference.",
-  },
-  {
-    title: "Future Drops",
-    copy:
-      "Expect limited runways documented like museum catalogues. Upcoming capsules blend denim tailoring with archival leather findings.",
-  },
-];
-
 export default function AboutPage() {
   return (
     <main className="page-transition">
       <PageShell
         eyebrow="About"
         title="The Hana-Bi study."
-        intro="A sustainable denim house with an editorial mindset. Use this page to tell the brand story, update process notes, and add future chapters."
+        intro="A sustainable atelier with a focus on denim construction and design."
       >
         <div className="grid gap-20 lg:grid-cols-[1.1fr_0.9fr]">
           <article className="space-y-10">
             <InkUnderline width={160} variant="wispy" strokeOpacity={0.4} />
             <p className="text-lg leading-relaxed text-[var(--hb-smoke)] opacity-85 max-w-lg">
-              Every garment is treated like an artifact. We shoot them on matte
-              backgrounds, annotate with gothic typography, and log them into a
-              living archive. Sustainability is not a tagline; it&rsquo;s recorded in
-              our care notes and fabric provenance.
+              With a focus on sustainability and domestic production, Hana-Bi puts its efforts towards conserving the art of Japanese denim construction.
             </p>
-            <div className="grid gap-8 md:grid-cols-2">
-              <SketchFrame tilt="left" strokeOpacity={0.25} className="p-6">
-                <div className="space-y-4">
-                  <p className="uppercase text-xs tracking-[0.35em] text-[var(--hb-smoke)] font-script opacity-70">
-                    Studios
-                  </p>
-                  <p className="font-serif text-2xl leading-tight">
-                    Osaka / Brooklyn / Digital
-                  </p>
-                </div>
-              </SketchFrame>
-              <SketchFrame tilt="right" strokeOpacity={0.25} className="p-6">
-                <div className="space-y-4">
-                  <p className="uppercase text-xs tracking-[0.35em] text-[var(--hb-smoke)] font-script opacity-70">
-                    Techniques
-                  </p>
-                  <p className="font-serif text-2xl leading-tight">Sashiko · Indigo · Photo copy</p>
-                </div>
-              </SketchFrame>
-            </div>
           </article>
-          <section className="space-y-10">
-            {CHAPTERS.map((chapter, index) => (
-              <SketchFrame key={chapter.title} tilt={index % 2 === 0 ? "left" : "right"} strokeOpacity={0.3} className="p-6">
-                <div className="space-y-5">
-                  <p className="uppercase text-xs tracking-[0.35em] text-[var(--hb-smoke)] font-script opacity-70">
-                    {chapter.title}
-                  </p>
-                  <p className="font-serif text-2xl leading-tight">{chapter.title}</p>
-                  <InkUnderline width={90} variant="delicate" strokeOpacity={0.3} />
-                  <p className="text-sm text-[var(--hb-smoke)] opacity-80 leading-relaxed">{chapter.copy}</p>
-                </div>
-              </SketchFrame>
-            ))}
-          </section>
+          <ChapterCards />
         </div>
       </PageShell>
     </main>
