@@ -51,6 +51,22 @@ export default async function ArchivePage() {
         intro="Every garment that has passed through the shop lives here — sold-out and closed editions catalogued with fabric provenance and editorial notes."
       >
         <div className="space-y-16">
+          {years.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-24 space-y-4 opacity-50">
+              <p
+                className="text-5xl lg:text-6xl italic font-light text-[var(--hb-smoke)]"
+                style={{ fontFamily: 'var(--hb-font-display)' }}
+              >
+                empty...
+              </p>
+              <p
+                className="text-xs uppercase tracking-[0.5em] text-[var(--hb-smoke)]"
+                style={{ fontFamily: 'var(--hb-font-mono)' }}
+              >
+                for now!
+              </p>
+            </div>
+          )}
           {years.map((year) => (
             <section key={year} className="space-y-8">
               <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)] font-script opacity-70">
