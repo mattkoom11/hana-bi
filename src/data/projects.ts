@@ -45,15 +45,15 @@ export const projects: Project[] = [
     year: 2026,
   },
   {
-    id: "linen-wrap-dress",
-    slug: "linen-wrap-dress",
-    name: "Linen Wrap Dress",
-    status: "in_progress",
+    id: "pl-denim-shorts",
+    slug: "pleated-denim-shorts",
+    name: "Pleated Denim Shorts",
+    status: "completed",
     description:
-      "A midi-length wrap dress in undyed linen with contrasting bias binding and hand-finished hems.",
+      "A medium length pair of pleated denim shorts, featuring two inverted box pleats on the front. The waistband is made of a different herringbone denim.",
     story:
-      "Inspired by 1970s French fashion photography. Wanted something light and airy for summer that could be dressed up or down. The wrap construction is trickier than it looks - getting the drape right took several muslins.",
-    fabric: "Italian linen from local fabric shop",
+      "My little sister wanted a pair of jorts for the warmer Spring and Summer weather. I added some pleats to create a voluminous thigh and leg opening. The waistband is a result of me running out of fabric...",
+    fabric: "Japanese herringbone denim from Nihon Menpu Mills. (100%C) / Japanese Selvedge Denim from Nihon Menpu Mills. (100%C)",
     heroImage:
       "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=80",
     images: [

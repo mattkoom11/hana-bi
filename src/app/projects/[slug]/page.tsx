@@ -1,5 +1,4 @@
 import { Badge } from "@/components/common/Badge";
-import { HandDrawnDivider } from "@/components/common/HandDrawnDivider";
 import { InkUnderline } from "@/components/common/InkUnderline";
 import { MarginNote } from "@/components/common/MarginNote";
 import { PaperBackground } from "@/components/common/PaperBackground";
@@ -256,6 +255,25 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                           <p className="font-serif text-lg">{statusLabel}</p>
                         </div>
 
+                        <div>
+                          <p className="text-sm uppercase tracking-[0.3em] text-[var(--hb-smoke)] opacity-70 mb-2">
+                            Story
+                          </p>
+                          <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80">
+                            {project.story}
+                          </p>
+                        </div>
+
+                        {project.fabric && (
+                          <div>
+                            <p className="text-sm uppercase tracking-[0.3em] text-[var(--hb-smoke)] opacity-70 mb-2">
+                              Fabric
+                            </p>
+                            <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80">
+                              {project.fabric}
+                            </p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </PaperBackground>
@@ -264,49 +282,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* Editorial details section */}
-      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 relative">
-        <PaperBackground intensity="subtle" texture="grain">
-          <div className="absolute top-0 left-0 right-0 flex justify-center">
-            <HandDrawnDivider variant="wispy" strokeOpacity={0.3} />
-          </div>
-
-          <div className="max-w-4xl mx-auto mt-16 space-y-12">
-            {/* Story section */}
-            <SketchFrame tilt="none" strokeOpacity={0.25} className="w-full">
-              <div className="space-y-4">
-                <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)] font-script opacity-70">
-                  Story
-                </p>
-                <InkUnderline
-                  width={80}
-                  variant="delicate"
-                  strokeOpacity={0.3}
-                  className="mb-4"
-                />
-                <p className="text-base leading-relaxed text-[var(--hb-smoke)] opacity-85">
-                  {project.story}
-                </p>
-              </div>
-            </SketchFrame>
-
-            {project.fabric && (
-              <SketchFrame tilt="right" strokeOpacity={0.2} className="w-full">
-                <div className="space-y-3">
-                  <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] font-script opacity-70">
-                    Fabric
-                  </p>
-                  <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80">
-                    {project.fabric}
-                  </p>
-                </div>
-              </SketchFrame>
-            )}
-
-          </div>
-        </PaperBackground>
       </section>
 
       {related.length > 0 && (
