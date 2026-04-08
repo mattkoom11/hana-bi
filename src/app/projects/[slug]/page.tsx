@@ -19,7 +19,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 interface ProjectPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 const STATUS_LABELS: Record<ProjectStatus, string> = {
@@ -46,7 +46,8 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: ProjectPageProps): Promise<Metadata> {
-  const project = getProjectBySlug(params.slug);
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
 
   if (!project) {
     return {
@@ -78,8 +79,9 @@ function getRelatedProjects(currentSlug: string, project: Project): Project[] {
     .slice(0, 3);
 }
 
-export default function ProjectPage({ params }: ProjectPageProps) {
-  const project = getProjectBySlug(params.slug);
+export default async function ProjectPage({ params }: ProjectPageProps) {
+  const { slug } = await params;
+  const project = getProjectBySlug(slug);
 
   if (!project) {
     notFound();

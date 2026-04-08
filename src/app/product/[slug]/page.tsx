@@ -16,7 +16,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 interface ProductPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -28,11 +28,12 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+  const { slug } = await params;
   let product: Product | null = null;
   try {
-    product = await getStripeProductBySlug(params.slug);
+    product = await getStripeProductBySlug(slug);
   } catch {}
-  if (!product) product = getProductBySlug(params.slug) ?? null;
+  if (!product) product = getProductBySlug(slug) ?? null;
   if (!product) return { title: 'Piece not found — Hana-Bi' };
   return {
     title: `${product.name} — Hana-Bi`,
@@ -54,18 +55,19 @@ async function getRelatedProducts(currentSlug: string): Promise<Product[]> {
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
+  const { slug } = await params;
   let product: Product | null = null;
 
   try {
-    product = await getStripeProductBySlug(params.slug);
+    product = await getStripeProductBySlug(slug);
   } catch (error) {
     console.warn('Failed to fetch product from Stripe, using fallback:', error);
   }
 
-  if (!product) product = getProductBySlug(params.slug) ?? null;
+  if (!product) product = getProductBySlug(slug) ?? null;
   if (!product) notFound();
 
-  const catalogIndex = fallbackProducts.findIndex((p) => p.slug === params.slug);
+  const catalogIndex = fallbackProducts.findIndex((p) => p.slug === slug);
   const catalogNumber =
     catalogIndex >= 0 ? `HB-${String(catalogIndex + 1).padStart(3, '0')}` : null;
 
