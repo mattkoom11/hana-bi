@@ -234,77 +234,66 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </div>
 
               {/* Project details panel */}
-              <div className="space-y-6 sticky top-24">
-                <div className="space-y-4">
-                  <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)] font-script opacity-70">
-                    Project Details
-                  </p>
-                  <h1 className="font-serif text-4xl lg:text-5xl leading-tight">
-                    {project.name}
-                  </h1>
-                  <InkUnderline
-                    width={180}
-                    variant="wispy"
-                    strokeOpacity={0.35}
-                    className="mt-2"
-                  />
-                </div>
+              <div className="sticky top-24">
+                <SketchFrame tilt="none" strokeOpacity={0.25} className="w-full">
+                  <PaperBackground intensity="subtle" texture="grain">
+                    <div className="space-y-6">
+                      <div className="space-y-4">
+                        <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)] font-script opacity-70">
+                          Project Details
+                        </p>
+                        <h1 className="font-serif text-4xl lg:text-5xl leading-tight">
+                          {project.name}
+                        </h1>
+                        <InkUnderline
+                          width={180}
+                          variant="wispy"
+                          strokeOpacity={0.35}
+                          className="mt-2"
+                        />
+                      </div>
 
-                <div className="space-y-4 pt-4">
-                  <div>
-                    <p className="text-sm uppercase tracking-[0.3em] text-[var(--hb-smoke)] opacity-70 mb-2">
-                      Status
-                    </p>
-                    <p className="font-serif text-lg">{statusLabel}</p>
-                  </div>
+                      <div className="space-y-4 pt-2">
+                        <div>
+                          <p className="text-sm uppercase tracking-[0.3em] text-[var(--hb-smoke)] opacity-70 mb-2">
+                            Status
+                          </p>
+                          <p className="font-serif text-lg">{statusLabel}</p>
+                        </div>
 
-                  {project.startedDate && (
-                    <div>
-                      <p className="text-sm uppercase tracking-[0.3em] text-[var(--hb-smoke)] opacity-70 mb-2">
-                        Started
-                      </p>
-                      <p className="text-sm text-[var(--hb-smoke)] opacity-80">
-                        {new Date(project.startedDate).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}
-                      </p>
+                        {project.startedDate && (
+                          <div>
+                            <p className="text-sm uppercase tracking-[0.3em] text-[var(--hb-smoke)] opacity-70 mb-2">
+                              Started
+                            </p>
+                            <p className="text-sm text-[var(--hb-smoke)] opacity-80">
+                              {new Date(project.startedDate).toLocaleDateString("en-US", {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })}
+                            </p>
+                          </div>
+                        )}
+
+                        {project.completedDate && (
+                          <div>
+                            <p className="text-sm uppercase tracking-[0.3em] text-[var(--hb-smoke)] opacity-70 mb-2">
+                              Completed
+                            </p>
+                            <p className="text-sm text-[var(--hb-smoke)] opacity-80">
+                              {new Date(project.completedDate).toLocaleDateString("en-US", {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })}
+                            </p>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  )}
-
-                  {project.completedDate && (
-                    <div>
-                      <p className="text-sm uppercase tracking-[0.3em] text-[var(--hb-smoke)] opacity-70 mb-2">
-                        Completed
-                      </p>
-                      <p className="text-sm text-[var(--hb-smoke)] opacity-80">
-                        {new Date(project.completedDate).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}
-                      </p>
-                    </div>
-                  )}
-
-                  <div>
-                    <p className="text-sm uppercase tracking-[0.3em] text-[var(--hb-smoke)] opacity-70 mb-2">
-                      Techniques
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {project.techniques.map((technique) => (
-                        <span
-                          key={technique}
-                          className="text-xs uppercase tracking-[0.2em] text-[var(--hb-smoke)] opacity-80 border border-[var(--hb-border)] border-dashed px-3 py-1.5"
-                          style={{ borderWidth: "1px" }}
-                        >
-                          {technique}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                  </PaperBackground>
+                </SketchFrame>
               </div>
             </div>
           </div>
@@ -336,77 +325,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </p>
               </div>
             </SketchFrame>
-
-            {/* Materials, Techniques, Notes */}
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              <SketchFrame tilt="right" strokeOpacity={0.2} className="w-full">
-                <div className="space-y-3">
-                  <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] font-script opacity-70">
-                    Materials
-                  </p>
-                  <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80">
-                    {project.materials}
-                  </p>
-                </div>
-              </SketchFrame>
-
-              {project.fabric && (
-                <SketchFrame tilt="left" strokeOpacity={0.2} className="w-full">
-                  <div className="space-y-3">
-                    <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] font-script opacity-70">
-                      Fabric
-                    </p>
-                    <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80">
-                      {project.fabric}
-                    </p>
-                  </div>
-                </SketchFrame>
-              )}
-
-              {project.pattern && (
-                <SketchFrame tilt="right" strokeOpacity={0.2} className="w-full">
-                  <div className="space-y-3">
-                    <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] font-script opacity-70">
-                      Pattern
-                    </p>
-                    <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80">
-                      {project.pattern}
-                    </p>
-                  </div>
-                </SketchFrame>
-              )}
-
-              <SketchFrame tilt="left" strokeOpacity={0.2} className="w-full">
-                <div className="space-y-3">
-                  <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] font-script opacity-70">
-                    Notes
-                  </p>
-                  <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80">
-                    {project.notes}
-                  </p>
-                </div>
-              </SketchFrame>
-            </div>
-
-            {/* Process Notes (if available) */}
-            {project.processNotes && (
-              <SketchFrame tilt="left" strokeOpacity={0.2} className="w-full">
-                <div className="space-y-4">
-                  <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)] font-script opacity-70">
-                    Process Notes
-                  </p>
-                  <InkUnderline
-                    width={120}
-                    variant="delicate"
-                    strokeOpacity={0.3}
-                    className="mb-2"
-                  />
-                  <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80 whitespace-pre-line">
-                    {project.processNotes}
-                  </p>
-                </div>
-              </SketchFrame>
-            )}
 
             {/* Tags */}
             <div className="flex flex-wrap gap-3 pt-4">
