@@ -35,14 +35,16 @@ export function ProductDetailHero({ product, catalogNumber }: ProductDetailHeroP
           >
             花火
           </span>
-          <Image
-            src={product.heroImage}
-            alt={product.name}
-            fill
-            className="object-cover"
-            sizes="(max-width: 1024px) 100vw, 65vw"
-            priority
-          />
+          {product.heroImage && (
+            <Image
+              src={product.heroImage}
+              alt={product.name}
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 65vw"
+              priority
+            />
+          )}
           <div className="absolute top-6 left-6 z-10">
             <Badge tone="sienna">
               {product.status === "available"
