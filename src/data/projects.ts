@@ -89,47 +89,6 @@ export const projects: Project[] = [
     year: 2025,
     startedDate: "2025-03-10",
   },
-  {
-    id: "kimono-reconstruction",
-    slug: "kimono-reconstruction",
-    name: "Vintage Kimono Reconstruction",
-    status: "on_hold",
-    description:
-      "Deconstructing a damaged vintage kimono to create a modern jacket with preserved traditional elements.",
-    story:
-      "Found this beautiful but damaged kimono at a flea market in Tokyo. The body fabric is too worn to save, but the sleeves and collar have incredible hand-painted details. Planning to salvage those pieces and create something new.",
-    materials: "Vintage silk kimono fabric, coordinating silk lining, vintage buttons.",
-    techniques: ["deconstruction", "reconstruction", "pattern-making"],
-    pattern: "Self-drafted (adapting traditional kimono structure)",
-    fabric: "Vintage silk kimono (damaged, being salvaged)",
-    notes: "On hold while researching traditional kimono construction methods to honor the original piece.",
-    heroImage:
-      "https://images.unsplash.com/photo-1495121605193-b116b5b09d59?auto=format&fit=crop&w=1200&q=80",
-    images: [],
-    tags: ["kimono", "vintage", "reconstruction", "silk", "traditional"],
-    year: 2024,
-    startedDate: "2024-11-20",
-  },
-  {
-    id: "workwear-apron",
-    slug: "workwear-apron",
-    name: "Heavy-Duty Workwear Apron",
-    status: "planning",
-    description:
-      "A functional work apron inspired by Japanese workwear and traditional European craftsman aprons.",
-    story:
-      "Need something durable for studio work that looks good too. Planning a split-leg design with multiple pockets and reinforced stress points. Taking inspiration from both Japanese workwear and European artisan aprons.",
-    materials: "Heavy canvas (12oz), leather straps, brass hardware, reinforced stitching.",
-    techniques: ["pattern-drafting", "leather-working", "heavy-duty-construction"],
-    pattern: "Self-drafted (in planning)",
-    fabric: "Undecided - canvas vs. waxed canvas vs. denim",
-    notes: "Still researching materials and finalizing the design. Want it to be both functional and beautiful.",
-    heroImage:
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1000&q=80",
-    images: [],
-    tags: ["apron", "workwear", "functional", "canvas", "planning"],
-    year: 2025,
-  },
 ];
 
 export const getProjectBySlug = (slug: string) =>
