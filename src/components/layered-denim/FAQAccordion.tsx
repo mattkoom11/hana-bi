@@ -25,7 +25,7 @@ export function FAQAccordion({ items, className }: FAQAccordionProps) {
         <AccordionItem
           key={index}
           value={`item-${index}`}
-          className="border-b border-[var(--hb-border)] border-t-0 border-l-0 border-r-0"
+          className="border-b border-[var(--hb-border)] border-t-0 border-l-0 border-r-0 last:border-b"
         >
           <AccordionTrigger className="font-serif text-lg text-left hover:text-[var(--hb-accent)] hover:no-underline py-4 [&>svg]:text-[var(--hb-smoke)]">
             {item.question}

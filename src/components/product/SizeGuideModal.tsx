@@ -23,7 +23,7 @@ export function SizeGuideModal() {
           Size Guide
         </button>
       </DialogTrigger>
-      <DialogContent className="bg-[var(--hb-paper)] border border-[var(--hb-border)] max-w-md [&>button]:text-[var(--hb-smoke)] [&>button]:hover:text-[var(--hb-ink)]">
+      <DialogContent className="bg-[var(--hb-paper)] border border-[var(--hb-border)] max-w-md sm:max-w-md [&>button]:text-[var(--hb-smoke)] [&>button]:hover:text-[var(--hb-ink)]">
         <DialogHeader>
           <DialogTitle className="uppercase text-xs tracking-[0.35em] text-[var(--hb-smoke)] font-normal">
             Measurements
