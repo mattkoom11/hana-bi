@@ -1,4 +1,4 @@
-# Hana-Bi — Claude Project Context
+![1775685678005](image/CLAUDE/1775685678005.png)# Hana-Bi — Claude Project Context
 
 ## What This Is
 
