@@ -8,6 +8,12 @@ import {
   type CartItem,
 } from "@/store/cart";
 import { useState } from "react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 interface CartDrawerProps {
   open: boolean;
@@ -64,19 +70,13 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
   const setCheckingOut = useCartStore((state) => state.setCheckingOut);
   const [isLoading, setIsLoading] = useState(false);
 
-  if (!open) {
-    return null;
-  }
-
   return (
-    <div className="fixed inset-0 z-50 flex">
-      <div
-        className="flex-1"
-        style={{ background: "rgba(14,12,11,0.7)" }}
-        onClick={onClose}
-      />
-      <section className="grain w-full max-w-md bg-[var(--hb-dark-surface)] border-l border-[var(--hb-dark-border)]">
-        <header className="px-6 py-5 flex items-center justify-between border-b border-[var(--hb-dark-border)] relative z-10">
+    <Sheet open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <SheetContent
+        side="right"
+        className="grain w-full max-w-md p-0 bg-[var(--hb-dark-surface)] border-l border-[var(--hb-dark-border)] [&>button]:hidden"
+      >
+        <SheetHeader className="px-6 py-5 flex-row items-center justify-between border-b border-[var(--hb-dark-border)] space-y-0">
           <div>
             <p
               className="uppercase text-xs tracking-[0.35em] opacity-70"
@@ -84,12 +84,12 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             >
               Cart
             </p>
-            <h2
-              className="text-2xl mt-1 text-[#faf8f4] italic font-light"
+            <SheetTitle
+              className="text-2xl mt-1 text-[#faf8f4] italic font-light border-none"
               style={{ fontFamily: "var(--hb-font-display)" }}
             >
               {itemCount === 0 ? "Empty" : `${itemCount} item${itemCount > 1 ? "s" : ""}`}
-            </h2>
+            </SheetTitle>
           </div>
           <button
             onClick={onClose}
@@ -98,8 +98,9 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
           >
             Close
           </button>
-        </header>
-        <div className="max-h-[65vh] overflow-y-auto divide-y divide-[var(--hb-dark-border)] relative z-10">
+        </SheetHeader>
+
+        <div className="max-h-[65vh] overflow-y-auto divide-y divide-[var(--hb-dark-border)]">
           {items.length === 0 ? (
             <p
               className="px-6 py-12 text-sm text-[var(--hb-dark-muted)] leading-relaxed"
@@ -170,8 +171,9 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             ))
           )}
         </div>
+
         {items.length > 0 && (
-          <footer className="px-6 py-5 border-t border-[var(--hb-dark-border)] space-y-4 relative z-10">
+          <footer className="px-6 py-5 border-t border-[var(--hb-dark-border)] space-y-4">
             <div className="flex items-center justify-between">
               <span
                 className="text-xs uppercase tracking-[0.3em]"
@@ -209,7 +211,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             </button>
           </footer>
         )}
-      </section>
-    </div>
+      </SheetContent>
+    </Sheet>
   );
 }
