@@ -4,6 +4,7 @@ import { VideoBackground } from "@/components/layout/VideoBackground";
 import { VhFix } from "@/components/common/VhFix";
 import { LoadingScreen } from "@/components/common/LoadingScreen";
 import { CustomScrollbar } from "@/components/common/CustomScrollbar";
+import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { Spectral, Inter, Kalam, Cormorant_Garamond, DM_Mono } from "next/font/google";
 import "./globals.css";
@@ -71,6 +72,15 @@ export default function RootLayout({
         <LoadingScreen />
         <VhFix />
         <CustomScrollbar />
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            classNames: {
+              toast: "bg-[var(--hb-dark-surface)] border border-[var(--hb-dark-border)] text-[#faf8f4]",
+              description: "text-[var(--hb-dark-muted)]",
+            },
+          }}
+        />
         <VideoBackground />
         {/* Dark ambient overlay — suppresses video to ~20-30% presence */}
         <div className="fixed inset-0 z-0 bg-[#0e0c0b]/60 pointer-events-none" />
