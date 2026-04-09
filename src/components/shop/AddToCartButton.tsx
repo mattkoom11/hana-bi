@@ -1,6 +1,7 @@
 "use client";
 
 import { Product } from "@/data/products";
+import { openCartDrawer } from "@/lib/open-cart";
 import { cn, formatCurrency } from "@/lib/utils";
 import { useCartStore } from "@/store/cart";
 import { useMemo } from "react";
@@ -46,8 +47,12 @@ export function AddToCartButton({
           },
           1
         );
-        toast(`${product.name} added`, {
-          description: `Size ${selectedSize} · ${formatCurrency(product.price)}`,
+        toast.success("Added to cart", {
+          description: `${product.name} · Size ${selectedSize} · ${formatCurrency(product.price)}`,
+          action: {
+            label: "View cart",
+            onClick: () => openCartDrawer(),
+          },
         });
       }}
       className={cn(

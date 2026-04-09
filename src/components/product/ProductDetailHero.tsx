@@ -8,7 +8,7 @@ import type { Product } from "@/data/products";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface ProductDetailHeroProps {
   product: Product;
@@ -17,7 +17,7 @@ interface ProductDetailHeroProps {
 
 // Silently selects "One Size" on mount so the cart button is immediately active
 function SizeAutoSelect({ onSelect }: { onSelect: () => void }) {
-  useState(() => { onSelect(); });
+  useEffect(() => { onSelect(); }, []);
   return null;
 }
 

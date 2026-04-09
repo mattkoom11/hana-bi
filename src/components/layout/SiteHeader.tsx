@@ -6,8 +6,9 @@ import { RollText } from "@/components/common/RollText";
 import { useHeaderTheme } from "@/hooks/useHeaderTheme";
 import { useCartCount } from "@/store/cart";
 import Link from "next/link";
+import { OPEN_CART_EVENT } from "@/lib/open-cart";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -23,6 +24,12 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const theme = useHeaderTheme();
   const isDark = theme === "dark";
+
+  useEffect(() => {
+    const onOpenCart = () => setOpen(true);
+    window.addEventListener(OPEN_CART_EVENT, onOpenCart);
+    return () => window.removeEventListener(OPEN_CART_EVENT, onOpenCart);
+  }, []);
 
   return (
     <>
