@@ -74,7 +74,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
     <Sheet open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
       <SheetContent
         side="right"
-        className="grain w-full max-w-md p-0 bg-[var(--hb-dark-surface)] border-l border-[var(--hb-dark-border)] [&>button]:hidden"
+        className="grain w-full max-w-md p-0 gap-0 bg-[var(--hb-dark-surface)] border-l border-[var(--hb-dark-border)] [&>button]:hidden"
       >
         <SheetHeader className="px-6 py-5 flex-row items-center justify-between border-b border-[var(--hb-dark-border)] space-y-0">
           <div>
