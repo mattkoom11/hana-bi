@@ -92,7 +92,7 @@ export function EmailCaptureForm({ className }: EmailCaptureFormProps) {
             className="space-y-4"
           >
             <div>
-              <label htmlFor="name" className="block text-sm font-script mb-2 text-[var(--hb-smoke)]">
+              <label htmlFor="name" className="block text-xs uppercase tracking-[0.3em] mb-3 text-[var(--hb-smoke)] opacity-70">
                 Name
               </label>
               <input
@@ -102,13 +102,13 @@ export function EmailCaptureForm({ className }: EmailCaptureFormProps) {
                 onChange={(e) => setName(e.target.value)}
                 required
                 disabled={formState === 'loading'}
-                className="w-full px-4 py-3 bg-[var(--hb-paper-muted)] border border-[var(--hb-border)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--hb-accent)]/50 focus:border-transparent disabled:opacity-50 transition-all"
+                className="w-full px-0 py-3 bg-transparent border-0 border-b border-[var(--hb-border)] focus:outline-none focus:border-[var(--hb-accent)] disabled:opacity-50 transition-colors font-serif placeholder:text-[var(--hb-smoke)]/50"
                 placeholder="Your name"
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-script mb-2 text-[var(--hb-smoke)]">
+              <label htmlFor="email" className="block text-xs uppercase tracking-[0.3em] mb-3 text-[var(--hb-smoke)] opacity-70">
                 Email
               </label>
               <input
@@ -118,7 +118,7 @@ export function EmailCaptureForm({ className }: EmailCaptureFormProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={formState === 'loading'}
-                className="w-full px-4 py-3 bg-[var(--hb-paper-muted)] border border-[var(--hb-border)] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--hb-accent)]/50 focus:border-transparent disabled:opacity-50 transition-all"
+                className="w-full px-0 py-3 bg-transparent border-0 border-b border-[var(--hb-border)] focus:outline-none focus:border-[var(--hb-accent)] disabled:opacity-50 transition-colors font-serif placeholder:text-[var(--hb-smoke)]/50"
                 placeholder="your@email.com"
               />
             </div>
