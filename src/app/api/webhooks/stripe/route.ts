@@ -32,7 +32,7 @@ async function sendOrderConfirmation(session: Stripe.Checkout.Session) {
 
   const resend = getResend();
   await resend.emails.send({
-    from: "Hana-Bi <onboarding@resend.dev>",
+    from: "Hana-Bi <hello@hana-bi.com>",
     to: email,
     subject: "Your Hana-Bi order is confirmed",
     html: `

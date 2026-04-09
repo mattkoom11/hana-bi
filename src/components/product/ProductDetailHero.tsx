@@ -2,17 +2,32 @@
 
 import { Badge } from "@/components/common/Badge";
 import { MarginNote } from "@/components/common/MarginNote";
+import { ImageLightbox } from "@/components/common/ImageLightbox";
+import { AddToCartButton } from "@/components/shop/AddToCartButton";
 import type { Product } from "@/data/products";
+import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useState } from "react";
 
 interface ProductDetailHeroProps {
   product: Product;
   catalogNumber: string | null;
 }
 
+// Silently selects "One Size" on mount so the cart button is immediately active
+function SizeAutoSelect({ onSelect }: { onSelect: () => void }) {
+  useState(() => { onSelect(); });
+  return null;
+}
+
 export function ProductDetailHero({ product, catalogNumber }: ProductDetailHeroProps) {
+  const allImages = product.images && product.images.length > 0 ? product.images : (product.heroImage ? [product.heroImage] : []);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+
   return (
+    <>
     <div className="grid gap-12 lg:grid-cols-[1.3fr_0.7fr] items-start">
       {/* Hero image — animated from left */}
       <motion.div
@@ -21,7 +36,10 @@ export function ProductDetailHero({ product, catalogNumber }: ProductDetailHeroP
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="relative space-y-6"
       >
-        <div className="relative w-full aspect-[3/4] overflow-hidden">
+        <div
+            className="relative w-full aspect-[3/4] overflow-hidden cursor-zoom-in"
+            onClick={() => allImages.length > 0 && setLightboxIndex(0)}
+          >
           {/* Ghost 花火 */}
           <span
             aria-hidden="true"
@@ -67,8 +85,9 @@ export function ProductDetailHero({ product, catalogNumber }: ProductDetailHeroP
             {product.images.map((image, idx) => (
               <div
                 key={image}
-                className="relative aspect-[4/5] overflow-hidden"
+                className="relative aspect-[4/5] overflow-hidden cursor-zoom-in"
                 style={{ transform: `rotate(${idx % 2 === 0 ? "0.8deg" : "-0.8deg"})` }}
+                onClick={() => setLightboxIndex(idx)}
               >
                 <Image
                   src={image}
@@ -155,27 +174,87 @@ export function ProductDetailHero({ product, catalogNumber }: ProductDetailHeroP
             </div>
           )}
 
-          <div>
-            <p
-              className="text-xs tracking-[0.3em] uppercase mb-2"
-              style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
-            >
-              Tags
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {product.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="text-xs uppercase tracking-[0.2em] border border-dashed border-[var(--hb-dark-border)] px-3 py-1.5"
-                  style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
-                >
-                  {tag}
-                </span>
-              ))}
+          {/* Size selector */}
+          {product.sizes && product.sizes.length > 0 && product.sizes[0] !== "One Size" && (
+            <div>
+              <p
+                className="text-xs tracking-[0.3em] uppercase mb-3"
+                style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
+              >
+                Size
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {product.sizes.map((size) => {
+                  const isSoldOut = product.soldSizes?.includes(size);
+                  const isSelected = selectedSize === size;
+                  return (
+                    <button
+                      key={size}
+                      disabled={isSoldOut}
+                      onClick={() => setSelectedSize(isSelected ? null : size)}
+                      className={cn(
+                        "px-4 py-2 text-xs uppercase tracking-[0.25em] border transition-all duration-200",
+                        isSoldOut
+                          ? "border-dashed border-[var(--hb-dark-border)] text-[var(--hb-dark-border)] cursor-not-allowed line-through"
+                          : isSelected
+                          ? "border-[var(--hb-sienna)] bg-[var(--hb-sienna)]/10 text-[#faf8f4]"
+                          : "border-[var(--hb-dark-border)] text-[var(--hb-dark-muted)] hover:border-[#faf8f4]/40 hover:text-[#faf8f4]"
+                      )}
+                      style={{ fontFamily: "var(--hb-font-mono)" }}
+                      aria-label={isSoldOut ? `${size} — sold out` : size}
+                    >
+                      {size}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
+          )}
+
+          {/* One Size — auto-select */}
+          {product.sizes?.[0] === "One Size" && (
+            <SizeAutoSelect onSelect={() => setSelectedSize("One Size")} />
+          )}
+
+          {/* Add to Cart */}
+          <div className="pt-2">
+            <AddToCartButton product={product} selectedSize={selectedSize} />
           </div>
+
+          {/* Tags */}
+          {product.tags.length > 0 && (
+            <div>
+              <p
+                className="text-xs tracking-[0.3em] uppercase mb-2"
+                style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
+              >
+                Tags
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {product.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-xs uppercase tracking-[0.2em] border border-dashed border-[var(--hb-dark-border)] px-3 py-1.5"
+                    style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </motion.div>
     </div>
+
+    {lightboxIndex !== null && (
+      <ImageLightbox
+        images={allImages}
+        initialIndex={lightboxIndex}
+        alt={product.name}
+        onClose={() => setLightboxIndex(null)}
+      />
+    )}
+    </>
   );
 }

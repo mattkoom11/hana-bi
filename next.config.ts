@@ -18,12 +18,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "cdn.shopify.com",
       },
-      // Add your custom image hostname here if hosting images externally
-      // Example:
-      // {
-      //   protocol: "https",
-      //   hostname: "your-cdn.com",
-      // },
+      {
+        protocol: "https",
+        hostname: "files.stripe.com",
+      },
     ],
   },
 };

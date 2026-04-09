@@ -82,7 +82,7 @@ export default async function Home() {
 
             {/* Right: Layered Denim product card */}
             {layeredDenim && layeredDenim.heroImage && (
-              <Link href="/layered-denim" className="group block relative overflow-hidden aspect-[3/4] border border-[var(--hb-dark-border)]">
+              <Link href={`/product/${layeredDenim.slug}`} className="group block relative overflow-hidden aspect-[3/4] border border-[var(--hb-dark-border)]">
                 <Image
                   src={layeredDenim.heroImage}
                   alt={layeredDenim.name}
@@ -117,7 +117,7 @@ export default async function Home() {
                     className="uppercase text-[0.6rem] tracking-[0.4em] text-[#faf8f4] border border-[rgba(250,248,244,0.35)] px-3 py-1.5"
                     style={{ fontFamily: "var(--hb-font-mono)" }}
                   >
-                    View Drop
+                    View Product
                   </span>
                 </div>
               </Link>
