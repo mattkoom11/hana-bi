@@ -2,16 +2,13 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-
-const FOOTER_LINKS = [
-  { label: 'Contact', href: 'mailto:hello@hanabiny.com' },
-];
+import { ContactDialog } from '@/components/contact/ContactDialog';
 
 const KANJI_CHARS = ['花', '火'];
 
 export function SiteFooter() {
   const [revealed, setRevealed] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
   const footerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -63,16 +60,14 @@ export function SiteFooter() {
           className="flex flex-wrap gap-6 text-xs uppercase tracking-[0.3em] text-[var(--hb-dark-muted)]"
           style={{ fontFamily: 'var(--hb-font-mono)' }}
         >
-          {FOOTER_LINKS.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className="pb-1 border-b border-transparent hover:border-[var(--hb-sienna)] hover:text-[#faf8f4] hover-wispy opacity-70 hover:opacity-100 transition-all duration-300"
-            >
-              {link.label}
-            </Link>
-          ))}
+          <button
+            onClick={() => setContactOpen(true)}
+            className="pb-1 border-b border-transparent hover:border-[var(--hb-sienna)] hover:text-[#faf8f4] hover-wispy opacity-70 hover:opacity-100 transition-all duration-300"
+          >
+            Contact
+          </button>
         </div>
+        <ContactDialog open={contactOpen} onOpenChange={setContactOpen} />
       </div>
 
       {/* Oversized kanji reveal */}
