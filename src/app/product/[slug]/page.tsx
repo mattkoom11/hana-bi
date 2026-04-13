@@ -106,24 +106,23 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </section>
 
       {/* ── Preorder Notice ────────────────────────────────────────── */}
-      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-12 border-b border-dashed border-[var(--hb-border)]">
-        <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-8 md:gap-16">
-          <div className="space-y-2 flex-1">
+      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 border-b border-dashed border-[var(--hb-border)]">
+        <div className="max-w-2xl mx-auto space-y-10">
+          <div className="space-y-3">
             <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)]" style={{ fontFamily: 'var(--hb-font-mono)' }}>
-              How it works
+              Preorder
             </p>
-            <p className="font-serif text-lg leading-snug">Made to order — no excess, no waste.</p>
-            <p className="text-sm text-[var(--hb-smoke)] leading-relaxed">
-              Every piece is a preorder. Your payment funds the materials and manufacturing directly. Once we hit our minimum order threshold, production begins and your garment ships in 2–3 months.
-            </p>
+            <h2 className="font-serif text-3xl">Made to order — no excess, no waste.</h2>
           </div>
-          <div className="space-y-2 flex-1">
-            <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)]" style={{ fontFamily: 'var(--hb-font-mono)' }}>
-              Minimum run
+          <div className="space-y-5 text-base leading-relaxed text-[var(--hb-ink)]">
+            <p>
+              Every piece on this site is a preorder. When you purchase, your payment goes directly toward sourcing materials and manufacturing your garment. Nothing is produced speculatively.
             </p>
-            <p className="font-serif text-lg leading-snug">We only produce what is ordered.</p>
-            <p className="text-sm text-[var(--hb-smoke)] leading-relaxed">
-              If the minimum is not reached, you will be fully refunded. This model allows us to keep production domestic, quality high, and waste at zero.
+            <p>
+              Production only begins once we reach a minimum number of orders. If that threshold isn&apos;t met, you will be fully refunded — no questions asked.
+            </p>
+            <p>
+              Once production begins, your garment is cut, sewn, and shipped to you in <strong>2–3 months</strong>.
             </p>
           </div>
         </div>
