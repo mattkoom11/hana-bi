@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(OBSIDIAN_API_KEY=c302da62bcc57b3f417b466e9236d25aa6d16929b4d13ecadbf756b67276f072 npx -y obsidian-mcp)",
+      "Bash(git -C /c/hana-bi log --oneline -20)",
+      "Bash(git -C \"/c/UVA Historic Fashion/UVA_Collectiveaccess_Frontend\" log --oneline -20)",
+      "Bash(git -C /c/hana-bi log --oneline ea29523 --since=\"2025-01-01\")",
+      "Bash(git -C /c/hana-bi show --stat ea29523)",
+      "Bash(git -C /c/hana-bi log --oneline 8c3b7f9..ea29523)",
+      "Bash(git -C \"/c/UVA Historic Fashion/UVA_Collectiveaccess_Frontend\" log --oneline)",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(bash ~/.claude/obsidian-context.sh)",
+      "Bash(where python3:*)",
+      "Bash(where python:*)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('OK - additionalContext length:', len\\(d['hookSpecificOutput']['additionalContext']\\), 'chars'\\)\")"
+    ]
+  }
+}
