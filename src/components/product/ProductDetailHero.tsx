@@ -169,7 +169,7 @@ export function ProductDetailHero({ product, catalogNumber }: ProductDetailHeroP
 
           {/* Waitlist */}
           <div className="pt-2">
-            <ShopWaitlistForm />
+            <ShopWaitlistForm dark />
           </div>
 
           {/* Tags */}
