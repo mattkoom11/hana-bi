@@ -106,7 +106,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </section>
 
       {/* ── Preorder Notice ────────────────────────────────────────── */}
-      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 border-b border-dashed border-[var(--hb-border)]">
+      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 bg-[var(--hb-paper-muted)]/30">
         <div className="max-w-2xl mx-auto space-y-10">
           <div className="space-y-3">
             <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)]" style={{ fontFamily: 'var(--hb-font-mono)' }}>
