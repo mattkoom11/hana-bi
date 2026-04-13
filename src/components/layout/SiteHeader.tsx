@@ -49,7 +49,7 @@ export function SiteHeader() {
           <Link
             href="/"
             className="text-3xl tracking-[0.08em] hover-wispy relative group transition-colors italic font-normal text-white"
-            style={{ fontFamily: "var(--hb-font-display)", textShadow: "0 1px 16px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.8), 0 2px 32px rgba(0,0,0,0.7)" }}
+            style={{ fontFamily: "var(--hb-font-display)", textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
           >
             Hana-Bi
             <span className="absolute -bottom-1 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
