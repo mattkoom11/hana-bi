@@ -7,7 +7,7 @@ const CHAPTERS = [
   {
     title: "Origin",
     copy:
-      "Hana-Bi began inside a Kyoto bookstore collecting Japanese fashion magazines from the '80s and '90s. Each lookbook spread influenced how we present garments: generous margins, serif headlines, and hand-drawn arrows.",
+      "Hana-Bi began in the small basement of a Northern Virginia home. There was no drafting table and no fancy sewing machine, but there was a hive of ideas. ",
   },
   {
     title: "Process",
