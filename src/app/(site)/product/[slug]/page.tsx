@@ -105,6 +105,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
       </section>
 
+      {/* ── Denim Material Cards ───────────────────────────────────── */}
+      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-12 bg-[var(--hb-paper-muted)]/30">
+        <div className="max-w-4xl mx-auto grid md:grid-cols-3 gap-6">
+          {materialsInfo.map((m, i) => (
+            <RoughBorderCard key={i} hover className="p-6 bg-[var(--hb-paper)]">
+              <h3 className="font-serif text-lg mb-3 text-[var(--hb-ink)]">{m.title}</h3>
+              <p className="text-sm text-[var(--hb-smoke)] leading-relaxed">{m.description}</p>
+            </RoughBorderCard>
+          ))}
+        </div>
+      </section>
+
       {/* ── Preorder Notice ────────────────────────────────────────── */}
       <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 bg-[var(--hb-paper-muted)]/30">
         <div className="max-w-2xl mx-auto space-y-10">
@@ -201,16 +213,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <ScribbleArrow direction="down" size={28} strokeOpacity={0.4} />
           </div>
           <EmailCaptureForm />
-
-          {/* Denim material characteristics */}
-          <div className="grid md:grid-cols-3 gap-6 pt-8 text-left">
-            {materialsInfo.map((m, i) => (
-              <RoughBorderCard key={i} hover className="p-6 bg-[var(--hb-paper)]">
-                <h3 className="font-serif text-lg mb-3 text-[var(--hb-ink)]">{m.title}</h3>
-                <p className="text-sm text-[var(--hb-smoke)] leading-relaxed">{m.description}</p>
-              </RoughBorderCard>
-            ))}
-          </div>
         </div>
       </section>
 
