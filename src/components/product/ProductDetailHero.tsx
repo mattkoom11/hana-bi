@@ -113,25 +113,6 @@ export function ProductDetailHero({ product, catalogNumber }: ProductDetailHeroP
           </div>
         )}
 
-        {/* Material characteristic cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-          {materialsInfo.map((m, i) => (
-            <RoughBorderCard key={i} hover className="p-4 bg-[var(--hb-dark-surface)]">
-              <h3
-                className="font-serif text-base mb-2"
-                style={{ color: "#faf8f4" }}
-              >
-                {m.title}
-              </h3>
-              <p
-                className="text-xs leading-relaxed"
-                style={{ color: "var(--hb-dark-muted)" }}
-              >
-                {m.description}
-              </p>
-            </RoughBorderCard>
-          ))}
-        </div>
       </motion.div>
 
       {/* Details panel — animated from right */}
@@ -233,6 +214,26 @@ export function ProductDetailHero({ product, catalogNumber }: ProductDetailHeroP
               </div>
             </div>
           )}
+
+          {/* Material characteristic cards */}
+          <div className="grid grid-cols-1 gap-3 pt-2">
+            {materialsInfo.map((m, i) => (
+              <RoughBorderCard key={i} hover className="p-4 bg-[var(--hb-dark-surface)]">
+                <h3
+                  className="font-serif text-base mb-1"
+                  style={{ color: "#faf8f4" }}
+                >
+                  {m.title}
+                </h3>
+                <p
+                  className="text-xs leading-relaxed"
+                  style={{ color: "var(--hb-dark-muted)" }}
+                >
+                  {m.description}
+                </p>
+              </RoughBorderCard>
+            ))}
+          </div>
         </div>
       </motion.div>
     </div>
