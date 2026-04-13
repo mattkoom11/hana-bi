@@ -67,7 +67,7 @@ export default async function Home() {
                 </Link>
                 <Link
                   href="/about"
-                  className="group border border-[rgba(250,248,244,0.25)] text-[rgba(250,248,244,0.7)] uppercase tracking-[0.4em] px-8 py-4 text-xs hover:text-[#faf8f4] hover:border-[rgba(250,248,244,0.5)] transition-all duration-300"
+                  className="group border border-[rgba(250,248,244,0.25)] bg-[rgba(0,0,0,0.35)] text-[rgba(250,248,244,0.7)] uppercase tracking-[0.4em] px-8 py-4 text-xs hover:text-[#faf8f4] hover:border-[rgba(250,248,244,0.5)] hover:bg-[rgba(0,0,0,0.5)] transition-all duration-300"
                   style={{ fontFamily: "var(--hb-font-mono)" }}
                 >
                   <RollText>What is Hana-Bi?</RollText>
