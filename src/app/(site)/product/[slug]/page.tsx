@@ -150,42 +150,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <HandDrawnDivider variant="wispy" strokeOpacity={0.3} />
           </div>
 
-          {/* Product-specific materials */}
-          <div className="grid gap-6 md:grid-cols-3">
-            <SketchFrame tilt="right" strokeOpacity={0.2} className="w-full">
-              <div className="space-y-3">
-                <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] opacity-70" style={{ fontFamily: "var(--hb-font-mono)" }}>
-                  Composition
-                </p>
-                <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80">
-                  {product.materials}
-                </p>
-              </div>
-            </SketchFrame>
-
-            <SketchFrame tilt="left" strokeOpacity={0.2} className="w-full">
-              <div className="space-y-3">
-                <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] opacity-70" style={{ fontFamily: "var(--hb-font-mono)" }}>
-                  Care
-                </p>
-                <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80">
-                  {product.care}
-                </p>
-              </div>
-            </SketchFrame>
-
-            <SketchFrame tilt="right" strokeOpacity={0.2} className="w-full">
-              <div className="space-y-3">
-                <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] opacity-70" style={{ fontFamily: "var(--hb-font-mono)" }}>
-                  Notes
-                </p>
-                <p className="text-sm leading-relaxed text-[var(--hb-smoke)] opacity-80">
-                  {product.notes}
-                </p>
-              </div>
-            </SketchFrame>
-          </div>
-
           <div className="flex flex-wrap gap-3 pt-2">
             {product.tags.map((tag) => (
               <Tag key={tag}>{tag}</Tag>
