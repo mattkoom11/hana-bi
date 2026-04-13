@@ -4,7 +4,7 @@ import { projects } from "@/data/projects";
 import { getStripeCatalog } from "@/lib/stripe-catalog";
 import { NEXT_PUBLIC_SITE_URL } from "@/lib/env";
 
-const BASE_URL = NEXT_PUBLIC_SITE_URL ?? "https://hana-bi.com";
+const BASE_URL = NEXT_PUBLIC_SITE_URL ?? "https://hanabiny.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages

@@ -32,7 +32,7 @@ async function sendOrderConfirmation(session: Stripe.Checkout.Session) {
 
   const resend = getResend();
   await resend.emails.send({
-    from: "Hana-Bi <hello@hana-bi.com>",
+    from: "Hana-Bi <hello@hanabiny.com>",
     to: email,
     subject: "Your Hana-Bi order is confirmed",
     html: `
@@ -46,7 +46,7 @@ async function sendOrderConfirmation(session: Stripe.Checkout.Session) {
           <p style="font-size: 1.1rem; margin: 0;">${amountFormatted}</p>
         </div>
         <p style="font-size: 0.875rem; color: #6b6560;">We'll notify you when your order ships. First drops take 6–8 weeks.</p>
-        <p style="font-size: 0.875rem; color: #6b6560;">Questions? Reply to this email or write to <a href="mailto:hello@hana-bi.com" style="color: #8b5e3c;">hello@hana-bi.com</a></p>
+        <p style="font-size: 0.875rem; color: #6b6560;">Questions? Reply to this email or write to <a href="mailto:hello@hanabiny.com" style="color: #8b5e3c;">hello@hanabiny.com</a></p>
         <p style="margin-top: 32px; font-family: serif; font-style: italic; color: #6b6560;">— Hana-Bi Studio</p>
       </div>
     `,

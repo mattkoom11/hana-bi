@@ -3,28 +3,21 @@
 import { Badge } from "@/components/common/Badge";
 import { MarginNote } from "@/components/common/MarginNote";
 import { ImageLightbox } from "@/components/common/ImageLightbox";
-import { AddToCartButton } from "@/components/shop/AddToCartButton";
+import { ShopWaitlistForm } from "@/components/shop/ShopWaitlistForm";
 import type { Product } from "@/data/products";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 interface ProductDetailHeroProps {
   product: Product;
   catalogNumber: string | null;
 }
 
-// Silently selects "One Size" on mount so the cart button is immediately active
-function SizeAutoSelect({ onSelect }: { onSelect: () => void }) {
-  useEffect(() => { onSelect(); }, []);
-  return null;
-}
-
 export function ProductDetailHero({ product, catalogNumber }: ProductDetailHeroProps) {
   const allImages = product.images && product.images.length > 0 ? product.images : (product.heroImage ? [product.heroImage] : []);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
   return (
     <>
@@ -174,51 +167,9 @@ export function ProductDetailHero({ product, catalogNumber }: ProductDetailHeroP
             </div>
           )}
 
-          {/* Size selector */}
-          {product.sizes && product.sizes.length > 0 && product.sizes[0] !== "One Size" && (
-            <div>
-              <p
-                className="text-xs tracking-[0.3em] uppercase mb-3"
-                style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
-              >
-                Size
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {product.sizes.map((size) => {
-                  const isSoldOut = product.soldSizes?.includes(size);
-                  const isSelected = selectedSize === size;
-                  return (
-                    <button
-                      key={size}
-                      disabled={isSoldOut}
-                      onClick={() => setSelectedSize(isSelected ? null : size)}
-                      className={cn(
-                        "px-4 py-2 text-xs uppercase tracking-[0.25em] border transition-all duration-200",
-                        isSoldOut
-                          ? "border-dashed border-[var(--hb-dark-border)] text-[var(--hb-dark-border)] cursor-not-allowed line-through"
-                          : isSelected
-                          ? "border-[var(--hb-sienna)] bg-[var(--hb-sienna)]/10 text-[#faf8f4]"
-                          : "border-[var(--hb-dark-border)] text-[var(--hb-dark-muted)] hover:border-[#faf8f4]/40 hover:text-[#faf8f4]"
-                      )}
-                      style={{ fontFamily: "var(--hb-font-mono)" }}
-                      aria-label={isSoldOut ? `${size} — sold out` : size}
-                    >
-                      {size}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* One Size — auto-select */}
-          {product.sizes?.[0] === "One Size" && (
-            <SizeAutoSelect onSelect={() => setSelectedSize("One Size")} />
-          )}
-
-          {/* Add to Cart */}
+          {/* Waitlist */}
           <div className="pt-2">
-            <AddToCartButton product={product} selectedSize={selectedSize} />
+            <ShopWaitlistForm />
           </div>
 
           {/* Tags */}

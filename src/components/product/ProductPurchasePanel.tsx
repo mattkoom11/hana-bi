@@ -1,9 +1,8 @@
 "use client";
 
-import { AddToCartButton } from "@/components/shop/AddToCartButton";
+import { ShopWaitlistForm } from "@/components/shop/ShopWaitlistForm";
 import { Product } from "@/data/products";
 import { formatCurrency } from "@/lib/utils";
-import { useState } from "react";
 
 interface ProductPurchasePanelProps {
   product: Product;
@@ -12,10 +11,6 @@ interface ProductPurchasePanelProps {
 export function ProductPurchasePanel({
   product,
 }: ProductPurchasePanelProps) {
-  const [selectedSize, setSelectedSize] = useState<string | null>(
-    product.sizes.find((s) => !product.soldSizes?.includes(s)) ?? product.sizes[0] ?? null
-  );
-  const isAvailable = product.status === "available";
 
   return (
     <div className="space-y-6 border border-[var(--hb-border)] border-dashed p-8 relative">
@@ -35,73 +30,32 @@ export function ProductPurchasePanel({
             {product.collection} · {product.year}
           </p>
           <p className="mt-6 text-xl font-serif">{formatCurrency(product.price)}</p>
-          <p className="text-sm text-[var(--hb-smoke)] opacity-80 mt-2">
-            {isAvailable ? "Ships in 2 weeks" : "Preserved in the archive"}
-          </p>
         </div>
 
-        <div className="space-y-4 pt-6">
-          <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] font-script opacity-70">
-            Select Size
+        {/* Preorder model explainer */}
+        <div className="border border-dashed border-[var(--hb-border)] px-5 py-4 space-y-3">
+          <p className="uppercase text-xs tracking-[0.3em] text-[var(--hb-smoke)] opacity-70">
+            Made to order
           </p>
-          <div className="flex flex-wrap gap-3">
-            {product.sizes.map((size) => {
-              const isSoldOut = product.soldSizes?.includes(size);
-              return (
-                <button
-                  key={size}
-                  onClick={() => { if (!isSoldOut) setSelectedSize(size); }}
-                  disabled={isSoldOut}
-                  className={`px-5 py-2.5 min-h-[44px] border text-xs uppercase tracking-[0.3em] transition-all duration-300 ${
-                    selectedSize === size
-                      ? "border-[var(--hb-ink)] bg-[var(--hb-ink)] text-[var(--hb-paper)]"
-                      : isSoldOut
-                      ? "border-[var(--hb-border)] border-dashed text-[var(--hb-smoke)] opacity-30 cursor-not-allowed line-through"
-                      : "border-[var(--hb-border)] border-dashed text-[var(--hb-smoke)] hover:border-[var(--hb-ink-light)] hover-wispy"
-                  }`}
-                  style={{ borderWidth: "1px" }}
-                >
-                  {size}
-                </button>
-              );
-            })}
+          <p className="text-sm text-[var(--hb-smoke)] leading-relaxed">
+            Every piece is preordered before it's made. Your payment funds the materials and manufacturing — your garment is then cut, sewn, and shipped directly to you.
+          </p>
+          <div className="flex flex-col gap-1.5 pt-1">
+            {[
+              ["01", "Preorder opens — you pay upfront"],
+              ["02", "Materials sourced, garment manufactured"],
+              ["03", "Ships to you in 2–3 months"],
+            ].map(([num, label]) => (
+              <div key={num} className="flex items-baseline gap-3">
+                <span className="text-[0.65rem] font-mono text-[var(--hb-smoke)] opacity-50 shrink-0">{num}</span>
+                <span className="text-xs text-[var(--hb-smoke)] opacity-80">{label}</span>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="pt-4">
-          <AddToCartButton
-            product={product}
-            selectedSize={selectedSize}
-          />
-        </div>
-        
-        <p className="text-[0.75rem] text-[var(--hb-smoke)] opacity-70 mt-6 leading-relaxed">
-          Need a custom tailoring note? Add it during checkout or email studio@hana-bi.example.
-        </p>
-      </div>
-
-      {/* Sticky mobile Add to Cart — visible only below md breakpoint */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden border-t border-[var(--hb-dark-border)] bg-[var(--hb-dark)]/95 backdrop-blur-sm px-4 py-3 flex items-center gap-4">
-        <div className="flex-1 min-w-0">
-          <p
-            className="text-xs uppercase tracking-[0.3em] truncate"
-            style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
-          >
-            {selectedSize ? `Size ${selectedSize}` : "Select a size"}
-          </p>
-          <p
-            className="text-base text-[#faf8f4] italic font-light truncate"
-            style={{ fontFamily: "var(--hb-font-display)" }}
-          >
-            {formatCurrency(product.price)}
-          </p>
-        </div>
-        <div className="shrink-0">
-          <AddToCartButton
-            product={product}
-            selectedSize={selectedSize}
-            compact
-          />
+        <div className="pt-2">
+          <ShopWaitlistForm />
         </div>
       </div>
     </div>

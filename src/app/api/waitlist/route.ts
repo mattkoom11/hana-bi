@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
   const resend = getResend();
 
   await resend.emails.send({
-    from: 'Hana-Bi <hello@hana-bi.com>',
+    from: 'Hana-Bi <hello@hanabiny.com>',
     to: email,
     subject: "You're on the Hana-Bi drop list",
     html: `<p>Hi ${name},</p><p>You're on the waitlist for Layered Denim. We'll notify you when it drops.</p><p>— Hana-Bi Studio</p>`,
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
 
   if (WAITLIST_NOTIFY_EMAIL) {
     await resend.emails.send({
-      from: 'Hana-Bi Waitlist <hello@hana-bi.com>',
+      from: 'Hana-Bi Waitlist <hello@hanabiny.com>',
       to: WAITLIST_NOTIFY_EMAIL,
       subject: `New waitlist signup: ${name}`,
       html: `<p><strong>${name}</strong> (${email}) joined the Layered Denim waitlist.</p>`,

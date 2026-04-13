@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
 const FOOTER_LINKS = [
-  { label: 'Contact', href: 'mailto:hello@hana-bi.com' },
+  { label: 'Contact', href: 'mailto:hello@hanabiny.com' },
 ];
 
 const KANJI_CHARS = ['花', '火'];

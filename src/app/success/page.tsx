@@ -223,11 +223,11 @@ function SuccessContent() {
         >
           Questions? Contact us at{" "}
           <a
-            href="mailto:hello@hana-bi.com"
+            href="mailto:hello@hanabiny.com"
             className="hover:opacity-80 transition-opacity"
             style={{ color: "var(--hb-sienna)" }}
           >
-            hello@hana-bi.com
+            hello@hanabiny.com
           </a>
         </motion.p>
       </motion.div>
