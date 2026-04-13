@@ -24,3 +24,6 @@ export const STRIPE_SHIPPING_COUNTRIES = process.env.STRIPE_SHIPPING_COUNTRIES ?
 export const RESEND_API_KEY = process.env.RESEND_API_KEY;
 // Address that receives waitlist notification emails
 export const WAITLIST_NOTIFY_EMAIL = process.env.WAITLIST_NOTIFY_EMAIL;
+
+// Site lock — set to enable password gate
+export const SITE_PASSWORD = process.env.SITE_PASSWORD;
