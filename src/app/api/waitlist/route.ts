@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
-import { RESEND_API_KEY, WAITLIST_NOTIFY_EMAIL } from '@/lib/env';
+import { RESEND_API_KEY, RESEND_AUDIENCE_ID, WAITLIST_NOTIFY_EMAIL } from '@/lib/env';
 
 let _resend: Resend | null = null;
 function getResend(): Resend {
@@ -31,6 +31,16 @@ export async function POST(request: NextRequest) {
   const displayName = name?.trim() || email;
 
   const resend = getResend();
+
+  // Add to Resend audience for tracking if configured
+  if (RESEND_AUDIENCE_ID) {
+    await resend.contacts.create({
+      email,
+      firstName: name?.trim() || undefined,
+      audienceId: RESEND_AUDIENCE_ID,
+      unsubscribed: false,
+    });
+  }
 
   await resend.emails.send({
     from: 'Hana-Bi <hello@hanabiny.com>',
