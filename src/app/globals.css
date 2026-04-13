@@ -10,8 +10,8 @@
   --hb-ink: #1a1a1a;
   --hb-ink-light: #2a2929;
   --hb-ink-lighter: #3b3937;
-  --hb-smoke: #6b6660;
-  --hb-smoke-light: #8a8580;
+  --hb-smoke: #524f4b;
+  --hb-smoke-light: #6b6660;
   --hb-sienna: #9a7a5a;
   --hb-gold: #c4a876;
   --hb-border: #d4ccc0;
@@ -20,7 +20,7 @@
   --hb-dark:         #0e0c0b;
   --hb-dark-surface: #171310;
   --hb-dark-border:  rgba(250, 248, 244, 0.08);
-  --hb-dark-muted:   rgba(250, 248, 244, 0.45);
+  --hb-dark-muted:   rgba(250, 248, 244, 0.68);
   --hb-dark-kanji:   rgba(250, 248, 244, 0.07);
   --hb-font-display: var(--font-cormorant), Georgia, serif;
   --hb-font-mono:    var(--font-dm-mono), 'Courier New', monospace;
