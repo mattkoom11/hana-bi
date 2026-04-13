@@ -2,6 +2,7 @@
 
 import { EmailCaptureForm } from '@/components/layered-denim/EmailCaptureForm';
 import { InkUnderline } from '@/components/common/InkUnderline';
+import { VideoBackground } from '@/components/layout/VideoBackground';
 import { cn } from '@/lib/utils';
 import { useSearchParams } from 'next/navigation';
 import { useState, Suspense } from 'react';
@@ -31,8 +32,10 @@ function LockedPageInner() {
   };
 
   return (
-    <main className="min-h-screen bg-[var(--hb-ink)] text-[var(--hb-paper)] flex flex-col items-center justify-center px-6 py-20">
-      <div className="w-full max-w-sm space-y-16 text-center">
+    <main className="min-h-screen text-[var(--hb-paper)] flex flex-col items-center justify-center px-6 py-20 relative">
+      <VideoBackground />
+      <div className="fixed inset-0 z-0 bg-[#0e0c0b]/70 pointer-events-none" />
+      <div className="relative z-10 w-full max-w-sm space-y-16 text-center">
 
         {/* Brand */}
         <div className="space-y-4">

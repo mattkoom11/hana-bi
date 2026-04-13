@@ -34,6 +34,9 @@ export function SiteHeader() {
   return (
     <>
       <header className="px-4 sm:px-8 md:px-12 lg:px-20 py-10 flex flex-col gap-8 relative">
+        {isDark && (
+          <div className="absolute inset-0 bg-gradient-to-b from-[rgba(0,0,0,0.45)] to-transparent pointer-events-none" />
+        )}
         {!isDark && (
           <div className="absolute bottom-0 left-0 right-0 flex justify-center">
             <div className="w-full max-w-6xl mx-auto">
@@ -81,7 +84,7 @@ export function SiteHeader() {
 
         <nav
           className={`flex flex-wrap gap-8 text-xs uppercase tracking-[0.4em] ${
-            isDark ? "text-[var(--hb-dark-muted)]" : "text-[var(--hb-smoke)]"
+            isDark ? "text-[rgba(250,248,244,0.82)]" : "text-[var(--hb-smoke)]"
           }`}
           style={{ fontFamily: "var(--hb-font-mono)" }}
         >
