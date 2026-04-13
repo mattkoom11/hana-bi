@@ -1,13 +1,10 @@
-import { HandDrawnDivider } from '@/components/common/HandDrawnDivider';
 import { InkUnderline } from '@/components/common/InkUnderline';
 import { PaperBackground } from '@/components/common/PaperBackground';
-import { SketchFrame } from '@/components/common/SketchFrame';
 import { Tag } from '@/components/common/Tag';
 import { PageShell } from '@/components/layout/PageShell';
 import { ProductCard } from '@/components/shop/ProductCard';
 import { ProductDetailHero } from '@/components/product/ProductDetailHero';
 import { ProductStickyNav } from '@/components/product/ProductStickyNav';
-import { RoughBorderCard } from '@/components/layered-denim/RoughBorderCard';
 import { ScribbleArrow } from '@/components/layered-denim/ScribbleArrow';
 import { EmailCaptureForm } from '@/components/layered-denim/EmailCaptureForm';
 import { getStripeCatalog, getStripeProductBySlug } from '@/lib/stripe-catalog';
@@ -58,21 +55,6 @@ async function getRelatedProducts(currentSlug: string): Promise<Product[]> {
     .slice(0, 3);
 }
 
-const materialsInfo = [
-  {
-    title: 'Japanese Selvedge Denim',
-    description: 'Woven on traditional shuttle looms, creating a dense, durable fabric with distinctive edge characteristics.',
-  },
-  {
-    title: 'Indigo Character',
-    description: 'Deep, rich indigo that fades uniquely with wear. Each piece develops its own signature patterns over time.',
-  },
-  {
-    title: 'Hand Feel & Weight',
-    description: '13–15oz range. Structured initially, the fabric softens with wear while maintaining integrity at key stress points.',
-  },
-];
-
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
   let product: Product | null = null;
@@ -105,18 +87,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
       </section>
 
-      {/* ── Denim Material Cards ───────────────────────────────────── */}
-      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-12 bg-[var(--hb-paper-muted)]/30">
-        <div className="max-w-4xl mx-auto grid md:grid-cols-3 gap-6">
-          {materialsInfo.map((m, i) => (
-            <RoughBorderCard key={i} hover className="p-6 bg-[var(--hb-paper)]">
-              <h3 className="font-serif text-lg mb-3 text-[var(--hb-ink)]">{m.title}</h3>
-              <p className="text-sm text-[var(--hb-smoke)] leading-relaxed">{m.description}</p>
-            </RoughBorderCard>
-          ))}
-        </div>
-      </section>
-
       {/* ── Preorder Notice ────────────────────────────────────────── */}
       <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 bg-[var(--hb-paper-muted)]/30">
         <div className="max-w-2xl mx-auto space-y-10">
@@ -141,16 +111,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </section>
 
       {/* ── Materials ──────────────────────────────────────────────── */}
-      <section id="materials" className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 bg-[var(--hb-paper-muted)]/30">
-        <div className="max-w-4xl mx-auto space-y-10">
-          <div className="space-y-3">
-            <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)] opacity-70" style={{ fontFamily: "var(--hb-font-mono)" }}>
-              Materials
-            </p>
-            <HandDrawnDivider variant="wispy" strokeOpacity={0.3} />
-          </div>
-
-          <div className="flex flex-wrap gap-3 pt-2">
+      <section id="materials" className="px-4 sm:px-8 md:px-12 lg:px-20 py-10 bg-[var(--hb-paper-muted)]/30">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex flex-wrap gap-3">
             {product.tags.map((tag) => (
               <Tag key={tag}>{tag}</Tag>
             ))}

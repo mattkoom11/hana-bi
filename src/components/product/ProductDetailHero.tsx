@@ -3,12 +3,31 @@
 import { Badge } from "@/components/common/Badge";
 import { MarginNote } from "@/components/common/MarginNote";
 import { ImageLightbox } from "@/components/common/ImageLightbox";
+import { RoughBorderCard } from "@/components/layered-denim/RoughBorderCard";
 import { ShopWaitlistForm } from "@/components/shop/ShopWaitlistForm";
 import type { Product } from "@/data/products";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
+
+const materialsInfo = [
+  {
+    title: "Japanese Selvedge Denim",
+    description:
+      "Woven on traditional shuttle looms, creating a dense, durable fabric with distinctive edge characteristics.",
+  },
+  {
+    title: "Indigo Character",
+    description:
+      "Deep, rich indigo that fades uniquely with wear. Each piece develops its own signature patterns over time.",
+  },
+  {
+    title: "Hand Feel & Weight",
+    description:
+      "13–15oz range. Structured initially, the fabric softens with wear while maintaining integrity at key stress points.",
+  },
+];
 
 interface ProductDetailHeroProps {
   product: Product;
@@ -93,6 +112,26 @@ export function ProductDetailHero({ product, catalogNumber }: ProductDetailHeroP
             ))}
           </div>
         )}
+
+        {/* Material characteristic cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+          {materialsInfo.map((m, i) => (
+            <RoughBorderCard key={i} hover className="p-4 bg-[var(--hb-dark-surface)]">
+              <h3
+                className="font-serif text-base mb-2"
+                style={{ color: "#faf8f4" }}
+              >
+                {m.title}
+              </h3>
+              <p
+                className="text-xs leading-relaxed"
+                style={{ color: "var(--hb-dark-muted)" }}
+              >
+                {m.description}
+              </p>
+            </RoughBorderCard>
+          ))}
+        </div>
       </motion.div>
 
       {/* Details panel — animated from right */}
