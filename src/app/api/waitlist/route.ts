@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Email service not configured' }, { status: 500 });
   }
 
-  let body: { name: string; email: string };
+  let body: { name?: string; email: string };
   try {
     body = await request.json();
   } catch {
@@ -24,12 +24,11 @@ export async function POST(request: NextRequest) {
 
   const { name, email } = body;
 
-  if (!name || typeof name !== 'string' || name.trim().length === 0) {
-    return NextResponse.json({ error: 'Name is required' }, { status: 400 });
-  }
   if (!email || typeof email !== 'string' || !email.includes('@')) {
     return NextResponse.json({ error: 'Valid email is required' }, { status: 400 });
   }
+
+  const displayName = name?.trim() || email;
 
   const resend = getResend();
 
@@ -37,15 +36,15 @@ export async function POST(request: NextRequest) {
     from: 'Hana-Bi <hello@hanabiny.com>',
     to: email,
     subject: "You're on the Hana-Bi drop list",
-    html: `<p>Hi ${name},</p><p>You're on the waitlist for Layered Denim. We'll notify you when it drops.</p><p>— Hana-Bi Studio</p>`,
+    html: `<p>Hi ${displayName},</p><p>You're on the waitlist for Layered Denim. We'll notify you when it drops.</p><p>— Hana-Bi Studio</p>`,
   });
 
   if (WAITLIST_NOTIFY_EMAIL) {
     await resend.emails.send({
       from: 'Hana-Bi Waitlist <hello@hanabiny.com>',
       to: WAITLIST_NOTIFY_EMAIL,
-      subject: `New waitlist signup: ${name}`,
-      html: `<p><strong>${name}</strong> (${email}) joined the Layered Denim waitlist.</p>`,
+      subject: `New waitlist signup: ${email}`,
+      html: `<p><strong>${displayName}</strong> (${email}) joined the Layered Denim waitlist.</p>`,
     });
   }
 
