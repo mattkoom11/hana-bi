@@ -105,6 +105,30 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
       </section>
 
+      {/* ── Preorder Notice ────────────────────────────────────────── */}
+      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-12 border-b border-dashed border-[var(--hb-border)]">
+        <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-8 md:gap-16">
+          <div className="space-y-2 flex-1">
+            <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)]" style={{ fontFamily: 'var(--hb-font-mono)' }}>
+              How it works
+            </p>
+            <p className="font-serif text-lg leading-snug">Made to order — no excess, no waste.</p>
+            <p className="text-sm text-[var(--hb-smoke)] leading-relaxed">
+              Every piece is a preorder. Your payment funds the materials and manufacturing directly. Once we hit our minimum order threshold, production begins and your garment ships in 2–3 months.
+            </p>
+          </div>
+          <div className="space-y-2 flex-1">
+            <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)]" style={{ fontFamily: 'var(--hb-font-mono)' }}>
+              Minimum run
+            </p>
+            <p className="font-serif text-lg leading-snug">We only produce what is ordered.</p>
+            <p className="text-sm text-[var(--hb-smoke)] leading-relaxed">
+              If the minimum is not reached, you will be fully refunded. This model allows us to keep production domestic, quality high, and waste at zero.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* ── Materials ──────────────────────────────────────────────── */}
       <section id="materials" className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 bg-[var(--hb-paper-muted)]/30">
         <div className="max-w-4xl mx-auto space-y-10">
