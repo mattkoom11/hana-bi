@@ -3,22 +3,18 @@
 import { BottomSheetNav } from "@/components/layered-denim/BottomSheetNav";
 import { BuyButton } from "@/components/layered-denim/BuyButton";
 import { EmailCaptureForm } from "@/components/layered-denim/EmailCaptureForm";
-import { FAQAccordion } from "@/components/layered-denim/FAQAccordion";
 import { ModalGallery } from "@/components/layered-denim/ModalGallery";
 import { RoughBorderCard } from "@/components/layered-denim/RoughBorderCard";
 import { ScribbleArrow } from "@/components/layered-denim/ScribbleArrow";
 import { ScribbleUnderline } from "@/components/layered-denim/ScribbleUnderline";
-import { WearTimeline } from "@/components/layered-denim/WearTimeline";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Menu } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 const navItems = [
-  { label: 'Story', href: '#story' },
   { label: 'Materials', href: '#materials' },
-  { label: 'Construction', href: '#construction' },
-  { label: 'Fit', href: '#fit' },
-  { label: 'FAQ', href: '#faq' },
+  { label: 'Gallery', href: '#gallery' },
+  { label: 'Drop List', href: '#drop-list' },
 ];
 
 const galleryItems = [
@@ -28,51 +24,6 @@ const galleryItems = [
   { id: '4', label: 'Detail: Pocket', caption: 'Hand-finished edges', metadata: 'Pocket Detail' },
   { id: '5', label: 'Side View', caption: 'Relaxed fit silhouette', metadata: 'Side Profile' },
   { id: '6', label: 'Detail: Hem', caption: 'Chain-stitched finish', metadata: 'Hem Detail' },
-];
-
-const faqItems = [
-  {
-    question: 'Where is Layered Denim made?',
-    answer: 'Layered Denim is designed and manufactured entirely in America. Each garment is constructed in small batches with meticulous attention to detail.',
-  },
-  {
-    question: 'What is selvedge denim?',
-    answer: 'Selvedge (self-edge) denim refers to denim woven on traditional shuttle looms, creating a finished edge that prevents unraveling. This method produces a denser, higher-quality fabric with distinctive edge characteristics.',
-  },
-  {
-    question: 'How should I care for my denim?',
-    answer: 'Wash infrequently (every 6-12 months for best fades), inside out, cold water, hang dry. Avoid machine drying to preserve fabric integrity and prevent excessive shrinkage.',
-  },
-  {
-    question: 'What sizing is available?',
-    answer: 'Layered Denim is available in sizes 28-38 with a relaxed, straight-leg fit. Refer to our detailed size guide for measurements.',
-  },
-  {
-    question: 'Will there be a restock?',
-    answer: 'This is a limited release. We may produce additional runs based on demand, but each batch is unique. Join the drop list to be notified.',
-  },
-  {
-    question: 'What are shipping options?',
-    answer: 'We ship worldwide. Domestic shipping takes 5-7 business days. International shipping varies by destination. All orders include tracking.',
-  },
-];
-
-const timelineItems = [
-  {
-    period: 'Day 1',
-    title: 'Fresh Cut',
-    description: 'Crisp indigo with structured hand. The fabric feels substantial and holds its shape.',
-  },
-  {
-    period: 'Month 3',
-    title: 'Breaking In',
-    description: 'The denim begins to mold to your body. First creases form at stress points—knees, seat, and cuffs.',
-  },
-  {
-    period: 'Year 1',
-    title: 'Character Emerges',
-    description: 'Distinctive fade patterns unique to your wear. The fabric softens while maintaining structure at key areas.',
-  },
 ];
 
 export default function LayeredDenimPage() {
@@ -109,7 +60,7 @@ export default function LayeredDenimPage() {
             <a href="/" className="font-serif text-xl">
               Hana-Bi
             </a>
-            
+
             {/* Desktop Nav */}
             <nav className="hidden md:flex gap-8">
               {navItems.map((item) => (
@@ -204,7 +155,7 @@ export default function LayeredDenimPage() {
               View Details
             </motion.a>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -224,38 +175,6 @@ export default function LayeredDenimPage() {
             </a>
           </motion.div>
         </div>
-      </section>
-
-      {/* Story Section */}
-      <section id="story" className="py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className="space-y-8"
-        >
-          <h2 className="font-serif text-4xl md:text-5xl">Story</h2>
-          
-          <div className="space-y-6 text-lg leading-relaxed text-[var(--hb-ink)]">
-            <p>
-              In an age of rapid consumption, we return to craft. Layered Denim is built not for trends, but for the long arc of wear—each crease, each fade, a record of your movement through the world.
-            </p>
-            <p>
-              These garments are constructed to evolve. The Japanese selvedge denim we select ages with character, developing unique patterns that tell your story. What starts as structured indigo softens into a second skin, shaped by your body and your habits.
-            </p>
-            <p>
-              Made in small batches in America, each piece receives individual attention. We believe in the slow accumulation of detail: reinforced stress points, hand-finished edges, layered panel construction that moves with you.
-            </p>
-          </div>
-
-          {/* Handwritten annotations */}
-          <div className="pt-8 space-y-4">
-            <p className="font-script text-[var(--hb-smoke)] text-base italic">Built to age.</p>
-            <p className="font-script text-[var(--hb-smoke)] text-base italic">First drop.</p>
-            <p className="font-script text-[var(--hb-smoke)] text-base italic">Wear marks encouraged.</p>
-          </div>
-        </motion.div>
       </section>
 
       {/* Materials Section */}
@@ -308,113 +227,8 @@ export default function LayeredDenimPage() {
         </div>
       </section>
 
-      {/* Construction Section */}
-      <section id="construction" className="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className="space-y-12"
-        >
-          <div>
-            <h2 className="font-serif text-4xl md:text-5xl mb-4">Construction</h2>
-            <p className="text-[var(--hb-smoke)] text-lg max-w-2xl">
-              Layered panel construction with reinforced seams at every stress point.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <div>
-                <h3 className="font-serif text-xl mb-2">Layered Panel Construction</h3>
-                <p className="text-[var(--hb-smoke)] leading-relaxed">
-                  Multiple fabric layers at key areas—seat, knees, and cuffs—provide durability while allowing natural movement.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-serif text-xl mb-2">Reinforced Seams</h3>
-                <p className="text-[var(--hb-smoke)] leading-relaxed">
-                  Double-stitched and bar-tacked at all stress points. Chain-stitched hems for authentic finish.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-serif text-xl mb-2">Hand-Finished Details</h3>
-                <p className="text-[var(--hb-smoke)] leading-relaxed">
-                  Pockets, edges, and closures receive individual attention. Each garment is inspected before finishing.
-                </p>
-              </div>
-            </div>
-
-            {/* X-ray style diagram */}
-            <div className="relative bg-[var(--hb-paper-muted)] rounded-2xl p-8 aspect-square">
-              <svg
-                viewBox="0 0 300 300"
-                className="w-full h-full"
-                fill="none"
-                stroke="var(--hb-ink)"
-                strokeWidth="2"
-                strokeOpacity="0.3"
-              >
-                {/* Simplified garment outline */}
-                <path d="M150 50 L120 80 L110 150 L115 220 L140 260 L160 260 L185 220 L190 150 L180 80 Z" />
-                {/* Panel lines */}
-                <path d="M150 80 L150 220" strokeDasharray="4 4" />
-                <path d="M130 150 L170 150" strokeDasharray="4 4" />
-                {/* Stress points (circles) */}
-                <circle cx="130" cy="120" r="8" fill="var(--hb-accent)" opacity="0.4" />
-                <circle cx="170" cy="120" r="8" fill="var(--hb-accent)" opacity="0.4" />
-                <circle cx="135" cy="200" r="8" fill="var(--hb-accent)" opacity="0.4" />
-                <circle cx="165" cy="200" r="8" fill="var(--hb-accent)" opacity="0.4" />
-              </svg>
-              <p className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs font-script text-[var(--hb-smoke)]">
-                Construction diagram
-              </p>
-            </div>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* Fit & Wear Section */}
-      <section id="fit" className="py-20 px-4 sm:px-6 lg:px-8 bg-[var(--hb-paper-muted)]/30">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
-            className="mb-12"
-          >
-            <h2 className="font-serif text-4xl md:text-5xl mb-4">Fit & Wear</h2>
-            <p className="text-[var(--hb-smoke)] text-lg max-w-2xl">
-              Relaxed fit designed to move with you.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-12">
-            <div className="space-y-6">
-              <h3 className="font-serif text-2xl">Fit</h3>
-              <p className="text-[var(--hb-smoke)] leading-relaxed">
-                Straight-leg silhouette with a relaxed rise. The cut allows natural movement while maintaining a clean, contemporary line. Sits at the natural waist with room through the thigh.
-              </p>
-              <p className="text-[var(--hb-smoke)] leading-relaxed">
-                Sizing runs true. We recommend your usual size for a relaxed fit, or size down for a closer silhouette. The denim will soften and mold to your body with wear.
-              </p>
-            </div>
-
-            <div className="space-y-6">
-              <h3 className="font-serif text-2xl">How It Ages</h3>
-              <p className="text-[var(--hb-smoke)] leading-relaxed mb-6">
-                The denim evolves with your wear patterns. Creases form at natural stress points—knees, seat, and cuffs. Indigo fades gradually, creating unique patterns that are yours alone.
-              </p>
-              <WearTimeline items={timelineItems} />
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Gallery Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+      <section id="gallery" className="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -485,20 +299,6 @@ export default function LayeredDenimPage() {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section id="faq" className="py-20 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className="space-y-8"
-        >
-          <h2 className="font-serif text-4xl md:text-5xl">FAQ</h2>
-          <FAQAccordion items={faqItems} />
-        </motion.div>
-      </section>
-
       {/* Footer */}
       <footer className="py-12 px-4 sm:px-6 lg:px-8 border-t border-[var(--hb-border)]">
         <div className="max-w-6xl mx-auto">
@@ -528,4 +328,3 @@ export default function LayeredDenimPage() {
     </div>
   );
 }
-
