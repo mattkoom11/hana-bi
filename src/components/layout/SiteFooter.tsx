@@ -3,6 +3,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { ContactDialog } from '@/components/contact/ContactDialog';
+import Link from 'next/link';
 
 const KANJI_CHARS = ['花', '火'];
 
@@ -60,6 +61,22 @@ export function SiteFooter() {
           className="flex flex-wrap gap-6 text-xs uppercase tracking-[0.3em] text-[var(--hb-dark-muted)]"
           style={{ fontFamily: 'var(--hb-font-mono)' }}
         >
+          <Link
+            href="https://www.instagram.com/hana.bi.st2"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="pb-1 border-b border-transparent hover:border-[var(--hb-sienna)] hover:text-[#faf8f4] hover-wispy opacity-70 hover:opacity-100 transition-all duration-300"
+          >
+            Instagram
+          </Link>
+          <Link
+            href="https://www.tiktok.com/@hana_bi1111"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="pb-1 border-b border-transparent hover:border-[var(--hb-sienna)] hover:text-[#faf8f4] hover-wispy opacity-70 hover:opacity-100 transition-all duration-300"
+          >
+            TikTok
+          </Link>
           <button
             onClick={() => setContactOpen(true)}
             className="pb-1 border-b border-transparent hover:border-[var(--hb-sienna)] hover:text-[#faf8f4] hover-wispy opacity-70 hover:opacity-100 transition-all duration-300"

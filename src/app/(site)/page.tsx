@@ -103,7 +103,11 @@ export default async function Home() {
                     className="uppercase text-xs tracking-[0.55em] opacity-60"
                     style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
                   >
-                    Now Available
+                    {layeredDenim.status === "available"
+                      ? "Now Available"
+                      : layeredDenim.status === "sold_out"
+                      ? "Sold Out"
+                      : "New Drop"}
                   </p>
                   <h2
                     className="text-xl leading-tight text-[#faf8f4] italic font-light"
