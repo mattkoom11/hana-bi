@@ -53,16 +53,25 @@ export function EmailCaptureForm({ className }: EmailCaptureFormProps) {
             onSubmit={handleSubmit}
             className="space-y-4"
           >
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={formState === 'loading'}
-              className="w-full px-0 py-3 bg-transparent border-0 border-b border-[var(--hb-border)] focus:outline-none focus:border-[var(--hb-accent)] disabled:opacity-50 transition-colors font-serif placeholder:text-[var(--hb-smoke)]/50"
-              placeholder="your@email.com"
-            />
+            <div className="space-y-1">
+              <label
+                htmlFor="email"
+                className="block text-xs uppercase tracking-[0.35em]"
+                style={{ fontFamily: 'var(--hb-font-mono)', color: 'rgba(250,248,244,0.45)' }}
+              >
+                Email address
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={formState === 'loading'}
+                className="w-full px-0 py-3 bg-transparent border-0 border-b border-[var(--hb-border)] focus:outline-none focus:border-[var(--hb-accent)] disabled:opacity-50 transition-colors font-serif placeholder:text-[var(--hb-smoke)]/50"
+                placeholder="your@email.com"
+              />
+            </div>
 
             {formState === 'error' && (
               <motion.p
