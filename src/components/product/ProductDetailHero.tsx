@@ -25,7 +25,7 @@ const materialsInfo = [
   {
     title: "Hand Feel & Weight",
     description:
-      "13–15oz range. Structured initially, the fabric softens with wear while maintaining integrity at key stress points.",
+      "13.5oz range. Structured initially, the fabric softens with wear while maintaining integrity at key stress points.",
   },
 ];
 
