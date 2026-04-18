@@ -40,18 +40,9 @@ export function VideoBackground() {
     clipStartedAtRef.current = Date.now();
 
     if (videoARef.current) {
-      const videoA = videoARef.current;
-      videoA.src = CLIPS[startIndex];
-      videoA.load();
-      // Wait for enough data before playing — critical on slow mobile connections
-      const tryPlay = () => videoA.play().catch(() => {});
-      videoA.addEventListener("canplay", tryPlay, { once: true });
-      // Fallback: attempt play after 3s regardless (handles some mobile edge cases)
-      const fallback = setTimeout(() => videoA.play().catch(() => {}), 3000);
-      return () => {
-        videoA.removeEventListener("canplay", tryPlay);
-        clearTimeout(fallback);
-      };
+      videoARef.current.src = CLIPS[startIndex];
+      videoARef.current.load();
+      videoARef.current.play().catch(() => {});
     }
     if (videoBRef.current) {
       videoBRef.current.src = CLIPS[nextIndex];
