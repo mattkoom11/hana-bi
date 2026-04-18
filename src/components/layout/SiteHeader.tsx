@@ -157,87 +157,86 @@ export function SiteHeader() {
         </nav>
       </header>
 
-      {/* Mobile menu overlay */}
-      <div
-        className={`fixed inset-0 z-50 bg-[var(--hb-dark)] flex flex-col transition-opacity duration-300 md:hidden ${
-          menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-      >
-        {/* Top bar */}
-        <div className="flex items-center justify-between px-6 py-8">
-          <span
-            className="text-3xl italic font-light text-[#faf8f4]"
-            style={{ fontFamily: "var(--hb-font-display)" }}
-          >
-            Hana-Bi
-          </span>
-          <button
-            onClick={() => setMenuOpen(false)}
-            aria-label="Close menu"
-            className="text-[var(--hb-dark-muted)] hover:text-[#faf8f4] transition-colors text-2xl leading-none"
-            style={{ fontFamily: "var(--hb-font-mono)" }}
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* Nav links */}
-        <nav className="flex-1 flex flex-col justify-center px-8 gap-2">
-          {NAV_LINKS.map((link, i) => {
-            const isActive =
-              link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`py-4 border-b border-[var(--hb-dark-border)] transition-colors duration-200 ${
-                  isActive ? "text-[#faf8f4]" : "text-[var(--hb-dark-muted)] hover:text-[#faf8f4]"
-                }`}
-                style={{
-                  fontFamily: "var(--hb-font-display)",
-                  fontSize: `clamp(2rem, ${8 - i * 0.3}vw, 3.5rem)`,
-                  fontStyle: "italic",
-                  fontWeight: 300,
-                  transitionDelay: menuOpen ? `${i * 40}ms` : "0ms",
-                }}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Social + copyright */}
-        <div className="px-8 pb-10 flex items-center justify-between">
-          <div
-            className="flex gap-6 text-[0.65rem] uppercase tracking-[0.4em] text-[var(--hb-dark-muted)]"
-            style={{ fontFamily: "var(--hb-font-mono)" }}
-          >
-            <Link
-              href="https://www.instagram.com/hana.bi.st2"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#faf8f4] transition-colors"
+      {/* Mobile menu overlay — rendered outside header, always in DOM on mobile */}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 z-[9999] flex flex-col md:hidden"
+          style={{ backgroundColor: "#0e0c0b" }}
+        >
+          {/* Top bar */}
+          <div className="flex items-center justify-between px-6 py-8 shrink-0">
+            <span
+              className="text-3xl italic font-light"
+              style={{ fontFamily: "var(--hb-font-display)", color: "#faf8f4" }}
             >
-              Instagram
-            </Link>
-            <Link
-              href="https://www.tiktok.com/@hana_bi1111"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#faf8f4] transition-colors"
+              Hana-Bi
+            </span>
+            <button
+              onClick={() => setMenuOpen(false)}
+              aria-label="Close menu"
+              style={{ fontFamily: "var(--hb-font-mono)", color: "#faf8f4", fontSize: "1.5rem", lineHeight: 1 }}
             >
-              TikTok
-            </Link>
+              ✕
+            </button>
           </div>
-          <p
-            className="text-[0.6rem] uppercase tracking-[0.3em] text-[var(--hb-dark-muted)] opacity-40"
-            style={{ fontFamily: "var(--hb-font-mono)" }}
-          >
-            © {new Date().getFullYear()} Hana-Bi
-          </p>
+
+          {/* Nav links */}
+          <nav className="flex-1 flex flex-col justify-center px-8" style={{ gap: "0" }}>
+            {NAV_LINKS.map((link) => {
+              const isActive =
+                link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  style={{
+                    fontFamily: "var(--hb-font-display)",
+                    fontSize: "clamp(2rem, 9vw, 3.5rem)",
+                    fontStyle: "italic",
+                    fontWeight: 300,
+                    color: isActive ? "#faf8f4" : "rgba(250,248,244,0.65)",
+                    borderBottom: "1px solid rgba(250,248,244,0.08)",
+                    padding: "1rem 0",
+                    display: "block",
+                  }}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Social + copyright */}
+          <div className="px-8 pb-10 shrink-0 flex items-center justify-between">
+            <div
+              className="flex gap-6"
+              style={{ fontFamily: "var(--hb-font-mono)", fontSize: "0.65rem", letterSpacing: "0.4em", textTransform: "uppercase", color: "rgba(250,248,244,0.5)" }}
+            >
+              <Link
+                href="https://www.instagram.com/hana.bi.st2"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "inherit" }}
+              >
+                Instagram
+              </Link>
+              <Link
+                href="https://www.tiktok.com/@hana_bi1111"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "inherit" }}
+              >
+                TikTok
+              </Link>
+            </div>
+            <p
+              style={{ fontFamily: "var(--hb-font-mono)", fontSize: "0.6rem", letterSpacing: "0.3em", textTransform: "uppercase", color: "rgba(250,248,244,0.3)" }}
+            >
+              © {new Date().getFullYear()} Hana-Bi
+            </p>
+          </div>
         </div>
-      </div>
+      )}
 
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
     </>
