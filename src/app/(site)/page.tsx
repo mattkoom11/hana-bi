@@ -7,6 +7,8 @@ import { getStripeCatalog } from "@/lib/stripe-catalog";
 import Image from "next/image";
 import Link from "next/link";
 
+export const revalidate = 3600; // re-fetch Stripe catalog at most once per hour
+
 export default async function Home() {
   let layeredDenim = null;
 

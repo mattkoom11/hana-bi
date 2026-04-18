@@ -16,6 +16,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const revalidate = 3600; // re-fetch Stripe catalog at most once per hour
+
 export default async function ShopPage() {
   let shopProducts = fallbackProducts;
 

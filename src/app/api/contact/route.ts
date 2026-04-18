@@ -37,16 +37,19 @@ export async function POST(request: NextRequest) {
   const resend = getResend();
   const notifyTo = WAITLIST_NOTIFY_EMAIL ?? 'hello@hanabiny.com';
 
+  const esc = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
   await resend.emails.send({
     from: 'Hana-Bi <hello@hanabiny.com>',
     to: notifyTo,
     replyTo: email,
     subject: `Message from ${name}`,
     html: `
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Name:</strong> ${esc(name)}</p>
+      <p><strong>Email:</strong> ${esc(email)}</p>
       <p><strong>Message:</strong></p>
-      <p>${message.replace(/\n/g, '<br>')}</p>
+      <p>${esc(message).replace(/\n/g, '<br>')}</p>
     `,
   });
 

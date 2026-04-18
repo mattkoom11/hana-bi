@@ -20,6 +20,8 @@ interface ProductPageProps {
   params: Promise<{ slug: string }>;
 }
 
+export const revalidate = 3600; // re-fetch Stripe catalog at most once per hour
+
 export async function generateStaticParams() {
   try {
     const catalog = await getStripeCatalog();

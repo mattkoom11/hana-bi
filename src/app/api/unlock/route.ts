@@ -10,7 +10,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Incorrect password' }, { status: 401 });
   }
 
-  const from = request.nextUrl.searchParams.get('from') ?? '/';
+  const raw = request.nextUrl.searchParams.get('from') ?? '/';
+  const from = raw.startsWith('/') && !raw.startsWith('//') ? raw : '/';
   const response = NextResponse.redirect(new URL(from, request.url));
 
   response.cookies.set(COOKIE, correct, {
