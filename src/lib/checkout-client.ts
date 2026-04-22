@@ -14,23 +14,16 @@ export async function startCheckoutSession(
     return { ok: false, message: "Your cart is empty." };
   }
 
-  const missingPrice = items.find((item) => !item.stripePriceId);
-  if (missingPrice) {
-    return {
-      ok: false,
-      message: `“${missingPrice.name}” has no Stripe price ID. Configure products in the Stripe Dashboard.`,
-    };
-  }
-
   try {
     const response = await fetch("/api/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        items: items.map((item) => ({
-          priceId: item.stripePriceId!,
-          quantity: item.quantity,
-        })),
+        items: items.map((item) =>
+          item.stripePriceId
+            ? { priceId: item.stripePriceId, quantity: item.quantity }
+            : { name: `${item.name} — Size ${item.size}`, price: Math.round(item.price * 100), quantity: item.quantity }
+        ),
         cancelUrl: `${window.location.origin}/cart`,
       }),
     });
@@ -40,7 +33,7 @@ export async function startCheckoutSession(
       const msg =
         typeof error.error === "string" && error.error
           ? error.error
-          : "We couldn’t reach checkout. Try again.";
+          : "We couldn't reach checkout. Try again.";
       return { ok: false, message: msg };
     }
 
