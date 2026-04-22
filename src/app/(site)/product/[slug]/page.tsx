@@ -88,7 +88,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <ProductDetailHero
               product={product}
               catalogNumber={catalogNumber}
-              purchaseSlot={slug === 'layered-denim' ? <BuyButton price={product.price} /> : undefined}
+              purchaseSlot={slug === 'layered-denim' || slug === 'prod_UKSl0B4Jso85YM' ? <BuyButton price={product.price} /> : undefined}
             />
           </div>
         </div>
@@ -129,7 +129,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </section>
 
       {/* ── Drop List ──────────────────────────────────────────────── */}
-      {slug !== 'layered-denim' && <section id="drop-list" className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 bg-[var(--hb-paper-muted)]/30">
+      {slug !== 'layered-denim' && slug !== 'prod_UKSl0B4Jso85YM' && <section id="drop-list" className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 bg-[var(--hb-paper-muted)]/30">
         <div className="max-w-2xl mx-auto text-center space-y-6">
           <div className="space-y-3">
             <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)] opacity-70" style={{ fontFamily: "var(--hb-font-mono)" }}>
