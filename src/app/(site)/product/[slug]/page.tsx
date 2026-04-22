@@ -88,7 +88,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <ProductDetailHero
               product={product}
               catalogNumber={catalogNumber}
-              purchaseSlot={slug === 'layered-denim' || slug === 'prod_UKSl0B4Jso85YM' ? <BuyButton product={product} /> : undefined}
+              purchaseSlot={slug === 'layered-denim' ? <BuyButton product={product} /> : undefined}
             />
           </div>
         </div>
