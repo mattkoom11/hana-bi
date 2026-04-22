@@ -1,84 +1,70 @@
 'use client';
 
+import { openCartDrawer } from "@/lib/open-cart";
+import { formatCurrency } from "@/lib/utils";
+import { useCartStore } from "@/store/cart";
+import type { Product } from "@/data/products";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const SIZES = ["28", "29", "30", "31", "32", "33", "34", "35", "36"] as const;
 type Size = typeof SIZES[number];
 
 interface BuyButtonProps {
-  className?: string;
-  price?: number; // price in dollars, e.g. 198
+  product: Product & { stripePriceId?: string };
 }
 
-export function BuyButton({ className, price = 198 }: BuyButtonProps) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+export function BuyButton({ product }: BuyButtonProps) {
+  const addItem = useCartStore((state) => state.addItem);
   const [selectedSize, setSelectedSize] = useState<Size | null>(null);
+  const [sizeError, setSizeError] = useState(false);
 
-  const handleCheckout = async () => {
+  const handleAddToCart = () => {
     if (!selectedSize) {
-      setError("Please select a size before continuing.");
+      setSizeError(true);
       return;
     }
-    setLoading(true);
-    setError(null);
+    setSizeError(false);
 
-    try {
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          items: [
-            {
-              name: `Layered Denim — Size ${selectedSize}`,
-              price: Math.round(price * 100),
-              quantity: 1,
-            },
-          ],
-          cancelUrl: `${window.location.origin}/layered-denim`,
-        }),
-      });
+    addItem(
+      {
+        id: `${product.id}-${selectedSize}`,
+        productId: product.id,
+        variantId: "",
+        name: product.name,
+        slug: product.slug,
+        price: product.price,
+        size: selectedSize,
+        image: product.heroImage,
+        stripePriceId: product.stripePriceId,
+      },
+      1
+    );
 
-      let data;
-      try {
-        data = await response.json();
-      } catch {
-        throw new Error("Invalid response from server");
-      }
+    toast.success("Added to cart", {
+      description: `${product.name} · Size ${selectedSize} · ${formatCurrency(product.price)}`,
+      action: { label: "View cart", onClick: () => openCartDrawer() },
+    });
 
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to create checkout session");
-      }
-
-      if (!data.url) {
-        throw new Error("No checkout URL received");
-      }
-
-      window.location.href = data.url;
-    } catch (err) {
-      console.error("Checkout error:", err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Something went wrong. Please try again."
-      );
-      setLoading(false);
-    }
+    openCartDrawer();
   };
 
   return (
-    <div className={className}>
+    <div>
       <div className="mb-4 space-y-2">
-        <p className="text-xs tracking-[0.3em] uppercase" style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}>
-          Size
+        <p
+          className="text-xs tracking-[0.3em] uppercase"
+          style={{ fontFamily: "var(--hb-font-mono)", color: sizeError ? "var(--hb-sienna)" : "var(--hb-dark-muted)" }}
+        >
+          {sizeError ? "Select a size" : "Size"}
         </p>
         <div className="flex gap-2 flex-wrap">
           {SIZES.map((size) => (
             <button
               key={size}
               type="button"
-              onClick={() => { setSelectedSize(size); setError(null); }}
+              onClick={() => { setSelectedSize(size); setSizeError(false); }}
               className={`px-4 py-2 text-sm border transition-colors ${
                 selectedSize === size
                   ? "bg-[#faf8f4] text-[var(--hb-ink)] border-[#faf8f4]"
@@ -93,30 +79,13 @@ export function BuyButton({ className, price = 198 }: BuyButtonProps) {
       </div>
 
       <motion.button
-        onClick={handleCheckout}
-        disabled={loading}
-        whileHover={!loading ? { scale: 1.02, rotate: 0.5 } : {}}
-        whileTap={!loading ? { scale: 0.98 } : {}}
-        className="w-full py-4 bg-[var(--hb-ink)] text-[var(--hb-paper)] rounded-2xl font-serif text-lg hover:bg-[var(--hb-ink-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        onClick={handleAddToCart}
+        whileHover={{ scale: 1.02, rotate: 0.5 }}
+        whileTap={{ scale: 0.98 }}
+        className="w-full py-4 bg-[var(--hb-ink)] text-[var(--hb-paper)] rounded-2xl font-serif text-lg hover:bg-[var(--hb-ink-light)] transition-colors"
       >
-        {loading ? "Processing..." : "Buy Layered Denim"}
+        Add to Cart — {formatCurrency(product.price)}
       </motion.button>
-
-      {error && (
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-3 p-3 bg-red-50 border border-red-200 rounded-xl"
-        >
-          <p className="text-sm text-red-600 font-script">{error}</p>
-          <button
-            onClick={() => setError(null)}
-            className="mt-2 text-xs text-red-600 hover:text-red-800 underline"
-          >
-            Dismiss
-          </button>
-        </motion.div>
-      )}
     </div>
   );
 }
