@@ -7,6 +7,7 @@ import { ProductDetailHero } from '@/components/product/ProductDetailHero';
 import { ProductStickyNav } from '@/components/product/ProductStickyNav';
 import { ScribbleArrow } from '@/components/layered-denim/ScribbleArrow';
 import { EmailCaptureForm } from '@/components/layered-denim/EmailCaptureForm';
+import { BuyButton } from '@/components/layered-denim/BuyButton';
 import { getStripeCatalog, getStripeProductBySlug } from '@/lib/stripe-catalog';
 import {
   getProductBySlug,
@@ -84,7 +85,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <section className="relative bg-[var(--hb-dark)] min-h-[70vh] flex items-center justify-center overflow-hidden mb-0">
         <div className="relative z-10 w-full px-4 sm:px-8 md:px-12 lg:px-20 py-16">
           <div className="max-w-7xl mx-auto">
-            <ProductDetailHero product={product} catalogNumber={catalogNumber} />
+            <ProductDetailHero
+              product={product}
+              catalogNumber={catalogNumber}
+              purchaseSlot={slug === 'layered-denim' ? <BuyButton price={product.price} /> : undefined}
+            />
           </div>
         </div>
       </section>

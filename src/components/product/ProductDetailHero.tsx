@@ -32,9 +32,10 @@ const materialsInfo = [
 interface ProductDetailHeroProps {
   product: Product;
   catalogNumber: string | null;
+  purchaseSlot?: React.ReactNode;
 }
 
-export function ProductDetailHero({ product, catalogNumber }: ProductDetailHeroProps) {
+export function ProductDetailHero({ product, catalogNumber, purchaseSlot }: ProductDetailHeroProps) {
   const allImages = product.images && product.images.length > 0 ? product.images : (product.heroImage ? [product.heroImage] : []);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -187,9 +188,9 @@ export function ProductDetailHero({ product, catalogNumber }: ProductDetailHeroP
             </div>
           )}
 
-          {/* Waitlist */}
+          {/* Purchase action */}
           <div className="pt-2">
-            <ShopWaitlistForm dark />
+            {purchaseSlot ?? <ShopWaitlistForm dark />}
           </div>
 
           {/* Tags */}
