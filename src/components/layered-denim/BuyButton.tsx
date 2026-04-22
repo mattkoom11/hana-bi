@@ -81,8 +81,8 @@ export function BuyButton({ className, price = 198 }: BuyButtonProps) {
               onClick={() => { setSelectedSize(size); setError(null); }}
               className={`px-4 py-2 text-sm border transition-colors ${
                 selectedSize === size
-                  ? "bg-[var(--hb-ink)] text-[var(--hb-paper)] border-[var(--hb-ink)]"
-                  : "bg-transparent text-[var(--hb-ink)] border-[var(--hb-ink)] hover:bg-[var(--hb-ink)] hover:text-[var(--hb-paper)]"
+                  ? "bg-[#faf8f4] text-[var(--hb-ink)] border-[#faf8f4]"
+                  : "bg-transparent text-[#faf8f4] border-[#faf8f4]/50 hover:border-[#faf8f4] hover:bg-[#faf8f4]/10"
               }`}
               style={{ fontFamily: "var(--hb-font-mono)" }}
             >

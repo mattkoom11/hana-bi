@@ -111,7 +111,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                   <Link
                     href="/shop"
                     onClick={onClose}
-                    className="inline-flex items-center justify-center border border-[var(--hb-sienna)]/60 px-5 py-3 text-xs uppercase tracking-[0.35em] text-[var(--hb-sienna)] hover:bg-[var(--hb-sienna)]/10 transition-colors"
+                    className="inline-flex items-center justify-center border border-[#faf8f4]/60 px-5 py-3 text-xs uppercase tracking-[0.35em] text-[#faf8f4] hover:border-[#faf8f4] hover:bg-[#faf8f4]/10 transition-colors"
                     style={{ fontFamily: "var(--hb-font-mono)" }}
                   >
                     Browse the collection
