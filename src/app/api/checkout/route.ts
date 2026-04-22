@@ -4,7 +4,9 @@ import Stripe from 'stripe';
 import { STRIPE_SECRET_KEY, NEXT_PUBLIC_SITE_URL, STRIPE_SHIPPING_RATE_IDS, STRIPE_SHIPPING_COUNTRIES } from '@/lib/env';
 
 export interface CheckoutLineItem {
-  priceId: string;
+  priceId?: string;
+  name?: string;
+  price?: number; // in cents
   quantity: number;
 }
 
@@ -41,8 +43,10 @@ export async function POST(request: NextRequest) {
   }
 
   for (const item of body.items) {
-    if (!item.priceId || typeof item.priceId !== 'string' || !item.priceId.startsWith('price_')) {
-      return NextResponse.json({ error: 'Invalid price ID' }, { status: 400 });
+    const hasPriceId = item.priceId && typeof item.priceId === 'string' && item.priceId.startsWith('price_');
+    const hasPriceData = item.name && typeof item.name === 'string' && typeof item.price === 'number' && item.price > 0;
+    if (!hasPriceId && !hasPriceData) {
+      return NextResponse.json({ error: 'Each item needs a valid priceId or name+price' }, { status: 400 });
     }
     if (typeof item.quantity !== 'number' || !Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > 1000) {
       return NextResponse.json({ error: 'Invalid item quantity' }, { status: 400 });
@@ -61,10 +65,18 @@ export async function POST(request: NextRequest) {
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: body.items.map((item) => ({
-        price: item.priceId,
-        quantity: item.quantity,
-      })),
+      line_items: body.items.map((item) =>
+        item.priceId
+          ? { price: item.priceId, quantity: item.quantity }
+          : {
+              price_data: {
+                currency: 'usd',
+                unit_amount: item.price!,
+                product_data: { name: item.name! },
+              },
+              quantity: item.quantity,
+            }
+      ),
       mode: 'payment',
       shipping_address_collection: {
         allowed_countries: STRIPE_SHIPPING_COUNTRIES.split(',').map((c) => c.trim()) as Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[],
