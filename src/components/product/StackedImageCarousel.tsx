@@ -67,7 +67,8 @@ function TopCard({
         src={image}
         alt={alt}
         fill
-        className="object-cover"
+        draggable={false}
+        className="object-cover pointer-events-none"
         sizes="(max-width: 1024px) 100vw, 65vw"
         priority
       />
@@ -123,6 +124,7 @@ export function StackedImageCarousel({ images, alt, onImageClick }: StackedImage
               src={images[imgIdx]}
               alt=""
               fill
+              loading="eager"
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 65vw"
             />
