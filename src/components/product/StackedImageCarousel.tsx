@@ -17,7 +17,6 @@ function TopCard({
   getExitX,
   onDismiss,
   onClick,
-  onFirstDrag,
 }: {
   image: string;
   alt: string;
