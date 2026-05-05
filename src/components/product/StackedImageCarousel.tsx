@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useMotionValue, useTransform, AnimatePresence, animate } from "framer-motion";
 import Image from "next/image";
 
 const DRAG_THRESHOLD = 80;
@@ -28,33 +28,34 @@ function TopCard({
 }) {
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-300, 300], [-12, 12]);
-  const opacity = useTransform(x, [-180, -60, 0, 60, 180], [0, 1, 1, 1, 0]);
+  const cardOpacity = useTransform(x, [-200, -80, 0, 80, 200], [0, 1, 1, 1, 0]);
   const wasDragged = useRef(false);
 
   return (
     <motion.div
       className="absolute inset-0 z-20 overflow-hidden cursor-grab active:cursor-grabbing"
       drag="x"
-      dragConstraints={{ left: 0, right: 0 }}
-      dragElastic={1}
-      style={{ x, rotate, opacity }}
-      initial={{ scale: 0.95, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
+      dragMomentum={false}
+      style={{ x, rotate, opacity: cardOpacity }}
+      initial={{ scale: 0.95 }}
+      animate={{ scale: 1 }}
       exit={{
         x: getExitX(),
         opacity: 0,
         rotate: getExitX() > 0 ? 15 : -15,
         transition: { duration: 0.3, ease: "easeIn" },
       }}
-      transition={{ type: "spring", stiffness: 300, damping: 26 }}
+      transition={{ duration: 0.2 }}
       onDragStart={() => {
         wasDragged.current = false;
         onFirstDrag();
       }}
       onDragEnd={(_, info) => {
         if (Math.abs(info.offset.x) > 5) wasDragged.current = true;
-        if (Math.abs(info.offset.x) > DRAG_THRESHOLD || Math.abs(info.velocity.x) > 400) {
+        if (Math.abs(info.offset.x) > DRAG_THRESHOLD || Math.abs(info.velocity.x) > 500) {
           onDismiss(info.offset.x > 0 ? 1 : -1);
+        } else {
+          animate(x, 0, { type: "spring", stiffness: 400, damping: 30 });
         }
       }}
       onClick={() => {
@@ -130,7 +131,7 @@ export function StackedImageCarousel({ images, alt, onImageClick }: StackedImage
       })}
 
       {/* Draggable top card */}
-      <AnimatePresence mode="popLayout">
+      <AnimatePresence>
         <TopCard
           key={topIndex}
           image={images[topIndex]}
@@ -150,20 +151,16 @@ export function StackedImageCarousel({ images, alt, onImageClick }: StackedImage
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.4 } }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="absolute bottom-14 left-0 right-0 z-30 flex flex-col items-center gap-2 pointer-events-none"
+            className="absolute bottom-14 left-0 right-0 z-30 flex items-center justify-center pointer-events-none"
           >
-            <motion.div
+            <motion.span
               animate={{ x: [0, -10, 0, 10, 0] }}
               transition={{ duration: 2, repeat: Infinity, repeatDelay: 0.5, ease: "easeInOut" }}
-              className="flex items-center gap-3"
+              className="text-[0.55rem] uppercase tracking-[0.5em] opacity-70"
+              style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
             >
-              <span
-                className="text-[0.55rem] uppercase tracking-[0.5em] opacity-70"
-                style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
-              >
-                ← drag to explore →
-              </span>
-            </motion.div>
+              ← drag to explore →
+            </motion.span>
           </motion.div>
         )}
       </AnimatePresence>

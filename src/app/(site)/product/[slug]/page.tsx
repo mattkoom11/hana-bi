@@ -94,8 +94,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </section>
 
       {/* ── Preorder Notice ────────────────────────────────────────── */}
-      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-8 bg-[var(--hb-paper-muted)]/30">
-        <div className="max-w-2xl mx-auto space-y-6">
+      <section className="px-4 sm:px-8 md:px-12 lg:px-20 pt-16 pb-6 bg-[var(--hb-paper-muted)]/30">
+        <div className="max-w-2xl mx-auto space-y-10">
           <div className="space-y-3">
             <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)]" style={{ fontFamily: 'var(--hb-font-mono)' }}>
               Preorder
@@ -117,7 +117,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </section>
 
       {/* ── Materials ──────────────────────────────────────────────── */}
-      <section id="materials" className="px-4 sm:px-8 md:px-12 lg:px-20 py-10 bg-[var(--hb-paper-muted)]/30">
+      <section id="materials" className="px-4 sm:px-8 md:px-12 lg:px-20 py-3 bg-[var(--hb-paper-muted)]/30">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-wrap gap-3">
             {product.tags.map((tag) => (
@@ -128,7 +128,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </section>
 
       {/* ── Drop List ──────────────────────────────────────────────── */}
-      <section id="drop-list" className="px-4 sm:px-8 md:px-12 lg:px-20 py-8 bg-[var(--hb-paper-muted)]/30">
+      <section id="drop-list" className="px-4 sm:px-8 md:px-12 lg:px-20 pt-6 pb-16 bg-[var(--hb-paper-muted)]/30">
         <div className="max-w-2xl mx-auto text-center space-y-6">
           <div className="space-y-3">
             <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)] opacity-70" style={{ fontFamily: "var(--hb-font-mono)" }}>
