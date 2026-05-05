@@ -119,20 +119,12 @@ export function ProductDetailHero({ product, catalogNumber, purchaseSlot }: Prod
             </p>
           </div>
 
+          {/* Price hidden until finalized — uncomment to restore:
           <div>
-            <p
-              className="text-xs tracking-[0.3em] uppercase mb-2"
-              style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
-            >
-              Price
-            </p>
-            <p
-              className="text-2xl"
-              style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
-            >
-              ${product.price}
-            </p>
+            <p className="text-xs tracking-[0.3em] uppercase mb-2" style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}>Price</p>
+            <p className="text-2xl" style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}>${product.price}</p>
           </div>
+          */}
 
           {product.year && (
             <div>

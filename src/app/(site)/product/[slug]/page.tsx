@@ -88,7 +88,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <ProductDetailHero
               product={product}
               catalogNumber={catalogNumber}
-              purchaseSlot={slug === 'layered-denim' ? <BuyButton product={product} /> : undefined}
+              {/* purchaseSlot={slug === 'layered-denim' ? <BuyButton product={product} /> : undefined} */}
             />
           </div>
         </div>
@@ -147,6 +147,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <ScribbleArrow direction="down" size={28} strokeOpacity={0.4} />
           </div>
           <EmailCaptureForm />
+          <p className="text-xs text-center mt-4 opacity-50 text-[var(--hb-smoke)]" style={{ fontFamily: 'var(--hb-font-mono)' }}>
+            Already signed up? You&apos;re on the list — no need to re-enter.
+          </p>
         </div>
       </section>
 

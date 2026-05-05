@@ -34,7 +34,7 @@ function TopCard({
       className="absolute inset-0 z-20 overflow-hidden cursor-grab active:cursor-grabbing"
       drag="x"
       dragConstraints={{ left: 0, right: 0 }}
-      dragElastic={0.12}
+      dragElastic={1}
       style={{ x, rotate, opacity }}
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}

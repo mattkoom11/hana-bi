@@ -99,6 +99,12 @@ export function ShopWaitlistForm({ compact, dark }: ShopWaitlistFormProps) {
       >
         {formState === "loading" ? "Joining..." : compact ? "Notify Me" : "Join the Waitlist"}
       </button>
+      <p className={cn(
+        "text-xs text-center mt-3",
+        dark ? "text-[rgba(250,248,244,0.4)]" : "text-[var(--hb-smoke)] opacity-60"
+      )} style={{ fontFamily: "var(--hb-font-mono)" }}>
+        Already signed up? You&apos;re on the list — no need to re-enter.
+      </p>
     </form>
   );
 }
