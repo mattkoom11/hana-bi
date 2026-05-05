@@ -44,7 +44,7 @@ export function ProductPurchasePanel({
             {[
               ["01", "Preorder opens — you pay upfront"],
               ["02", "Materials sourced, garment manufactured"],
-              ["03", "Ships to you in 2–3 months"],
+              ["03", "Ships to you in 3–4 months"],
             ].map(([num, label]) => (
               <div key={num} className="flex items-baseline gap-3">
                 <span className="text-[0.65rem] font-mono text-[var(--hb-smoke)] opacity-50 shrink-0">{num}</span>

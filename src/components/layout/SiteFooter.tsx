@@ -81,7 +81,7 @@ export function SiteFooter() {
             onClick={() => setContactOpen(true)}
             className="pb-1 border-b border-transparent hover:border-[var(--hb-sienna)] hover:text-[#faf8f4] hover-wispy opacity-70 hover:opacity-100 transition-all duration-300"
           >
-            Contact
+            CONTACT
           </button>
         </div>
         <ContactDialog open={contactOpen} onOpenChange={setContactOpen} />

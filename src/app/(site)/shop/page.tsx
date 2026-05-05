@@ -33,7 +33,7 @@ export default async function ShopPage() {
         variant="dark"
         eyebrow="Shop"
         title="Limited garments, ready to study."
-        intro={<>All pieces are made to order. Preorder opens soon — join the waitlist and your payment funds the materials and manufacturing. Garments ship in 2–3 months.</>}
+        intro={<>All pieces are made to order. Preorder opens soon — join the waitlist and your payment funds the materials and manufacturing. Garments ship in 3–4 months.</>}
       >
         <ShopContent products={shopProducts} variant="dark" />
       </PageShell>

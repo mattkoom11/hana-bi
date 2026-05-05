@@ -1,14 +1,12 @@
 "use client";
 
 import { Badge } from "@/components/common/Badge";
-import { MarginNote } from "@/components/common/MarginNote";
 import { ImageLightbox } from "@/components/common/ImageLightbox";
 import { RoughBorderCard } from "@/components/layered-denim/RoughBorderCard";
 import { ShopWaitlistForm } from "@/components/shop/ShopWaitlistForm";
+import { StackedImageCarousel } from "@/components/product/StackedImageCarousel";
 import type { Product } from "@/data/products";
-import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { useState } from "react";
 
 const materialsInfo = [
@@ -42,78 +40,43 @@ export function ProductDetailHero({ product, catalogNumber, purchaseSlot }: Prod
   return (
     <>
     <div className="grid gap-12 lg:grid-cols-[1.3fr_0.7fr] items-start">
-      {/* Hero image — animated from left */}
+      {/* Stacked image carousel — animated from left */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="relative space-y-6"
+        className="relative"
       >
-        <div
-            className="relative w-full aspect-[3/4] overflow-hidden cursor-zoom-in"
-            onClick={() => allImages.length > 0 && setLightboxIndex(0)}
-          >
-          {/* Ghost 花火 */}
-          <span
-            aria-hidden="true"
-            className="absolute top-6 right-6 z-20 pointer-events-none select-none"
-            style={{
-              color: "var(--hb-dark-kanji)",
-              fontSize: "8rem",
-              lineHeight: 1,
-              fontFamily: "var(--hb-font-display)",
-            }}
-          >
-            花火
-          </span>
-          {product.heroImage && (
-            <Image
-              src={product.heroImage}
-              alt={product.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 65vw"
-              priority
-            />
-          )}
-          <div className="absolute top-6 left-6 z-10">
-            <Badge tone="sienna">
-              {product.status === "available"
-                ? "Available"
-                : product.status === "sold_out"
-                ? "Sold Out"
-                : "Archived"}
-            </Badge>
-          </div>
-          {product.year && (
-            <MarginNote position="top-right" variant="script" size="xs">
-              <span style={{ color: "var(--hb-sienna)" }}>{product.year}</span>
-            </MarginNote>
-          )}
+        {/* Ghost 花火 */}
+        <span
+          aria-hidden="true"
+          className="absolute top-6 right-6 z-[50] pointer-events-none select-none"
+          style={{
+            color: "var(--hb-dark-kanji)",
+            fontSize: "8rem",
+            lineHeight: 1,
+            fontFamily: "var(--hb-font-display)",
+          }}
+        >
+          花火
+        </span>
+
+        {/* Status badge */}
+        <div className="absolute top-6 left-6 z-[50]">
+          <Badge tone="sienna">
+            {product.status === "available"
+              ? "Available"
+              : product.status === "sold_out"
+              ? "Sold Out"
+              : "Archived"}
+          </Badge>
         </div>
 
-        {/* Thumbnail grid */}
-        {product.images && product.images.length > 0 && (
-          <div className="grid grid-cols-3 gap-4">
-            {product.images.map((image, idx) => (
-              <div
-                key={image}
-                className="relative aspect-[4/5] overflow-hidden cursor-zoom-in"
-                style={{ transform: `rotate(${idx % 2 === 0 ? "0.8deg" : "-0.8deg"})` }}
-                onClick={() => setLightboxIndex(idx)}
-              >
-                <Image
-                  src={image}
-                  alt={`${product.name} alternate view ${idx + 1}`}
-                  fill
-                  sizes="(max-width: 768px) 33vw, 200px"
-                  className="object-cover"
-                />
-              </div>
-            ))}
-          </div>
-        )}
-
+        <StackedImageCarousel
+          images={allImages}
+          alt={product.name}
+          onImageClick={setLightboxIndex}
+        />
       </motion.div>
 
       {/* Details panel — animated from right */}

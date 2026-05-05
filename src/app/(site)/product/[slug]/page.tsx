@@ -111,7 +111,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               Production only begins once we reach a minimum number of orders. If that threshold isn&apos;t met, you will be fully refunded — no questions asked.
             </p>
             <p>
-              Once production begins, your garment is cut, sewn, and shipped to you in <strong>2–3 months</strong>.
+              Once production begins, your garment is cut, sewn, and shipped to you in <strong>3–4 months</strong>.
             </p>
           </div>
         </div>
