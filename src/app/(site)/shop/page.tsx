@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { PageShell } from '@/components/layout/PageShell';
 import { ShopContent } from '@/components/shop/ShopContent';
-import { GarmentStage } from '@/components/shop/GarmentStage';
 import { getStripeCatalog } from '@/lib/stripe-catalog';
 import { products as fallbackProducts } from '@/data/products';
 
@@ -28,16 +27,8 @@ export default async function ShopPage() {
     console.warn('Failed to fetch from Stripe, using fallback data:', error);
   }
 
-  const featuredProduct =
-    shopProducts.find((p) => p.status === 'available') ?? shopProducts[0];
-
-  const catalogIndex = shopProducts.findIndex((p) => p.slug === featuredProduct.slug);
-  const catalogNumber =
-    catalogIndex >= 0 ? `HB-${String(catalogIndex + 1).padStart(3, '0')}` : 'HB-001';
-
   return (
     <main className="page-transition">
-      <GarmentStage product={featuredProduct} catalogNumber={catalogNumber} />
       <PageShell
         variant="dark"
         eyebrow="Shop"
