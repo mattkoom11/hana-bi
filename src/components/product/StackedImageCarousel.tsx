@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
@@ -17,12 +17,14 @@ function TopCard({
   getExitX,
   onDismiss,
   onClick,
+  onFirstDrag,
 }: {
   image: string;
   alt: string;
   getExitX: () => number;
   onDismiss: (dir: number) => void;
   onClick: () => void;
+  onFirstDrag: () => void;
 }) {
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-300, 300], [-12, 12]);
@@ -45,7 +47,10 @@ function TopCard({
         transition: { duration: 0.3, ease: "easeIn" },
       }}
       transition={{ type: "spring", stiffness: 300, damping: 26 }}
-      onDragStart={() => { wasDragged.current = false; }}
+      onDragStart={() => {
+        wasDragged.current = false;
+        onFirstDrag();
+      }}
       onDragEnd={(_, info) => {
         if (Math.abs(info.offset.x) > 5) wasDragged.current = true;
         if (Math.abs(info.offset.x) > DRAG_THRESHOLD || Math.abs(info.velocity.x) > 400) {
@@ -77,7 +82,13 @@ interface StackedImageCarouselProps {
 
 export function StackedImageCarousel({ images, alt, onImageClick }: StackedImageCarouselProps) {
   const [topIndex, setTopIndex] = useState(0);
+  const [showHint, setShowHint] = useState(true);
   const exitXRef = useRef(600);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowHint(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   if (images.length === 0) {
     return <div className="relative w-full aspect-[3/4] bg-[var(--hb-dark-surface)] grain" />;
@@ -127,7 +138,34 @@ export function StackedImageCarousel({ images, alt, onImageClick }: StackedImage
           getExitX={() => exitXRef.current}
           onDismiss={advance}
           onClick={() => onImageClick?.(topIndex)}
+          onFirstDrag={() => setShowHint(false)}
         />
+      </AnimatePresence>
+
+      {/* Drag hint */}
+      <AnimatePresence>
+        {showHint && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.4 } }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+            className="absolute bottom-14 left-0 right-0 z-30 flex flex-col items-center gap-2 pointer-events-none"
+          >
+            <motion.div
+              animate={{ x: [0, -10, 0, 10, 0] }}
+              transition={{ duration: 2, repeat: Infinity, repeatDelay: 0.5, ease: "easeInOut" }}
+              className="flex items-center gap-3"
+            >
+              <span
+                className="text-[0.55rem] uppercase tracking-[0.5em] opacity-70"
+                style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
+              >
+                ← drag to explore →
+              </span>
+            </motion.div>
+          </motion.div>
+        )}
       </AnimatePresence>
 
       {/* Counter */}
