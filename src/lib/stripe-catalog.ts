@@ -27,6 +27,9 @@ function mapStripeProduct(
   const sizes = m.sizes ? m.sizes.split(',').map((s) => s.trim()).filter(Boolean) : ['One Size'];
   const year = m.year ? parseInt(m.year, 10) : new Date().getFullYear();
 
+  const localImages = m.images ? m.images.split(',').map((s) => s.trim()).filter(Boolean) : [];
+  const allImages = localImages.length > 0 ? localImages : product.images;
+
   return {
     id: product.id,
     slug: m.slug ?? product.id,
@@ -39,8 +42,8 @@ function mapStripeProduct(
     materials: m.materials ?? '',
     care: m.care ?? '',
     sizes,
-    heroImage: product.images[0] ?? '',
-    images: product.images,
+    heroImage: allImages[0] ?? '',
+    images: allImages,
     collection: m.collection ?? 'Uncategorized',
     tags: m.tags ? m.tags.split(',').map((t) => t.trim()).filter(Boolean) : [],
     year: isNaN(year) ? new Date().getFullYear() : year,
