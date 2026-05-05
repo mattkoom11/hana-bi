@@ -88,15 +88,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <ProductDetailHero
               product={product}
               catalogNumber={catalogNumber}
-              {/* purchaseSlot={slug === 'layered-denim' ? <BuyButton product={product} /> : undefined} */}
             />
           </div>
         </div>
       </section>
 
       {/* ── Preorder Notice ────────────────────────────────────────── */}
-      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 bg-[var(--hb-paper-muted)]/30">
-        <div className="max-w-2xl mx-auto space-y-10">
+      <section className="px-4 sm:px-8 md:px-12 lg:px-20 py-8 bg-[var(--hb-paper-muted)]/30">
+        <div className="max-w-2xl mx-auto space-y-6">
           <div className="space-y-3">
             <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)]" style={{ fontFamily: 'var(--hb-font-mono)' }}>
               Preorder
@@ -129,7 +128,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </section>
 
       {/* ── Drop List ──────────────────────────────────────────────── */}
-      <section id="drop-list" className="px-4 sm:px-8 md:px-12 lg:px-20 py-16 bg-[var(--hb-paper-muted)]/30">
+      <section id="drop-list" className="px-4 sm:px-8 md:px-12 lg:px-20 py-8 bg-[var(--hb-paper-muted)]/30">
         <div className="max-w-2xl mx-auto text-center space-y-6">
           <div className="space-y-3">
             <p className="uppercase text-xs tracking-[0.4em] text-[var(--hb-smoke)] opacity-70" style={{ fontFamily: "var(--hb-font-mono)" }}>
