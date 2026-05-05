@@ -24,7 +24,6 @@ function TopCard({
   getExitX: () => number;
   onDismiss: (dir: number) => void;
   onClick: () => void;
-  onFirstDrag: () => void;
 }) {
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-300, 300], [-12, 12]);
@@ -50,7 +49,7 @@ function TopCard({
       onPointerUp={(e) => {
         if (Math.abs(e.clientX - pointerStartX.current) < 5) onClick();
       }}
-      onDragStart={() => onFirstDrag()}
+      onDragStart={() => {}}
       onDragEnd={(_, info) => {
         if (Math.abs(info.offset.x) > DRAG_THRESHOLD || Math.abs(info.velocity.x) > 500) {
           onDismiss(info.offset.x > 0 ? 1 : -1);
@@ -80,25 +79,20 @@ interface StackedImageCarouselProps {
 
 export function StackedImageCarousel({ images, alt, onImageClick }: StackedImageCarouselProps) {
   const [topIndex, setTopIndex] = useState(0);
-  const [showHint, setShowHint] = useState(true);
   const exitXRef = useRef(600);
 
   if (images.length === 0) {
     return <div className="relative w-full aspect-[3/4] bg-[var(--hb-dark-surface)] grain" />;
   }
 
-  const dismiss = () => setShowHint(false);
-
   const advance = (dir: number) => {
     exitXRef.current = dir * 600;
     setTopIndex((p) => (p + 1) % images.length);
-    dismiss();
   };
 
   const back = () => {
     exitXRef.current = -600;
     setTopIndex((p) => (p - 1 + images.length) % images.length);
-    dismiss();
   };
 
   return (
@@ -137,8 +131,7 @@ export function StackedImageCarousel({ images, alt, onImageClick }: StackedImage
             getExitX={() => exitXRef.current}
             onDismiss={advance}
             onClick={() => onImageClick?.(topIndex)}
-            onFirstDrag={dismiss}
-          />
+            />
         </AnimatePresence>
 
         {/* Counter */}
@@ -168,43 +161,33 @@ export function StackedImageCarousel({ images, alt, onImageClick }: StackedImage
         </button>
       </div>
 
-      {/* Drag hint — sits below the carousel, visible by default */}
-      <AnimatePresence>
-        {showHint && (
-          <motion.div
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 4, transition: { duration: 0.3 } }}
-            transition={{ duration: 0.4 }}
-            className="flex items-center justify-center gap-4 pt-5 pb-1 pointer-events-none select-none"
-          >
-            <motion.span
-              animate={{ x: [0, -6, 0] }}
-              transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 0.8, ease: "easeInOut" }}
-              style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
-              className="text-base opacity-80"
-            >
-              ←
-            </motion.span>
+      {/* Drag hint */}
+      <div className="flex items-center justify-center gap-4 pt-5 pb-1 pointer-events-none select-none">
+        <motion.span
+          animate={{ x: [0, -6, 0] }}
+          transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 0.8, ease: "easeInOut" }}
+          style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
+          className="text-base opacity-80"
+        >
+          ←
+        </motion.span>
 
-            <span
-              className="text-[0.6rem] uppercase tracking-[0.5em]"
-              style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
-            >
-              drag to explore
-            </span>
+        <span
+          className="text-[0.6rem] uppercase tracking-[0.5em]"
+          style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
+        >
+          drag to explore
+        </span>
 
-            <motion.span
-              animate={{ x: [0, 6, 0] }}
-              transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 0.8, ease: "easeInOut" }}
-              style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
-              className="text-base opacity-80"
-            >
-              →
-            </motion.span>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        <motion.span
+          animate={{ x: [0, 6, 0] }}
+          transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 0.8, ease: "easeInOut" }}
+          style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
+          className="text-base opacity-80"
+        >
+          →
+        </motion.span>
+      </div>
     </>
   );
 }
