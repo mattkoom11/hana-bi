@@ -29,6 +29,7 @@ function TopCard({
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-300, 300], [-12, 12]);
   const cardOpacity = useTransform(x, [-200, -80, 0, 80, 200], [0, 1, 1, 1, 0]);
+  const pointerStartX = useRef(0);
 
   return (
     <motion.div
@@ -45,6 +46,10 @@ function TopCard({
         transition: { duration: 0.3, ease: "easeIn" },
       }}
       transition={{ duration: 0.2 }}
+      onPointerDown={(e) => { pointerStartX.current = e.clientX; }}
+      onPointerUp={(e) => {
+        if (Math.abs(e.clientX - pointerStartX.current) < 5) onClick();
+      }}
       onDragStart={() => onFirstDrag()}
       onDragEnd={(_, info) => {
         if (Math.abs(info.offset.x) > DRAG_THRESHOLD || Math.abs(info.velocity.x) > 500) {
@@ -53,7 +58,6 @@ function TopCard({
           animate(x, 0, { type: "spring", stiffness: 400, damping: 30 });
         }
       }}
-      onTap={() => onClick()}
     >
       <Image
         src={image}
