@@ -5,6 +5,7 @@ import { ImageLightbox } from "@/components/common/ImageLightbox";
 import { RoughBorderCard } from "@/components/layered-denim/RoughBorderCard";
 import { ShopWaitlistForm } from "@/components/shop/ShopWaitlistForm";
 import { StackedImageCarousel } from "@/components/product/StackedImageCarousel";
+import { SizeGuideModal } from "@/components/product/SizeGuideModal";
 import type { Product } from "@/data/products";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -142,6 +143,9 @@ export function ProductDetailHero({ product, catalogNumber, purchaseSlot }: Prod
               </p>
             </div>
           )}
+
+          {/* Size guide */}
+          <SizeGuideModal />
 
           {/* Purchase action */}
           <div className="pt-2">
