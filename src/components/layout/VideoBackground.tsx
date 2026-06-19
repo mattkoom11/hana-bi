@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const CLIPS = [
   "/videos/clip-01.mp4",
@@ -16,6 +16,10 @@ const CLIPS = [
   "/videos/clip-11.mp4",
   "/videos/clip-12.mp4",
   "/videos/clip-13.mp4",
+  "/videos/clip-14.mp4",
+  "/videos/clip-15.mp4",
+  "/videos/clip-16.mp4",
+  "/videos/clip-17.mp4",
 ];
 
 const TRANSITION_MS = 2000;
