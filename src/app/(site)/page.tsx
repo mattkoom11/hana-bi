@@ -4,6 +4,8 @@ import { KanjiCanvas } from "@/components/common/KanjiCanvas";
 import { CulturalExplainer } from "@/components/common/CulturalExplainer";
 import { MorphingKanji } from "@/components/common/MorphingKanji";
 import { ParallaxLayer } from "@/components/common/ParallaxLayer";
+import { Tilt3DStage } from "@/components/common/Tilt3DStage";
+import { DepthLayer } from "@/components/common/DepthLayer";
 import { getStripeCatalog } from "@/lib/stripe-catalog";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,17 +29,23 @@ export default async function Home() {
     <main className="page-transition">
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-        {/* KanjiCanvas 花火 — slow background layer */}
-        <ParallaxLayer
-          speed={130}
-          aria-hidden
-          className="absolute bottom-8 right-8 pointer-events-none select-none"
-          style={{ width: "420px", height: "280px" }}
+        <Tilt3DStage
+          perspective={1200}
+          intensity={6}
+          scrollDepth={200}
+          className="relative z-10 px-4 sm:px-8 md:px-12 lg:px-20 py-24 w-full max-w-6xl mx-auto"
         >
-          <KanjiCanvas kanji="花火" sampleStep={5} />
-        </ParallaxLayer>
+          {/* 花火 — far background plane (shifts least under tilt) */}
+          <DepthLayer
+            depth={-220}
+            perspective={1200}
+            aria-hidden
+            className="absolute bottom-8 right-8 pointer-events-none select-none"
+            style={{ width: "420px", height: "280px" }}
+          >
+            <KanjiCanvas kanji="花火" sampleStep={5} />
+          </DepthLayer>
 
-        <div className="relative z-10 px-4 sm:px-8 md:px-12 lg:px-20 py-24 w-full max-w-6xl mx-auto">
           <div className="grid gap-16 lg:grid-cols-[1.1fr_0.9fr] items-center">
             {/* Left: copy + CTAs */}
             <div className="space-y-8">
@@ -84,8 +92,9 @@ export default async function Home() {
               />
             </div>
 
-            {/* Right: Layered Denim product card — foreground layer */}
+            {/* Right: Layered Denim product card — near foreground plane (shifts most under tilt) */}
             {layeredDenim && layeredDenim.heroImage && (
+              <DepthLayer depth={110} perspective={1200}>
               <ParallaxLayer speed={-70} offset={["start start", "end start"]}>
               <Link href={`/product/${layeredDenim.slug}`} className="group block relative overflow-hidden aspect-[3/4] border border-[var(--hb-dark-border)]">
                 <Image
@@ -131,9 +140,10 @@ export default async function Home() {
                 </div>
               </Link>
               </ParallaxLayer>
+              </DepthLayer>
             )}
           </div>
-        </div>
+        </Tilt3DStage>
       </section>
 
       {/* ── MorphingKanji ─────────────────────────────────────────── */}
