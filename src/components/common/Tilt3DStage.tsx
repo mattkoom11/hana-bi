@@ -1,6 +1,12 @@
 "use client";
 
-import { useRef, type CSSProperties, type MouseEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  type CSSProperties,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
 import {
   motion,
   useMotionValue,
@@ -19,6 +25,12 @@ interface Tilt3DStageProps {
   intensity?: number;
   /** How far (px) the whole stage dollies back along Z across the scroll range. */
   scrollDepth?: number;
+  /**
+   * Track the cursor on `window` instead of the element. Use this when the stage
+   * is a `pointer-events-none` background layer so it can still tilt toward the
+   * cursor without intercepting clicks/hovers from foreground content.
+   */
+  trackOnWindow?: boolean;
   className?: string;
   style?: CSSProperties;
 }
@@ -34,6 +46,7 @@ export function Tilt3DStage({
   perspective = 1200,
   intensity = 6,
   scrollDepth = 180,
+  trackOnWindow = false,
   className = "",
   style,
 }: Tilt3DStageProps) {
@@ -56,18 +69,35 @@ export function Tilt3DStage({
 
   const transform = useMotionTemplate`perspective(${perspective}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(${translateZ}px)`;
 
-  function handleMouseMove(e: MouseEvent<HTMLDivElement>) {
+  const clamp = (v: number) => Math.max(-0.5, Math.min(0.5, v));
+
+  function setFromClient(clientX: number, clientY: number) {
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    pointerX.set((e.clientX - rect.left) / rect.width - 0.5);
-    pointerY.set((e.clientY - rect.top) / rect.height - 0.5);
+    pointerX.set(clamp((clientX - rect.left) / rect.width - 0.5));
+    pointerY.set(clamp((clientY - rect.top) / rect.height - 0.5));
+  }
+
+  function handleMouseMove(e: MouseEvent<HTMLDivElement>) {
+    setFromClient(e.clientX, e.clientY);
   }
 
   function handleMouseLeave() {
     pointerX.set(0);
     pointerY.set(0);
   }
+
+  // Background mode: follow the cursor globally so the stage can stay
+  // pointer-events-none and never steal interaction from foreground content.
+  useEffect(() => {
+    if (!trackOnWindow || reduce) return;
+    const onMove = (e: globalThis.MouseEvent) =>
+      setFromClient(e.clientX, e.clientY);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    return () => window.removeEventListener("mousemove", onMove);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trackOnWindow, reduce]);
 
   if (reduce) {
     return (
@@ -80,8 +110,8 @@ export function Tilt3DStage({
   return (
     <motion.div
       ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      onMouseMove={trackOnWindow ? undefined : handleMouseMove}
+      onMouseLeave={trackOnWindow ? undefined : handleMouseLeave}
       className={className}
       style={{
         transform,

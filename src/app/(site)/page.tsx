@@ -29,23 +29,28 @@ export default async function Home() {
     <main className="page-transition">
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+        {/* 3D background scene — 花火 tilts toward the cursor and dollies on
+            scroll, but never intercepts clicks (pointer-events-none). */}
         <Tilt3DStage
+          trackOnWindow
           perspective={1200}
           intensity={6}
           scrollDepth={200}
-          className="relative z-10 px-4 sm:px-8 md:px-12 lg:px-20 py-24 w-full max-w-6xl mx-auto"
+          className="absolute inset-0 z-0 pointer-events-none"
         >
-          {/* 花火 — far background plane (shifts least under tilt) */}
           <DepthLayer
             depth={-220}
             perspective={1200}
             aria-hidden
-            className="absolute bottom-8 right-8 pointer-events-none select-none"
+            className="absolute bottom-8 right-8 select-none"
             style={{ width: "420px", height: "280px" }}
           >
             <KanjiCanvas kanji="花火" sampleStep={5} />
           </DepthLayer>
+        </Tilt3DStage>
 
+        {/* Foreground content — flat & fully interactive */}
+        <div className="relative z-10 px-4 sm:px-8 md:px-12 lg:px-20 py-24 w-full max-w-6xl mx-auto">
           <div className="grid gap-16 lg:grid-cols-[1.1fr_0.9fr] items-center">
             {/* Left: copy + CTAs */}
             <div className="space-y-8">
@@ -92,9 +97,8 @@ export default async function Home() {
               />
             </div>
 
-            {/* Right: Layered Denim product card — near foreground plane (shifts most under tilt) */}
+            {/* Right: Layered Denim product card — interactive, with scroll parallax */}
             {layeredDenim && layeredDenim.heroImage && (
-              <DepthLayer depth={110} perspective={1200}>
               <ParallaxLayer speed={-70} offset={["start start", "end start"]}>
               <Link href={`/product/${layeredDenim.slug}`} className="group block relative overflow-hidden aspect-[3/4] border border-[var(--hb-dark-border)]">
                 <Image
@@ -140,10 +144,9 @@ export default async function Home() {
                 </div>
               </Link>
               </ParallaxLayer>
-              </DepthLayer>
             )}
           </div>
-        </Tilt3DStage>
+        </div>
       </section>
 
       {/* ── MorphingKanji ─────────────────────────────────────────── */}
