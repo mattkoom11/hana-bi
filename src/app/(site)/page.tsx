@@ -3,6 +3,7 @@ import { SplitText } from "@/components/common/SplitText";
 import { KanjiCanvas } from "@/components/common/KanjiCanvas";
 import { CulturalExplainer } from "@/components/common/CulturalExplainer";
 import { MorphingKanji } from "@/components/common/MorphingKanji";
+import { ParallaxLayer } from "@/components/common/ParallaxLayer";
 import { getStripeCatalog } from "@/lib/stripe-catalog";
 import Image from "next/image";
 import Link from "next/link";
@@ -26,14 +27,15 @@ export default async function Home() {
     <main className="page-transition">
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-        {/* KanjiCanvas 花火 */}
-        <div
-          aria-hidden="true"
+        {/* KanjiCanvas 花火 — slow background layer */}
+        <ParallaxLayer
+          speed={130}
+          aria-hidden
           className="absolute bottom-8 right-8 pointer-events-none select-none"
           style={{ width: "420px", height: "280px" }}
         >
           <KanjiCanvas kanji="花火" sampleStep={5} />
-        </div>
+        </ParallaxLayer>
 
         <div className="relative z-10 px-4 sm:px-8 md:px-12 lg:px-20 py-24 w-full max-w-6xl mx-auto">
           <div className="grid gap-16 lg:grid-cols-[1.1fr_0.9fr] items-center">
@@ -82,8 +84,9 @@ export default async function Home() {
               />
             </div>
 
-            {/* Right: Layered Denim product card */}
+            {/* Right: Layered Denim product card — foreground layer */}
             {layeredDenim && layeredDenim.heroImage && (
+              <ParallaxLayer speed={-70} offset={["start start", "end start"]}>
               <Link href={`/product/${layeredDenim.slug}`} className="group block relative overflow-hidden aspect-[3/4] border border-[var(--hb-dark-border)]">
                 <Image
                   src={layeredDenim.heroImage}
@@ -127,6 +130,7 @@ export default async function Home() {
                   </span>
                 </div>
               </Link>
+              </ParallaxLayer>
             )}
           </div>
         </div>
