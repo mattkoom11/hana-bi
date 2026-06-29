@@ -20,6 +20,12 @@ const CLIPS = [
   "/videos/clip-15.mp4",
   "/videos/clip-16.mp4",
   "/videos/clip-17.mp4",
+  "/videos/clip-18.mp4",
+  "/videos/clip-19.mp4",
+  "/videos/clip-20.mp4",
+  "/videos/clip-21.mp4",
+  "/videos/clip-22.mp4",
+  "/videos/clip-23.mp4",
 ];
 
 const TRANSITION_MS = 2000;
