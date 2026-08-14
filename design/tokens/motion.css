@@ -1,0 +1,67 @@
+:root {
+  /* ── Easing ──
+     expo-out is the brand curve: RollText, SplitText, FillLink, kanji reveal.
+     smooth is the Tailwind default used for wispy hovers. */
+  --hb-ease-expo-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --hb-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Durations ── */
+  --hb-dur-fast: 200ms;
+  --hb-dur-base: 300ms;
+  --hb-dur-slow: 500ms;
+  --hb-dur-roll: 600ms;      /* RollText, page fade, loading fade */
+  --hb-dur-image: 700ms;     /* image scale on card hover */
+  --hb-dur-video: 2000ms;    /* VideoBackground crossfade */
+
+  /* ── VideoBackground cadence ── */
+  --hb-video-clip-min: 8000ms;
+  --hb-video-crossfade: 2000ms;
+
+  /* ── Soft scroll — reference-derived (LIVEUP inc.: "soft scrolling effects,
+     feel bouncy somehow") ──
+     Not a component: a documented feel. Lerp the scroll position toward the target
+     each frame instead of jumping to it, and let scroll-driven transforms overshoot
+     very slightly before settling. Keep it subtle — past 0.12 lerp it reads as lag,
+     not softness, and the brand's register is composed. */
+  --hb-scroll-lerp: 0.085;          /* per-frame easing factor toward target */
+  --hb-scroll-overshoot: 1.03;      /* transform overshoot before settle */
+  --hb-scroll-settle: 700ms;        /* settle duration for scroll-driven transforms */
+  --hb-ease-soft-out: cubic-bezier(0.16, 1, 0.3, 1);   /* softer than expo-out */
+  --hb-ease-soft-bounce: cubic-bezier(0.34, 1.4, 0.64, 1); /* one gentle overshoot */
+
+  /* ── Spring presets (framer-motion) ── */
+  --hb-spring-drawer: "damping 28, stiffness 280";
+  --hb-spring-sheet: "damping 30, stiffness 300";
+  --hb-spring-card: "damping 20, stiffness 300";
+}
+
+/* ── Keyframes shipped with the system ── */
+@keyframes hb-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hb-split-char-in {
+  from { opacity: 0; transform: translateY(0.35em) rotate(1.5deg); }
+  to   { opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes hb-kanji-reveal {
+  from { clip-path: inset(0 0 100% 0); opacity: 0; }
+  to   { clip-path: inset(0 0 0% 0); opacity: 1; }
+}
+
+@keyframes hb-hanabi-draw {
+  from { stroke-dashoffset: 2400; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes hb-spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

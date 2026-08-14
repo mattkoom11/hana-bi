@@ -27,11 +27,20 @@ export interface Product {
   notes: string;
   featured?: boolean;
   soldSizes?: string[];
+  /** Record identity for CatalogueIndex/ProductCard — never derived from array position. */
+  catalogNumber?: string;
+  /**
+   * Path to a real production-marker JSON (public/patterns/*.json), read by
+   * ConstructionSection/TurntableObject. Only set this on a garment whose
+   * marker data is real — never fabricate one. See design/ASSETS.md.
+   */
+  marker?: string;
 }
 
 export const products: Product[] = [
   {
     id: "hb-indigo-serenade",
+    catalogNumber: "HB-001",
     slug: "indigo-serenade-coat",
     name: "Indigo Serenade Coat",
     price: 640,
@@ -58,9 +67,11 @@ export const products: Product[] = [
   },
   {
     id: "hb-midnight-reed",
+    catalogNumber: "HB-002",
     slug: "midnight-reed-denim",
     name: "Midnight Reed Denim",
     price: 320,
+    marker: "/patterns/AX100-SELF-36.json",
     status: "available",
     description:
       "Straight, relaxed denim with raw edge hems and brushstroke piping along the side seams.",
@@ -83,6 +94,7 @@ export const products: Product[] = [
   },
   {
     id: "hb-paper-lantern",
+    catalogNumber: "HB-003",
     slug: "paper-lantern-top",
     name: "Paper Lantern Top",
     price: 280,
@@ -106,6 +118,7 @@ export const products: Product[] = [
   },
   {
     id: "hb-sea-smoke-kimono",
+    catalogNumber: "HB-004",
     slug: "sea-smoke-kimono",
     name: "Sea Smoke Kimono",
     price: 540,
@@ -129,6 +142,7 @@ export const products: Product[] = [
   },
   {
     id: "hb-ink-ripple-skirt",
+    catalogNumber: "HB-005",
     slug: "ink-ripple-skirt",
     name: "Ink Ripple Skirt",
     price: 360,
@@ -153,6 +167,7 @@ export const products: Product[] = [
   },
   {
     id: "hb-shadow-weave-vest",
+    catalogNumber: "HB-006",
     slug: "shadow-weave-vest",
     name: "Shadow Weave Vest",
     price: 290,

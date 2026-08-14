@@ -1,0 +1,6 @@
+/* Webfonts. The source project loads these through next/font/google;
+   here they come from the Google Fonts CSS API so the design system is
+   portable. Cormorant Garamond and Kalam were cut in the subtraction pass: Spectral
+   carries 花火 (illegible difference at 7% watermark opacity) and mono carries
+   the labels Kalam used to hold. */
+@import url("https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@300&display=swap");

@@ -1,0 +1,61 @@
+:root {
+  /* ── Paper (light surfaces) ── */
+  --hb-paper: #faf8f4;
+  --hb-paper-muted: #f5f2ed;
+
+  /* ── Ink (text on paper) ── */
+  --hb-ink: #1a1a1a;
+  --hb-ink-light: #2a2929;
+  --hb-ink-lighter: #3b3937;
+  --hb-smoke: #524f4b;
+  --hb-smoke-light: #6b6660;
+
+  /* ── Accents ── */
+  --hb-sienna: #9a7a5a;
+  --hb-gold: #c4a876;
+  --hb-accent: #7a6a5a;
+
+  /* ── Lines & chips ── */
+  --hb-border: #d4ccc0;
+  --hb-tag: #ede8e0;
+
+  /* ── Dark (video-backed surfaces; the site's default mode) ── */
+  --hb-dark: #0e0c0b;
+  --hb-dark-surface: #171310;
+  --hb-dark-border: rgba(250, 248, 244, 0.08);
+  --hb-dark-muted: rgba(250, 248, 244, 0.68);
+  --hb-dark-kanji: rgba(250, 248, 244, 0.07);
+
+  /* Paper white used literally as #faf8f4 on dark surfaces throughout
+     the codebase; aliased here for legibility. */
+  --hb-on-dark: #faf8f4;
+
+  /* ── Semantic aliases ── */
+  --text-body: var(--hb-smoke);
+  --text-strong: var(--hb-ink);
+  --text-muted: var(--hb-smoke-light);
+  --text-on-dark: var(--hb-on-dark);
+  --text-on-dark-muted: var(--hb-dark-muted);
+  --text-eyebrow: var(--hb-sienna);
+
+  --surface-page: var(--hb-paper);
+  --surface-card: var(--hb-paper-muted);
+  --surface-page-dark: var(--hb-dark);
+  --surface-card-dark: var(--hb-dark-surface);
+
+  --line-hairline: var(--hb-border);
+  --line-hairline-dark: var(--hb-dark-border);
+
+  --action-primary-bg: var(--hb-sienna);
+  --action-primary-fg: var(--hb-on-dark);
+  --action-ink-bg: var(--hb-ink);
+  --action-ink-fg: var(--hb-paper);
+
+  --overlay-video-scrim: rgba(14, 12, 11, 0.6);
+  --overlay-modal: rgba(14, 12, 11, 0.7);
+  --overlay-lightbox: rgba(0, 0, 0, 0.9);
+
+  /* Selection matches globals.css */
+  --selection-bg: var(--hb-sienna);
+  --selection-fg: var(--hb-paper);
+}

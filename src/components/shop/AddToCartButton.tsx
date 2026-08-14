@@ -44,6 +44,8 @@ export function AddToCartButton({
             size: selectedSize,
             image: product.heroImage,
             stripePriceId: product.stripePriceId,
+            catalogNumber: product.catalogNumber,
+            collection: product.collection,
           },
           1
         );

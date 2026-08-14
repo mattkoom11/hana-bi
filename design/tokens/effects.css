@@ -1,0 +1,42 @@
+:root {
+  /* ── Shadows — almost absent. Only lift-on-hover and drawer edge. ── */
+  --hb-shadow-wispy: 0 8px 24px rgba(26, 26, 26, 0.08);
+  --hb-shadow-sketch: 0 4px 12px rgba(26, 26, 26, 0.06);
+  --hb-shadow-inner-paper: inset 0 0 20px rgba(26, 26, 26, 0.02);
+  --hb-shadow-drawer: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+
+  /* ── Hand-drawn stroke opacities (SVG components) ── */
+  --hb-stroke-delicate: 0.25;
+  --hb-stroke-wispy: 0.35;
+  --hb-stroke-bold: 0.5;
+  --hb-stroke-width-delicate: 0.6px;
+  --hb-stroke-width-wispy: 1px;
+  --hb-stroke-width-bold: 1.5px;
+
+  /* ── Blur ── */
+  --hb-blur-panel: 12px;   /* sticky nav */
+  --hb-blur-wisp: 0.3px;   /* SketchFrame feGaussianBlur / sketch-border */
+
+  /* ── Scrims ── */
+  --hb-scrim-header: linear-gradient(to bottom, rgba(0,0,0,0.45), transparent);
+  --hb-scrim-card: linear-gradient(to top, rgba(14,12,11,0.65) 0%, transparent 55%);
+  --hb-rule-fade: linear-gradient(to right, transparent, var(--hb-border), transparent);
+  --hb-rule-fade-dark: linear-gradient(to right, transparent, var(--hb-dark-border), transparent);
+
+  /* ── Grain overlay (globals.css .grain) ── */
+  --hb-grain-url: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+  --hb-paper-noise-url: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)'/%3E%3C/svg%3E");
+  --hb-ink-grid: linear-gradient(rgba(26,26,26,0.015) 0.5px, transparent 0.5px),
+                 linear-gradient(90deg, rgba(26,26,26,0.015) 0.5px, transparent 0.5px);
+}
+
+/* Grain texture overlay for dark surfaces. */
+.hb-grain { position: relative; }
+.hb-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--hb-grain-url);
+  pointer-events: none;
+  z-index: 0;
+}

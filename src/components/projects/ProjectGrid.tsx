@@ -8,14 +8,20 @@ interface ProjectGridProps {
 export function ProjectGrid({ projects }: ProjectGridProps) {
   if (projects.length === 0) {
     return (
-      <p className="text-center text-[var(--hb-smoke)] opacity-80 py-12">
+      <p style={{ color: "var(--hb-smoke)", opacity: 0.8, padding: "3rem 0" }}>
         No projects to display.
       </p>
     );
   }
 
   return (
-    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+    <div
+      style={{
+        display: "grid",
+        gap: "var(--hb-grid-gap-airy)",
+        gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 20rem), 1fr))",
+      }}
+    >
       {projects.map((project) => (
         <ProjectCard key={project.id} project={project} />
       ))}

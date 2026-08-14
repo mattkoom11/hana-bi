@@ -1,0 +1,55 @@
+:root {
+  /* ── Families ──
+     display  Spectral, italic + light, for every headline and product name
+     script   cut — alias onto the serif
+     mono     DM Mono, all-caps micro-labels, prices, catalog numbers
+     sans     Inter, body copy
+     kanji    Spectral carries 花火 (Cormorant Garamond cut) */
+  --hb-font-display: "Spectral", Georgia, serif;
+  --hb-font-serif: "Spectral", Georgia, serif;
+  --hb-font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  /* Kalam cut — kept as an alias so older components resolve to the serif. */
+  --hb-font-script: "Spectral", Georgia, serif;
+  --hb-font-mono: "DM Mono", "Courier New", monospace;
+  --hb-font-kanji: "Spectral", Georgia, serif;
+
+  /* ── Display scale (all italic, weight 300) ── */
+  --hb-display-hero: clamp(2.5rem, 7vw, 7rem);   /* homepage h1 */
+  --hb-display-page: clamp(3rem, 5vw, 4.5rem);   /* PageShell h1 (5xl→7xl) */
+  --hb-display-xl: 3rem;
+  --hb-display-lg: 2.25rem;
+  --hb-display-md: 1.5rem;
+  --hb-display-sm: 1.25rem;
+
+  --hb-display-weight: 300;
+  --hb-display-style: italic;
+  --hb-display-leading: 1.05;
+  --hb-display-leading-hero: 0.92;
+  --hb-display-tracking: -0.01em;
+
+  /* ── Body ── */
+  --hb-body-lg: 1.125rem;   /* page intros */
+  --hb-body-md: 1rem;
+  --hb-body-sm: 0.875rem;
+  --hb-body-leading: 1.7;
+  --hb-body-tracking: 0.01em;
+
+  /* ── Mono micro-labels — the system's signature ──
+     Always uppercase. Tracking grows as the label shrinks. */
+  --hb-label-md: 0.75rem;    /* text-xs   — nav, buttons */
+  --hb-label-sm: 0.7rem;
+  --hb-label-xs: 0.65rem;
+  --hb-label-2xs: 0.6rem;
+  --hb-label-3xs: 0.55rem;   /* catalog numbers */
+
+  --hb-track-eyebrow: 0.5em;   /* hero eyebrow */
+  --hb-track-nav: 0.4em;       /* nav, CTA buttons */
+  --hb-track-label: 0.35em;
+  --hb-track-meta: 0.3em;
+  --hb-track-tag: 0.2em;
+  --hb-track-catalog: 0.55em;  /* HB-001 */
+
+  /* ── Script ── */
+  --hb-script-weight: 300;
+  --hb-script-tracking: 0.05em;
+}

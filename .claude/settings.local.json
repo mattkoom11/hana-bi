@@ -12,7 +12,27 @@
       "Bash(grep -v \"//\")",
       "Bash(npx eslint:*)",
       "Bash(grep -n \"ProductCard\" src/app/product/[slug]/page.tsx -A 2 -B 2)",
-      "Bash(find C:/hana-bi/.worktrees/visual-overhaul/src -name SiteHeader* -o -name SiteFooter* -o -name CartDrawer* -o -name PageShell*)"
+      "Bash(find C:/hana-bi/.worktrees/visual-overhaul/src -name SiteHeader* -o -name SiteFooter* -o -name CartDrawer* -o -name PageShell*)",
+      "Bash(chromium-cli --session hbcheck)",
+      "Bash(python .scratch/check_routes.py)",
+      "Bash(python -m pip install --quiet playwright)",
+      "Bash(python -m playwright install chromium)",
+      "Bash(python .scratch/check_scrollstage.py)",
+      "Bash(python .scratch/check_scrollstage2.py)",
+      "Bash(python .scratch/check_cart_flow.py)",
+      "Bash(python .scratch/check_404_button.py)",
+      "Bash(python .scratch/check_var.py)",
+      "Bash(python .scratch/check_var2.py)",
+      "Bash(sed 's/localhost:3000/localhost:3001/; s#\\\\.scratch/#.scratch/prod_#' .scratch/check_var2.py)",
+      "Bash(python .scratch/check_var2_prod.py)",
+      "Bash(lsof -ti:3001 -sTCP:LISTEN)",
+      "Bash(xargs -r kill)",
+      "Bash(lsof -i:3001)",
+      "Bash(cat /tmp/nextstart2.log | tail -30 *)",
+      "Read(//tmp/**)",
+      "Bash(sed 's/localhost:3000/localhost:3001/; s#\\\\.scratch/#.scratch/prodfix_#' .scratch/check_404_button.py)",
+      "Bash(python .scratch/check_404_button_prod.py)",
+      "Bash(powershell -NoProfile -Command 'Get-NetTCPConnection -LocalPort 3001 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }; Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }')"
     ]
   }
 }

@@ -1,15 +1,16 @@
 import { VhFix } from "@/components/common/VhFix";
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
-import { Spectral, Inter, Kalam, Cormorant_Garamond, DM_Mono } from "next/font/google";
+import { Spectral, Inter, DM_Mono } from "next/font/google";
 import "./globals.css";
 
 // Editorial serif for headers - Spectral (magazine-style, elegant)
+// Weight 300 italic is the site's entire display voice — see design/tokens/APPLY.md.
 const hanabiSerif = Spectral({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-hanabi-serif",
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
   style: ["normal", "italic"],
 });
 
@@ -19,22 +20,6 @@ const hanabiSans = Inter({
   display: "swap",
   variable: "--font-hanabi-sans",
   weight: ["300", "400", "500", "600"],
-});
-
-// Handwritten/script font for captions and delicate notes
-const hanabiScript = Kalam({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-hanabi-script",
-  weight: ["300", "400"],
-});
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["300", "400"],
-  style: ["normal", "italic"],
-  variable: "--font-cormorant",
-  display: "swap",
 });
 
 const dmMono = DM_Mono({
@@ -62,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${hanabiSerif.variable} ${hanabiSans.variable} ${hanabiScript.variable} ${cormorant.variable} ${dmMono.variable} antialiased min-h-screen`}
+        className={`${hanabiSerif.variable} ${hanabiSans.variable} ${dmMono.variable} antialiased min-h-screen`}
       >
         <VhFix />
         <Toaster

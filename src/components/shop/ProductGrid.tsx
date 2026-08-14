@@ -22,7 +22,13 @@ export function ProductGrid({ products, variant = "dark" }: ProductGridProps) {
   }
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div
+      style={{
+        display: "grid",
+        gap: "var(--hb-grid-gap)",
+        gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 18rem), 1fr))",
+      }}
+    >
       {products.map((product, index) => (
         <ProductCard
           key={product.id}

@@ -1,19 +1,26 @@
-'use client';
+"use client";
+
+/**
+ * ProductStickyNav — items must be built from sections that actually exist
+ * on the page. See design/screens/03-product.md — the old #story/#fit
+ * anchors were never built and should not come back.
+ */
 
 import { BottomSheetNav } from "@/components/layered-denim/BottomSheetNav";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 
-const navItems = [
-  { label: 'Story', href: '#story' },
-  { label: 'Materials', href: '#materials' },
-  { label: 'Construction', href: '#construction' },
-  { label: 'Fit', href: '#fit' },
-  { label: 'FAQ', href: '#faq' },
-];
+interface NavItem {
+  label: string;
+  href: string;
+}
 
-export function ProductStickyNav() {
+interface ProductStickyNavProps {
+  items: NavItem[];
+}
+
+export function ProductStickyNav({ items }: ProductStickyNavProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const { scrollY } = useScroll();
@@ -25,7 +32,7 @@ export function ProductStickyNav() {
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     setMobileMenuOpen(false);
   };
@@ -41,7 +48,7 @@ export function ProductStickyNav() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-11">
             <nav className="hidden md:flex gap-8">
-              {navItems.map((item) => (
+              {items.map((item) => (
                 <a
                   key={item.href}
                   href={item.href}
@@ -69,7 +76,7 @@ export function ProductStickyNav() {
       </motion.div>
 
       <BottomSheetNav
-        items={navItems}
+        items={items}
         isOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
         onNavigate={scrollToSection}

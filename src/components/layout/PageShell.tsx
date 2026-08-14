@@ -51,10 +51,14 @@ export function PageShell({
         )}
         <div className="mt-8 space-y-4">
           <h1
-            className={`text-5xl sm:text-6xl lg:text-7xl tracking-tight leading-[1.05] italic font-light ${
+            className={`leading-[1.05] italic font-light ${
               isDark ? "text-[#faf8f4]" : ""
             }`}
-            style={{ fontFamily: "var(--hb-font-display)" }}
+            style={{
+              fontFamily: "var(--hb-font-display)",
+              fontSize: "var(--hb-display-page)",
+              letterSpacing: "var(--hb-display-tracking)",
+            }}
           >
             {title}
           </h1>
@@ -64,9 +68,10 @@ export function PageShell({
         </div>
         {intro && (
           <div
-            className={`mt-10 text-lg leading-relaxed max-w-2xl ${
+            className={`mt-10 max-w-2xl ${
               isDark ? "text-[var(--hb-dark-muted)]" : "text-[var(--hb-smoke)] opacity-85"
             }`}
+            style={{ fontSize: "var(--hb-body-lg)", lineHeight: "var(--hb-body-leading)" }}
           >
             {intro}
           </div>

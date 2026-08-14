@@ -1,12 +1,14 @@
 "use client";
 
+/**
+ * CartDrawer — shares vocabulary with the cart page ledger: hairline rules,
+ * no per-row fills, unboxed steppers, tabular figures, one filled element
+ * (checkout). See design/components/cart-and-drawer.md.
+ */
+
 import { startCheckoutSession } from "@/lib/checkout-client";
 import { formatCurrency } from "@/lib/utils";
-import {
-  useCartCount,
-  useCartStore,
-  useCartTotal,
-} from "@/store/cart";
+import { useCartCount, useCartStore, useCartTotal } from "@/store/cart";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,6 +18,18 @@ interface CartDrawerProps {
   open: boolean;
   onClose: () => void;
 }
+
+const mono: React.CSSProperties = { fontFamily: "var(--hb-font-mono)" };
+const meta: React.CSSProperties = {
+  ...mono,
+  fontSize: "0.75rem",
+  textTransform: "uppercase",
+  letterSpacing: "var(--hb-track-meta)",
+  color: "var(--hb-dark-muted)",
+};
+const num: React.CSSProperties = { ...mono, fontVariantNumeric: "tabular-nums" };
+const bare: React.CSSProperties = { background: "none", border: "none", padding: 0, cursor: "pointer" };
+const line = "1px solid var(--hb-dark-border)";
 
 export function CartDrawer({ open, onClose }: CartDrawerProps) {
   const items = useCartStore((state) => state.items);
@@ -49,11 +63,10 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-50 flex">
+        <div style={{ position: "fixed", inset: 0, zIndex: 50, display: "flex" }}>
           <motion.div
             key="backdrop"
-            className="flex-1"
-            style={{ background: "rgba(14,12,11,0.7)" }}
+            style={{ flex: 1, background: "var(--overlay-modal)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -67,23 +80,43 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             role="dialog"
             aria-modal="true"
             aria-label="Shopping cart"
-            className="grain w-full max-w-md bg-[var(--hb-dark-surface)] border-l border-[var(--hb-dark-border)] flex flex-col shadow-2xl shadow-black/40"
+            className="hb-grain"
+            style={{
+              width: "100%",
+              maxWidth: "28rem",
+              background: "var(--hb-dark-surface)",
+              borderLeft: "1px solid var(--hb-dark-border)",
+              display: "flex",
+              flexDirection: "column",
+              boxShadow: "var(--hb-shadow-drawer)",
+            }}
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 28, stiffness: 280 }}
           >
-            <header className="px-6 py-5 flex items-center justify-between border-b border-[var(--hb-dark-border)]">
+            <header
+              style={{
+                padding: "1.25rem 1.5rem",
+                borderBottom: line,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
               <div>
-                <p
-                  className="uppercase text-xs tracking-[0.35em] opacity-70"
-                  style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
-                >
+                <p style={{ ...mono, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.35em", color: "var(--hb-sienna)", opacity: 0.7, margin: 0 }}>
                   Cart
                 </p>
                 <h2
-                  className="text-2xl mt-1 text-[#faf8f4] italic font-light"
-                  style={{ fontFamily: "var(--hb-font-display)" }}
+                  style={{
+                    fontFamily: "var(--hb-font-display)",
+                    fontStyle: "italic",
+                    fontWeight: 300,
+                    fontSize: "1.5rem",
+                    color: "var(--hb-on-dark)",
+                    marginTop: "0.25rem",
+                  }}
                 >
                   {itemCount === 0 ? "Empty" : `${itemCount} item${itemCount > 1 ? "s" : ""}`}
                 </h2>
@@ -92,52 +125,54 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                 ref={closeButtonRef}
                 type="button"
                 onClick={onClose}
-                className="flex items-center justify-center min-h-[44px] min-w-[44px] text-xs uppercase tracking-[0.3em] text-[var(--hb-dark-muted)] hover:text-[#faf8f4] transition-colors"
-                style={{ fontFamily: "var(--hb-font-mono)" }}
+                style={{ ...meta, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 44, minWidth: 44 }}
               >
                 Close
               </button>
             </header>
 
-            <div className="max-h-[65vh] overflow-y-auto divide-y divide-[var(--hb-dark-border)]">
+            <div style={{ maxHeight: "65%", overflowY: "auto", flex: 1 }}>
               {items.length === 0 ? (
-                <div className="px-6 py-14 text-center space-y-6">
+                <div style={{ padding: "3rem 1.5rem" }}>
                   <p
-                    className="text-sm text-[var(--hb-dark-muted)] leading-relaxed max-w-[22rem] mx-auto"
-                    style={{ fontFamily: "var(--hb-font-mono)" }}
+                    style={{
+                      fontFamily: "var(--hb-font-display)",
+                      fontStyle: "italic",
+                      fontWeight: 300,
+                      fontSize: "1.5rem",
+                      lineHeight: 1.45,
+                      color: "var(--hb-on-dark)",
+                      margin: 0,
+                    }}
                   >
-                    The drawer is quiet. Add a garment from the shop to begin your Hana-Bi study.
+                    Nothing yet.
                   </p>
                   <Link
                     href="/shop"
                     onClick={onClose}
-                    className="inline-flex items-center justify-center border border-[#faf8f4]/60 px-5 py-3 text-xs uppercase tracking-[0.35em] text-[#faf8f4] hover:border-[#faf8f4] hover:bg-[#faf8f4]/10 transition-colors"
-                    style={{ fontFamily: "var(--hb-font-mono)" }}
+                    style={{
+                      display: "inline-flex",
+                      minHeight: 44,
+                      alignItems: "center",
+                      marginTop: "1.5rem",
+                      ...meta,
+                      color: "var(--hb-sienna)",
+                      borderBottom: "1px solid currentColor",
+                      paddingBottom: "0.35rem",
+                    }}
                   >
-                    Browse the collection
+                    Browse the shop
                   </Link>
                 </div>
               ) : (
                 items.map((item) => (
-                  <article
-                    key={`${item.id}-${item.size}`}
-                    className="px-6 py-5 bg-[var(--hb-dark)]"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0">
-                        <p
-                          className="text-lg text-[#faf8f4] italic font-light leading-snug"
-                          style={{ fontFamily: "var(--hb-font-display)" }}
-                        >
+                  <div key={item.id + "-" + item.size} style={{ padding: "1.5rem", borderTop: line }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1rem" }}>
+                      <div style={{ minWidth: 0 }}>
+                        <p style={{ fontFamily: "var(--hb-font-display)", fontStyle: "italic", fontWeight: 300, fontSize: "1.125rem", lineHeight: 1.35, color: "var(--hb-on-dark)", margin: 0 }}>
                           {item.name}
                         </p>
-                        <p
-                          className="text-xs uppercase tracking-[0.25em] mt-1"
-                          style={{
-                            fontFamily: "var(--hb-font-mono)",
-                            color: "var(--hb-dark-muted)",
-                          }}
-                        >
+                        <p style={{ ...mono, fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.25em", color: "var(--hb-dark-muted)", marginTop: "0.25rem" }}>
                           Size {item.size}
                         </p>
                       </div>
@@ -145,79 +180,66 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                         type="button"
                         onClick={() => removeItem(item.id, item.size)}
                         aria-label={`Remove ${item.name}`}
-                        className="shrink-0 text-xs uppercase tracking-[0.3em] text-[var(--hb-dark-muted)] hover:text-[#faf8f4] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
-                        style={{ fontFamily: "var(--hb-font-mono)" }}
+                        style={{ ...bare, ...meta, minHeight: 44, minWidth: 44, flexShrink: 0, opacity: 0.7 }}
                       >
-                        ×
+                        Remove
                       </button>
                     </div>
-                    <div className="flex items-center justify-between mt-3 gap-4">
-                      <div className="flex items-center border border-[var(--hb-dark-border)]">
+
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "0.75rem", gap: "1rem" }}>
+                      <div style={{ display: "flex", alignItems: "center", marginLeft: "-0.75rem" }}>
                         <button
                           type="button"
-                          onClick={() =>
-                            updateQuantity(item.id, item.size, Math.max(1, item.quantity - 1))
-                          }
                           aria-label="Decrease quantity"
-                          className="w-11 h-11 text-[#faf8f4] flex items-center justify-center hover:bg-[var(--hb-dark-surface)] transition-colors"
-                          style={{ fontFamily: "var(--hb-font-mono)" }}
+                          onClick={() => updateQuantity(item.id, item.size, Math.max(1, item.quantity - 1))}
+                          style={{ ...bare, width: 44, height: 44, color: "var(--hb-on-dark)", display: "flex", alignItems: "center", justifyContent: "center" }}
                         >
                           –
                         </button>
-                        <span
-                          className="w-10 text-center text-[#faf8f4] text-sm self-center tabular-nums"
-                          style={{ fontFamily: "var(--hb-font-mono)" }}
-                        >
+                        <span style={{ ...num, width: 40, textAlign: "center", fontSize: "0.875rem", color: "var(--hb-on-dark)" }}>
                           {item.quantity}
                         </span>
                         <button
                           type="button"
-                          onClick={() =>
-                            updateQuantity(item.id, item.size, item.quantity + 1)
-                          }
                           aria-label="Increase quantity"
-                          className="w-11 h-11 text-[#faf8f4] flex items-center justify-center hover:bg-[var(--hb-dark-surface)] transition-colors"
-                          style={{ fontFamily: "var(--hb-font-mono)" }}
+                          onClick={() => updateQuantity(item.id, item.size, item.quantity + 1)}
+                          style={{ ...bare, width: 44, height: 44, color: "var(--hb-on-dark)", display: "flex", alignItems: "center", justifyContent: "center" }}
                         >
                           +
                         </button>
                       </div>
-                      <span
-                        className="text-sm tabular-nums shrink-0"
-                        style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-sienna)" }}
-                      >
+                      <span style={{ ...num, fontSize: "0.875rem", color: "var(--hb-on-dark)", flexShrink: 0 }}>
                         {formatCurrency(item.price * item.quantity)}
                       </span>
                     </div>
-                  </article>
+                  </div>
                 ))
               )}
             </div>
 
             {items.length > 0 && (
-              <footer className="px-6 py-5 border-t border-[var(--hb-dark-border)] space-y-4">
+              <footer style={{ padding: "1.25rem 1.5rem", borderTop: line, display: "flex", flexDirection: "column", gap: "1rem" }}>
                 {checkoutError && (
                   <div
                     role="alert"
-                    className="border border-[var(--hb-sienna)]/45 bg-[var(--hb-sienna)]/[0.08] px-4 py-3 text-[0.7rem] uppercase tracking-[0.2em] text-[#faf8f4]/90 leading-relaxed"
-                    style={{ fontFamily: "var(--hb-font-mono)" }}
+                    style={{
+                      border: "1px solid rgba(154,122,90,0.45)",
+                      background: "rgba(154,122,90,0.08)",
+                      padding: "0.75rem 1rem",
+                      fontFamily: "var(--hb-font-mono)",
+                      fontSize: "0.7rem",
+                      textTransform: "uppercase",
+                      letterSpacing: "var(--hb-track-tag)",
+                      color: "rgba(250,248,244,0.9)",
+                      lineHeight: 1.7,
+                    }}
                   >
                     {checkoutError}
                   </div>
                 )}
-                <div className="flex items-center justify-between">
-                  <span
-                    className="text-xs uppercase tracking-[0.3em]"
-                    style={{ fontFamily: "var(--hb-font-mono)", color: "var(--hb-dark-muted)" }}
-                  >
-                    Total
-                  </span>
-                  <span
-                    className="text-base text-[#faf8f4] tabular-nums"
-                    style={{ fontFamily: "var(--hb-font-mono)" }}
-                  >
-                    {formatCurrency(total)}
-                  </span>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <span style={meta}>Total</span>
+                  <span style={{ ...num, fontSize: "1rem", color: "var(--hb-on-dark)" }}>{formatCurrency(total)}</span>
                 </div>
                 <button
                   type="button"
@@ -229,24 +251,30 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                     setIsLoading(false);
                     setCheckingOut(false);
                     if (!result.ok) {
-                      setCheckoutError(result.message);
-                      toast.error("Checkout couldn’t start", {
-                        description: result.message,
-                      });
+                      setCheckoutError(result.message || "Checkout couldn't start. Please try again.");
+                      toast.error("Checkout couldn't start", { description: result.message });
                     }
                   }}
                   disabled={isLoading}
-                  className="w-full bg-[var(--hb-sienna)] text-[#faf8f4] uppercase tracking-[0.4em] px-6 py-4 text-xs hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
-                  style={{ fontFamily: "var(--hb-font-mono)" }}
+                  style={{
+                    width: "100%",
+                    background: "var(--hb-sienna)",
+                    color: "var(--hb-on-dark)",
+                    textTransform: "uppercase",
+                    letterSpacing: "var(--hb-track-nav)",
+                    padding: "1rem 1.5rem",
+                    fontSize: "0.75rem",
+                    border: "none",
+                    borderRadius: 0,
+                    cursor: isLoading ? "not-allowed" : "pointer",
+                    opacity: isLoading ? 0.4 : 1,
+                    transition: "opacity 300ms ease",
+                    ...mono,
+                  }}
                 >
                   {isLoading ? "Redirecting…" : "Checkout"}
                 </button>
-                <button
-                  type="button"
-                  onClick={clearCart}
-                  className="w-full text-xs uppercase tracking-[0.3em] text-[var(--hb-dark-muted)] hover:text-[#faf8f4] transition-colors"
-                  style={{ fontFamily: "var(--hb-font-mono)" }}
-                >
+                <button type="button" onClick={clearCart} style={{ ...bare, ...meta, width: "100%" }}>
                   Clear cart
                 </button>
               </footer>

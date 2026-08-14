@@ -50,6 +50,11 @@ function mapStripeProduct(
     notes: m.notes ?? '',
     featured: m.featured === 'true',
     soldSizes: m.sold_sizes ? m.sold_sizes.split(',').map((s) => s.trim()).filter(Boolean) : [],
+    // Both optional and metadata-driven — never fabricated. A garment without
+    // catalog_number metadata falls back to position-derived numbering in the
+    // UI; a garment without marker metadata simply has no construction gallery.
+    catalogNumber: m.catalog_number || undefined,
+    marker: m.marker || undefined,
   };
 }
 

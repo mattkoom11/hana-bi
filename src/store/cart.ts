@@ -15,6 +15,9 @@ export interface CartItem {
   size: string;
   quantity: number;
   image?: string;
+  /** Snapshot from the product record at add-time — an identity, not derived from row position. */
+  catalogNumber?: string;
+  collection?: string;
 }
 
 interface CartState {

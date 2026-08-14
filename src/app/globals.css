@@ -4,7 +4,14 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Desaturated, ink-like colors for wispy aesthetic */
+  /* ══════════════════════════════════════════════════════════════
+     Hana-Bi design tokens — merged from design/tokens/*.css
+     (colors → typography → spacing → motion → effects). See
+     design/tokens/APPLY.md for the source of truth and the four
+     verification checks.
+     ══════════════════════════════════════════════════════════════ */
+
+  /* ── colors ── */
   --hb-paper: #faf8f4;
   --hb-paper-muted: #f5f2ed;
   --hb-ink: #1a1a1a;
@@ -14,19 +21,158 @@
   --hb-smoke-light: #6b6660;
   --hb-sienna: #9a7a5a;
   --hb-gold: #c4a876;
+  --hb-accent: #7a6a5a;
   --hb-border: #d4ccc0;
   --hb-tag: #ede8e0;
-  --hb-accent: #7a6a5a;
-  --hb-dark:         #0e0c0b;
+  --hb-dark: #0e0c0b;
   --hb-dark-surface: #171310;
-  --hb-dark-border:  rgba(250, 248, 244, 0.08);
-  --hb-dark-muted:   rgba(250, 248, 244, 0.68);
-  --hb-dark-kanji:   rgba(250, 248, 244, 0.07);
-  --hb-font-display: var(--font-cormorant), Georgia, serif;
-  --hb-font-mono:    var(--font-dm-mono), 'Courier New', monospace;
+  --hb-dark-border: rgba(250, 248, 244, 0.08);
+  --hb-dark-muted: rgba(250, 248, 244, 0.68);
+  --hb-dark-kanji: rgba(250, 248, 244, 0.07);
+  --hb-on-dark: #faf8f4;
 
-  /* Handwritten font variable */
-  --font-hanabi-script: var(--font-hanabi-script);
+  --text-body: var(--hb-smoke);
+  --text-strong: var(--hb-ink);
+  --text-muted: var(--hb-smoke-light);
+  --text-on-dark: var(--hb-on-dark);
+  --text-on-dark-muted: var(--hb-dark-muted);
+  --text-eyebrow: var(--hb-sienna);
+  --surface-page: var(--hb-paper);
+  --surface-card: var(--hb-paper-muted);
+  --surface-page-dark: var(--hb-dark);
+  --surface-card-dark: var(--hb-dark-surface);
+  --line-hairline: var(--hb-border);
+  --line-hairline-dark: var(--hb-dark-border);
+  --action-primary-bg: var(--hb-sienna);
+  --action-primary-fg: var(--hb-on-dark);
+  --action-ink-bg: var(--hb-ink);
+  --action-ink-fg: var(--hb-paper);
+  --overlay-video-scrim: rgba(14, 12, 11, 0.6);
+  --overlay-modal: rgba(14, 12, 11, 0.7);
+  --overlay-lightbox: rgba(0, 0, 0, 0.9);
+  --selection-bg: var(--hb-sienna);
+  --selection-fg: var(--hb-paper);
+
+  /* ── typography ──
+     Fonts load via next/font/google in layout.tsx (Spectral, Inter, DM Mono).
+     --hb-font-script/-serif/-kanji are aliases onto Spectral — Kalam and
+     Cormorant Garamond were cut. Do not introduce new uses of the aliases;
+     they exist only so older components keep resolving. */
+  --hb-font-display: var(--font-hanabi-serif), Georgia, serif;
+  --hb-font-serif: var(--font-hanabi-serif), Georgia, serif;
+  --hb-font-sans: var(--font-hanabi-sans), "Helvetica Neue", Arial, sans-serif;
+  --hb-font-script: var(--font-hanabi-serif), Georgia, serif;
+  --hb-font-mono: var(--font-dm-mono), "Courier New", monospace;
+  --hb-font-kanji: var(--font-hanabi-serif), Georgia, serif;
+
+  --hb-display-hero: clamp(2.5rem, 7vw, 7rem);
+  --hb-display-page: clamp(3rem, 5vw, 4.5rem);
+  --hb-display-xl: 3rem;
+  --hb-display-lg: 2.25rem;
+  --hb-display-md: 1.5rem;
+  --hb-display-sm: 1.25rem;
+  --hb-display-weight: 300;
+  --hb-display-style: italic;
+  --hb-display-leading: 1.05;
+  --hb-display-leading-hero: 0.92;
+  --hb-display-tracking: -0.01em;
+
+  --hb-body-lg: 1.125rem;
+  --hb-body-md: 1rem;
+  --hb-body-sm: 0.875rem;
+  --hb-body-leading: 1.7;
+  --hb-body-tracking: 0.01em;
+
+  --hb-label-md: 0.75rem;
+  --hb-label-sm: 0.7rem;
+  --hb-label-xs: 0.65rem;
+  --hb-label-2xs: 0.6rem;
+  --hb-label-3xs: 0.55rem;
+
+  --hb-track-eyebrow: 0.5em;
+  --hb-track-nav: 0.4em;
+  --hb-track-label: 0.35em;
+  --hb-track-meta: 0.3em;
+  --hb-track-tag: 0.2em;
+  --hb-track-catalog: 0.55em;
+
+  --hb-script-weight: 300;
+  --hb-script-tracking: 0.05em;
+
+  /* ── spacing ── */
+  --hb-gutter-sm: 1rem;
+  --hb-gutter-md: 2rem;
+  --hb-gutter-lg: 3rem;
+  --hb-gutter-xl: 5rem;
+  --hb-gutter: clamp(1rem, 5vw, 5rem);
+
+  --hb-section-y: 6rem;
+  --hb-section-y-tight: 4rem;
+  --hb-header-y: 2.5rem;
+  --hb-header-mb: 5rem;
+
+  --hb-space-wispy: 1.5rem;
+  --hb-space-airy: 2.5rem;
+
+  --hb-grid-gap: 1.5rem;
+  --hb-grid-gap-airy: 2rem;
+  --hb-grid-gap-archive: 2.5rem;
+  --hb-max-width: 80rem;
+  --hb-max-width-prose: 36rem;
+
+  --hb-radius-none: 0;
+  --hb-radius-hairline: 2px;
+  --hb-radius-sm: 0.125rem;
+  --hb-radius-pill: 9999px;
+
+  --hb-touch-min: 44px;
+
+  /* ── motion ── */
+  --hb-ease-expo-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --hb-ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --hb-dur-fast: 200ms;
+  --hb-dur-base: 300ms;
+  --hb-dur-slow: 500ms;
+  --hb-dur-roll: 600ms;
+  --hb-dur-image: 700ms;
+  --hb-dur-video: 2000ms;
+
+  --hb-video-clip-min: 8000ms;
+  --hb-video-crossfade: 2000ms;
+
+  --hb-scroll-lerp: 0.085;
+  --hb-scroll-overshoot: 1.03;
+  --hb-scroll-settle: 700ms;
+  --hb-ease-soft-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --hb-ease-soft-bounce: cubic-bezier(0.34, 1.4, 0.64, 1);
+
+  /* ── effects ── */
+  --hb-shadow-wispy: 0 8px 24px rgba(26, 26, 26, 0.08);
+  --hb-shadow-sketch: 0 4px 12px rgba(26, 26, 26, 0.06);
+  --hb-shadow-inner-paper: inset 0 0 20px rgba(26, 26, 26, 0.02);
+  --hb-shadow-drawer: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+
+  --hb-stroke-delicate: 0.25;
+  --hb-stroke-wispy: 0.35;
+  --hb-stroke-bold: 0.5;
+  --hb-stroke-width-delicate: 0.6px;
+  --hb-stroke-width-wispy: 1px;
+  --hb-stroke-width-bold: 1.5px;
+
+  --hb-blur-panel: 12px;
+  --hb-blur-wisp: 0.3px;
+
+  --hb-scrim-header: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), transparent);
+  --hb-scrim-card: linear-gradient(to top, rgba(14, 12, 11, 0.65) 0%, transparent 55%);
+  --hb-rule-fade: linear-gradient(to right, transparent, var(--hb-border), transparent);
+  --hb-rule-fade-dark: linear-gradient(to right, transparent, var(--hb-dark-border), transparent);
+
+  --hb-grain-url: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+  --hb-paper-noise-url: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)'/%3E%3C/svg%3E");
+  --hb-ink-grid: linear-gradient(rgba(26, 26, 26, 0.015) 0.5px, transparent 0.5px),
+                 linear-gradient(90deg, rgba(26, 26, 26, 0.015) 0.5px, transparent 0.5px);
+
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -61,6 +207,31 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* ── Keyframes shipped with the design system (design/tokens/motion.css) ──
+   Utility classes below (.page-transition, .split-char, .footer-kanji__char,
+   .hanabi-draw, .loader) reference these by name. */
+@keyframes hb-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes hb-split-char-in {
+  from { opacity: 0; transform: translateY(0.35em) rotate(1.5deg); }
+  to   { opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes hb-kanji-reveal {
+  from { clip-path: inset(0 0 100% 0); opacity: 0; }
+  to   { clip-path: inset(0 0 0% 0); opacity: 1; }
+}
+
+@keyframes hb-hanabi-draw {
+  from { stroke-dashoffset: 2400; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes hb-spin { to { transform: rotate(360deg); } }
+
 @theme inline {
   --color-paper: var(--hb-paper);
   --color-ink: var(--hb-ink);
@@ -69,7 +240,7 @@
   --color-border: var(--hb-border);
   --font-serif: var(--font-hanabi-serif);
   --font-sans: var(--font-hanabi-sans);
-  --font-script: var(--font-hanabi-script);
+  --font-script: var(--font-hanabi-serif);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -109,11 +280,13 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
-/* Handwritten typography utility classes */
+/* Handwritten typography utility class — Kalam was cut; this now resolves to
+   Spectral italic, same as --hb-font-script (see design/tokens/APPLY.md). */
 .font-script {
-  font-family: var(--font-hanabi-script), cursive;
+  font-family: var(--font-hanabi-serif), Georgia, serif;
+  font-style: italic;
   font-weight: 300;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--hb-script-tracking, 0.05em);
 }
 
 /* Wispy, airy spacing utilities */
@@ -190,18 +363,7 @@ img {
 
 /* Page transition fade - like turning a page */
 .page-transition {
-  animation: fadeIn 0.6s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  animation: hb-fade-in 0.6s ease-out;
 }
 
 /* Editorial spacing utilities */
@@ -381,11 +543,7 @@ img {
   border: 2px solid rgba(250, 248, 244, 0.15);
   border-top-color: rgba(250, 248, 244, 0.6);
   border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
+  animation: hb-spin 0.7s linear infinite;
 }
 
 /* Grain texture overlay for dark surfaces */
@@ -396,44 +554,57 @@ img {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+  background-image: var(--hb-grain-url);
   pointer-events: none;
   z-index: 0;
 }
 
-/* Loading screen — 花火 kanji stroke draw-in */
-@keyframes hanabi-draw {
-  from {
-    stroke-dashoffset: 2400;
+/* New components use .hb-grain (design/tokens/effects.css); identical to
+   .grain above, kept as a separate class name to match the design spec. */
+.hb-grain {
+  position: relative;
+}
+.hb-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--hb-grain-url);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ConstructionSection body grid — index left, stage right on wide viewports,
+   stacked on narrow. A real breakpoint (not a style token), kept as a class
+   per design/components/construction-gallery.md. */
+.hb-construction {
+  grid-template-columns: 1fr 0.9fr;
+}
+.hb-construction-stage {
+  position: sticky;
+  top: 5rem;
+}
+@media (max-width: 900px) {
+  .hb-construction {
+    grid-template-columns: 1fr;
   }
-  to {
-    stroke-dashoffset: 0;
+  .hb-construction-stage {
+    position: static;
   }
 }
 
+/* Loading screen — 花火 kanji stroke draw-in */
 /* stroke-dasharray value is empirical: covers full path length of 花火 at 96px serif */
 .hanabi-draw {
   stroke-dasharray: 2400;
   stroke-dashoffset: 2400;
-  animation: hanabi-draw 1.8s ease-out forwards;
+  animation: hb-hanabi-draw 1.8s ease-out forwards;
 }
 
 /* ── SplitText character entrance animation ── */
-@keyframes split-char-in {
-  from {
-    opacity: 0;
-    transform: translateY(0.35em) rotate(1.5deg);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) rotate(0deg);
-  }
-}
-
 .split-char {
   display: inline-block;
   opacity: 0;
-  animation: split-char-in 0.55s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  animation: hb-split-char-in 0.55s var(--hb-ease-expo-out) forwards;
   animation-play-state: paused;
 }
 
@@ -463,63 +634,11 @@ img {
   transition: color 0.25s ease;
 }
 
-/* ── CulturalExplainer slide-in panel ── */
-.cultural-explainer__panel {
-  display: inline-flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.75rem 1.25rem;
-  border: 1px solid var(--hb-dark-border);
-  background: rgba(14, 12, 11, 0.88);
-  backdrop-filter: blur(12px);
-  transform: translateX(-1.5rem);
-  opacity: 0;
-  transition: transform 0.55s cubic-bezier(0.23, 1, 0.32, 1),
-              opacity 0.45s ease;
-}
-
-.cultural-explainer--visible .cultural-explainer__panel {
-  transform: translateX(0);
-  opacity: 1;
-}
-
-.cultural-explainer__kanji {
-  font-size: 2.25rem;
-  color: var(--hb-sienna);
-  line-height: 1;
-  flex-shrink: 0;
-}
-
-.cultural-explainer__reading {
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.45em;
-  color: var(--hb-sienna);
-  margin-bottom: 0.3rem;
-}
-
-.cultural-explainer__meaning {
-  font-size: 0.8rem;
-  color: var(--hb-dark-muted);
-  line-height: 1.4;
-}
-
 /* ── Footer oversized kanji reveal ── */
-@keyframes kanji-reveal {
-  from {
-    clip-path: inset(0 0 100% 0);
-    opacity: 0;
-  }
-  to {
-    clip-path: inset(0 0 0% 0);
-    opacity: 1;
-  }
-}
-
 .footer-kanji__char {
   display: inline-block;
   opacity: 0;
-  animation: kanji-reveal 0.9s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+  animation: hb-kanji-reveal 0.9s var(--hb-ease-expo-out) forwards;
   animation-play-state: paused;
 }
 

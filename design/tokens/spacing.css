@@ -1,0 +1,35 @@
+:root {
+  /* ── Editorial page gutters ──
+     Source uses px-4 sm:px-8 md:px-12 lg:px-20 on every top-level section. */
+  --hb-gutter-sm: 1rem;
+  --hb-gutter-md: 2rem;
+  --hb-gutter-lg: 3rem;
+  --hb-gutter-xl: 5rem;
+  --hb-gutter: clamp(1rem, 5vw, 5rem);
+
+  /* ── Vertical rhythm ── */
+  --hb-section-y: 6rem;        /* py-24 — PageShell */
+  --hb-section-y-tight: 4rem;  /* py-16 */
+  --hb-header-y: 2.5rem;       /* py-10 — SiteHeader */
+  --hb-header-mb: 5rem;        /* mb-20 — PageShell header */
+
+  /* ── Airy stacks (globals.css utilities) ── */
+  --hb-space-wispy: 1.5rem;
+  --hb-space-airy: 2.5rem;
+
+  /* ── Grids ── */
+  --hb-grid-gap: 1.5rem;         /* gap-6 — product grid */
+  --hb-grid-gap-airy: 2rem;      /* gap-8 — project grid */
+  --hb-grid-gap-archive: 2.5rem; /* gap-10 — archive SketchFrames */
+  --hb-max-width: 80rem;         /* max-w-7xl */
+  --hb-max-width-prose: 36rem;   /* max-w-xl — About body */
+
+  /* ── Radii — the system is essentially square ── */
+  --hb-radius-none: 0;
+  --hb-radius-hairline: 2px;  /* .sketch-border */
+  --hb-radius-sm: 0.125rem;   /* Badge */
+  --hb-radius-pill: 9999px;   /* Tag */
+
+  /* ── Minimum hit target (enforced in CartDrawer) ── */
+  --hb-touch-min: 44px;
+}
