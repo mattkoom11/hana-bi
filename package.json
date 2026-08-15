@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "manifest:videos": "node scripts/generate-video-manifest.mjs",
+    "predev": "node scripts/generate-video-manifest.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/generate-video-manifest.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

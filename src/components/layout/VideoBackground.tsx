@@ -1,32 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-const CLIPS = [
-  "/videos/clip-01.mp4",
-  "/videos/clip-02.mp4",
-  "/videos/clip-03.mp4",
-  "/videos/clip-04.mp4",
-  "/videos/clip-05.mp4",
-  "/videos/clip-06.mp4",
-  "/videos/clip-07.mp4",
-  "/videos/clip-08.mp4",
-  "/videos/clip-09.mp4",
-  "/videos/clip-10.mp4",
-  "/videos/clip-11.mp4",
-  "/videos/clip-12.mp4",
-  "/videos/clip-13.mp4",
-  "/videos/clip-14.mp4",
-  "/videos/clip-15.mp4",
-  "/videos/clip-16.mp4",
-  "/videos/clip-17.mp4",
-  "/videos/clip-18.mp4",
-  "/videos/clip-19.mp4",
-  "/videos/clip-20.mp4",
-  "/videos/clip-21.mp4",
-  "/videos/clip-22.mp4",
-  "/videos/clip-23.mp4",
-];
+import { VIDEO_CLIPS as CLIPS } from "@/lib/video-clips";
 
 const TRANSITION_MS = 2000;
 const MIN_DISPLAY_MS = 8000; // each clip stays on screen at least 8s, looping if needed
