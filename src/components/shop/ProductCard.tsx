@@ -24,7 +24,11 @@ interface ProductCardProps {
 export function ProductCard({ product, variant = "dark", catalogIndex }: ProductCardProps) {
   const [broken, setBroken] = useState(false);
   const isDark = variant === "dark";
-  const isAvailable = product.status === "available";
+  const fullySoldOut =
+    product.status === "available" &&
+    product.sizes.length > 0 &&
+    product.sizes.every((s) => product.soldSizes?.includes(s) ?? false);
+  const isAvailable = product.status === "available" && !fullySoldOut;
 
   const fg = isDark ? "var(--hb-on-dark)" : "var(--hb-ink)";
   const dim = isDark ? "var(--hb-dark-muted)" : "var(--hb-smoke)";
@@ -35,7 +39,11 @@ export function ProductCard({ product, variant = "dark", catalogIndex }: Product
     (catalogIndex !== undefined ? "HB-" + String(catalogIndex + 1).padStart(3, "0") : null);
 
   const statusLabel =
-    product.status === "sold_out" ? "Sold Out" : product.status === "archived" ? "Archived" : "Available";
+    product.status === "sold_out" || fullySoldOut
+      ? "Sold Out"
+      : product.status === "archived"
+        ? "Archived"
+        : "Available";
 
   return (
     <Link

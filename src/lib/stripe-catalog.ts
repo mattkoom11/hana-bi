@@ -19,6 +19,13 @@ function metaStatus(value: string | undefined): ProductStatus {
   return 'available';
 }
 
+/**
+ * Slugs that must never be purchasable, enforced in code regardless of Stripe
+ * metadata. These garments stay visible in Shop but every size is forced sold
+ * out so the buy button is permanently disabled.
+ */
+const NON_PURCHASABLE_SLUGS = new Set(['layered-denim']);
+
 function mapStripeProduct(
   product: Stripe.Product,
   price: Stripe.Price
@@ -30,9 +37,15 @@ function mapStripeProduct(
   const localImages = m.images ? m.images.split(',').map((s) => s.trim()).filter(Boolean) : [];
   const allImages = localImages.length > 0 ? localImages : product.images;
 
+  const slug = m.slug ?? product.id;
+  const metaSoldSizes = m.sold_sizes ? m.sold_sizes.split(',').map((s) => s.trim()).filter(Boolean) : [];
+  // Force every size sold out for non-purchasable garments so they remain
+  // visible in Shop but can never be added to cart. See NON_PURCHASABLE_SLUGS.
+  const soldSizes = NON_PURCHASABLE_SLUGS.has(slug) ? [...sizes] : metaSoldSizes;
+
   return {
     id: product.id,
-    slug: m.slug ?? product.id,
+    slug,
     name: product.name,
     price: price.unit_amount ? price.unit_amount / 100 : 0,
     stripePriceId: price.id,
@@ -49,7 +62,7 @@ function mapStripeProduct(
     year: isNaN(year) ? new Date().getFullYear() : year,
     notes: m.notes ?? '',
     featured: m.featured === 'true',
-    soldSizes: m.sold_sizes ? m.sold_sizes.split(',').map((s) => s.trim()).filter(Boolean) : [],
+    soldSizes,
     // Both optional and metadata-driven — never fabricated. A garment without
     // catalog_number metadata falls back to position-derived numbering in the
     // UI; a garment without marker metadata simply has no construction gallery.

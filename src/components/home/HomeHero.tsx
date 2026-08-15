@@ -28,7 +28,7 @@ export function HomeHero() {
         aria-hidden="true"
         style={{
           position: "absolute",
-          bottom: "-0.12em",
+          bottom: 0,
           right: "-0.02em",
           userSelect: "none",
           pointerEvents: "none",

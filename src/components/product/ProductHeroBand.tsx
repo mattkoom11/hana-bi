@@ -51,8 +51,17 @@ export function ProductHeroBand({ product, catalogNumber }: ProductHeroBandProps
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [size, setSize] = useState<string | null>(null);
 
+  const fullySoldOut =
+    product.status === "available" &&
+    product.sizes.length > 0 &&
+    product.sizes.every((s) => product.soldSizes?.includes(s) ?? false);
+
   const statusLabel =
-    product.status === "available" ? "Available" : product.status === "sold_out" ? "Sold Out" : "Archived";
+    product.status === "sold_out" || fullySoldOut
+      ? "Sold Out"
+      : product.status === "available"
+        ? "Available"
+        : "Archived";
 
   return (
     <section

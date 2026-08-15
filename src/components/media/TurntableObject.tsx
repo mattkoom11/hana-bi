@@ -110,6 +110,23 @@ export function TurntableObject({
           bevelSegments: 2,
           curveSegments: 24,
         });
+
+        // Fit-to-frame: pieces vary widely in aspect ratio (0.31–3.15), and a
+        // fixed scale clips the wide ones against the canvas edge — the group
+        // only rotates around Y, so a piece's on-screen width never exceeds
+        // its face-on (unrotated) width. Sizing every piece off its own
+        // bounding box, against the camera's actual frustum at the origin,
+        // guarantees every piece — long or narrow — stays fully on-canvas.
+        geometry.computeBoundingBox();
+        const bbox = geometry.boundingBox!;
+        const rawWidth = bbox.max.x - bbox.min.x;
+        const rawHeight = bbox.max.y - bbox.min.y;
+        const cameraDistance = camera.position.length();
+        const frustumHalfExtent =
+          cameraDistance * Math.tan((camera.fov / 2) * (Math.PI / 180));
+        const targetHalfExtent = frustumHalfExtent * 0.72; // margin so nothing touches the edge
+        const fitScale = targetHalfExtent / (Math.max(rawWidth, rawHeight) / 2);
+
         geometry.center();
 
         const material = new THREE.MeshStandardMaterial({
@@ -121,7 +138,7 @@ export function TurntableObject({
 
         mesh = new THREE.Mesh(geometry, material);
         mesh.rotation.x = -Math.PI / 2.6;
-        mesh.scale.setScalar(1.5);
+        mesh.scale.setScalar(fitScale);
         group.add(mesh);
       })
       .catch(() => {});

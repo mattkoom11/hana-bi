@@ -19,12 +19,19 @@ export function AddToCartButton({
   compact,
 }: AddToCartButtonProps) {
   const addItem = useCartStore((state) => state.addItem);
-  const disabled = useMemo(
+  const soldOut = useMemo(
     () =>
       product.status !== "available" ||
+      (product.sizes.length > 0 &&
+        product.sizes.every((s) => product.soldSizes?.includes(s) ?? false)),
+    [product.status, product.sizes, product.soldSizes]
+  );
+  const disabled = useMemo(
+    () =>
+      soldOut ||
       !selectedSize ||
       (product.soldSizes?.includes(selectedSize) ?? false),
-    [product.status, selectedSize, product.soldSizes]
+    [soldOut, selectedSize, product.soldSizes]
   );
 
   return (
@@ -65,7 +72,7 @@ export function AddToCartButton({
           : "bg-[var(--hb-ink)] text-[var(--hb-paper)]"
       )}
     >
-      {disabled ? "Select Size" : compact ? "Add" : `Add to Cart — ${formatCurrency(product.price)}`}
+      {soldOut ? "Sold Out" : disabled ? "Select Size" : compact ? "Add" : `Add to Cart — ${formatCurrency(product.price)}`}
     </button>
   );
 }

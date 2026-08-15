@@ -32,7 +32,16 @@
       "Read(//tmp/**)",
       "Bash(sed 's/localhost:3000/localhost:3001/; s#\\\\.scratch/#.scratch/prodfix_#' .scratch/check_404_button.py)",
       "Bash(python .scratch/check_404_button_prod.py)",
-      "Bash(powershell -NoProfile -Command 'Get-NetTCPConnection -LocalPort 3001 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }; Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }')"
+      "Bash(powershell -NoProfile -Command 'Get-NetTCPConnection -LocalPort 3001 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }; Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }')",
+      "Bash(curl -sf http://localhost:3000)",
+      "Bash(curl -sf --max-time 5 http://localhost:3000 -o /tmp/out.html -w \"%{http_code}\\\\n\")",
+      "Bash(curl -sf --max-time 5 http://127.0.0.1:3000 -o /tmp/out.html -w \"%{http_code}\\\\n\")",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:3000\" -UseBasicParsing -TimeoutSec 5; Write-Output $r.StatusCode } catch { Write-Output \"ERR: $_\" })",
+      "PowerShell(Stop-Process -Id 25408 -Force -ErrorAction SilentlyContinue)",
+      "Bash(python .scratch/debug_kanji.py)",
+      "Bash(powershell -NoProfile -Command 'Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }')",
+      "Bash(python .scratch/debug_hero_prod.py)",
+      "Bash(python .scratch/debug_canvas3.py)"
     ]
   }
 }
