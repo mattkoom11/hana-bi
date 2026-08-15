@@ -73,10 +73,19 @@ export function CatalogueIndex({
             overflow: "hidden",
             zIndex: 0,
             pointerEvents: "none",
-            opacity: previewVisible ? 1 : 0,
-            transform: previewVisible ? "translateY(0)" : "translateY(12px)",
+            willChange: "opacity, transform",
+            // Feather the plate into the background so it reads as ambient
+            // imagery behind the type rather than a hard-edged photograph.
+            WebkitMaskImage:
+              "radial-gradient(125% 115% at 78% 28%, #000 42%, transparent 100%)",
+            maskImage:
+              "radial-gradient(125% 115% at 78% 28%, #000 42%, transparent 100%)",
+            opacity: previewVisible ? 0.62 : 0,
+            transform: previewVisible
+              ? "translateY(0) scale(1)"
+              : "translateY(10px) scale(1.03)",
             transition:
-              "opacity 500ms var(--hb-ease-expo-out), transform 600ms var(--hb-ease-expo-out)",
+              "opacity 650ms var(--hb-ease-expo-out), transform 700ms var(--hb-ease-expo-out)",
           }}
         >
           {activeItem?.image && (
