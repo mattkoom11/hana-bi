@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { RESEND_API_KEY, WAITLIST_NOTIFY_EMAIL } from '@/lib/env';
+import { escapeHtml } from '@/lib/escape-html';
+import { getClientIp, isRateLimited } from '@/lib/rate-limit';
 
 let _resend: Resend | null = null;
 function getResend(): Resend {
@@ -13,6 +15,10 @@ function getResend(): Resend {
 export async function POST(request: NextRequest) {
   if (!RESEND_API_KEY) {
     return NextResponse.json({ error: 'Email service not configured' }, { status: 500 });
+  }
+
+  if (isRateLimited(`contact:${getClientIp(request)}`, 5, 60 * 60 * 1000)) {
+    return NextResponse.json({ error: 'Too many messages. Please try again later.' }, { status: 429 });
   }
 
   let body: { name: string; email: string; message: string };
@@ -37,19 +43,16 @@ export async function POST(request: NextRequest) {
   const resend = getResend();
   const notifyTo = WAITLIST_NOTIFY_EMAIL ?? 'hello@hanabiny.com';
 
-  const esc = (s: string) =>
-    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-
   await resend.emails.send({
     from: 'Hana-Bi <hello@hanabiny.com>',
     to: notifyTo,
     replyTo: email,
     subject: `Message from ${name}`,
     html: `
-      <p><strong>Name:</strong> ${esc(name)}</p>
-      <p><strong>Email:</strong> ${esc(email)}</p>
+      <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+      <p><strong>Email:</strong> ${escapeHtml(email)}</p>
       <p><strong>Message:</strong></p>
-      <p>${esc(message).replace(/\n/g, '<br>')}</p>
+      <p>${escapeHtml(message).replace(/\n/g, '<br>')}</p>
     `,
   });
 

@@ -13,6 +13,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export interface CatalogueIndexItem {
   id?: string;
@@ -89,11 +90,12 @@ export function CatalogueIndex({
           }}
         >
           {activeItem?.image && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={activeItem.image}
               alt=""
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              fill
+              sizes="352px"
+              style={{ objectFit: "cover" }}
             />
           )}
         </div>

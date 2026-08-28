@@ -57,7 +57,7 @@ function LockedPageInner() {
         {/* Email signup */}
         <div className="space-y-4">
           <p className="uppercase text-xs tracking-[0.4em]"
-            style={{ fontFamily: 'var(--hb-font-mono)', color: 'rgba(250,248,244,0.45)' }}>
+            style={{ fontFamily: 'var(--hb-font-mono)', color: 'var(--hb-dark-muted)' }}>
             Get notified at launch
           </p>
           <EmailCaptureForm />
@@ -66,7 +66,7 @@ function LockedPageInner() {
         {/* Divider */}
         <div className="flex items-center gap-4">
           <div className="flex-1 border-t" style={{ borderColor: 'rgba(250,248,244,0.1)' }} />
-          <span className="text-xs font-script" style={{ color: 'rgba(250,248,244,0.3)' }}>
+          <span className="text-xs font-script" style={{ color: 'var(--hb-dark-muted)' }}>
             or
           </span>
           <div className="flex-1 border-t" style={{ borderColor: 'rgba(250,248,244,0.1)' }} />

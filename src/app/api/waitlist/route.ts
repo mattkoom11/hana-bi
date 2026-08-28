@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { RESEND_API_KEY, RESEND_AUDIENCE_ID, WAITLIST_NOTIFY_EMAIL } from '@/lib/env';
+import { escapeHtml } from '@/lib/escape-html';
+import { getClientIp, isRateLimited } from '@/lib/rate-limit';
 
 let _resend: Resend | null = null;
 function getResend(): Resend {
@@ -13,6 +15,10 @@ function getResend(): Resend {
 export async function POST(request: NextRequest) {
   if (!RESEND_API_KEY) {
     return NextResponse.json({ error: 'Email service not configured' }, { status: 500 });
+  }
+
+  if (isRateLimited(`waitlist:${getClientIp(request)}`, 5, 60 * 60 * 1000)) {
+    return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 });
   }
 
   let body: { name?: string; email: string };
@@ -28,7 +34,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Valid email is required' }, { status: 400 });
   }
 
-  const displayName = name?.trim() || email;
+  const displayName = escapeHtml(name?.trim() || email);
+  const safeEmail = escapeHtml(email);
 
   const resend = getResend();
 
@@ -54,7 +61,7 @@ export async function POST(request: NextRequest) {
       from: 'Hana-Bi Waitlist <hello@hanabiny.com>',
       to: WAITLIST_NOTIFY_EMAIL,
       subject: `New waitlist signup: ${email}`,
-      html: `<p><strong>${displayName}</strong> (${email}) joined the Layered Denim waitlist.</p>`,
+      html: `<p><strong>${displayName}</strong> (${safeEmail}) joined the Layered Denim waitlist.</p>`,
     });
   }
 

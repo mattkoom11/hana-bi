@@ -142,7 +142,7 @@ export default function CartPage() {
 
                     <div style={{ aspectRatio: "4 / 5", overflow: "hidden", background: "var(--hb-dark-surface)" }}>
                       {item.image && (
-                        <Image src={item.image} alt="" width={200} height={250} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <Image src={item.image} alt={`${item.name} — Size ${item.size}`} width={200} height={250} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       )}
                     </div>
 

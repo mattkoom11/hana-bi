@@ -49,7 +49,7 @@ export function ShopWaitlistForm({ compact, dark }: ShopWaitlistFormProps) {
   const inputClass = cn(
     "w-full px-0 py-2 bg-transparent border-0 border-b focus:outline-none disabled:opacity-50 transition-colors font-serif text-sm",
     dark
-      ? "border-[rgba(250,248,244,0.25)] focus:border-[rgba(250,248,244,0.7)] text-[#faf8f4] placeholder:text-[rgba(250,248,244,0.35)]"
+      ? "border-[rgba(250,248,244,0.25)] focus:border-[rgba(250,248,244,0.7)] text-[#faf8f4] placeholder:text-[var(--hb-dark-muted)]"
       : "border-[var(--hb-border)] focus:border-[var(--hb-ink)] placeholder:text-[var(--hb-smoke)]/50"
   );
 
@@ -101,7 +101,7 @@ export function ShopWaitlistForm({ compact, dark }: ShopWaitlistFormProps) {
       </button>
       <p className={cn(
         "text-xs text-center mt-3",
-        dark ? "text-[rgba(250,248,244,0.4)]" : "text-[var(--hb-smoke)] opacity-60"
+        dark ? "text-[var(--hb-dark-muted)]" : "text-[var(--hb-smoke)] opacity-60"
       )} style={{ fontFamily: "var(--hb-font-mono)" }}>
         Already signed up? You&apos;re on the list — no need to re-enter.
       </p>

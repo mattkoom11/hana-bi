@@ -14,16 +14,24 @@ export async function startCheckoutSession(
     return { ok: false, message: "Your cart is empty." };
   }
 
+  // Price always comes from Stripe's own catalog, never from local cart state
+  // (which lives in localStorage and is trivially editable) — an item missing
+  // its Stripe price can't be checked out at all rather than falling back to
+  // a client-supplied amount.
+  const unavailable = items.find((item) => !item.stripePriceId);
+  if (unavailable) {
+    return {
+      ok: false,
+      message: `"${unavailable.name}" isn't available for checkout right now. Remove it from your cart and try again.`,
+    };
+  }
+
   try {
     const response = await fetch("/api/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        items: items.map((item) =>
-          item.stripePriceId
-            ? { priceId: item.stripePriceId, quantity: item.quantity }
-            : { name: `${item.name} — Size ${item.size}`, price: Math.round(item.price * 100), quantity: item.quantity }
-        ),
+        items: items.map((item) => ({ priceId: item.stripePriceId, quantity: item.quantity })),
         cancelUrl: `${window.location.origin}/cart`,
       }),
     });

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-const COOKIE = 'hb-access';
+import { SITE_PASSWORD } from '@/lib/env';
+import { deriveAccessToken, SITE_LOCK_COOKIE } from '@/lib/site-lock';
 
 // Paths that bypass the lock
 const PUBLIC_PATHS = [
@@ -13,8 +13,8 @@ const PUBLIC_PATHS = [
   '/sitemap.xml',
 ];
 
-export function proxy(request: NextRequest) {
-  const password = process.env.SITE_PASSWORD;
+export async function proxy(request: NextRequest) {
+  const password = SITE_PASSWORD;
 
   // No password set — site is open
   if (!password) return NextResponse.next();
@@ -27,8 +27,8 @@ export function proxy(request: NextRequest) {
   }
 
   // Allow through if valid access cookie is present
-  const cookie = request.cookies.get(COOKIE);
-  if (cookie?.value === password) return NextResponse.next();
+  const cookie = request.cookies.get(SITE_LOCK_COOKIE);
+  if (cookie?.value === (await deriveAccessToken(password))) return NextResponse.next();
 
   // Otherwise redirect to locked page
   const url = request.nextUrl.clone();

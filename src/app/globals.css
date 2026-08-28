@@ -145,7 +145,6 @@
   --hb-scroll-overshoot: 1.03;
   --hb-scroll-settle: 700ms;
   --hb-ease-soft-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --hb-ease-soft-bounce: cubic-bezier(0.34, 1.4, 0.64, 1);
 
   /* ── effects ── */
   --hb-shadow-wispy: 0 8px 24px rgba(26, 26, 26, 0.08);
@@ -439,6 +438,14 @@ img {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* ── Global keyboard focus ring — hairline sienna outline.
+   Baseline behind component-specific treatments like .fill-link's, so
+   nothing silently falls back to the browser default outline. ── */
+:focus-visible {
+  outline: 2px solid var(--hb-sienna);
+  outline-offset: 2px;
 }
 
 /* Respect reduced motion preference */

@@ -2,6 +2,7 @@ import { VhFix } from "@/components/common/VhFix";
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { Spectral, Inter, DM_Mono } from "next/font/google";
+import { NEXT_PUBLIC_SITE_URL } from "@/lib/env";
 import "./globals.css";
 
 // Editorial serif for headers - Spectral (magazine-style, elegant)
@@ -30,6 +31,7 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: "Hana-Bi — Archival Denim",
   description:
     "Hana-Bi is a sustainable denim house documenting each garment like an artifact.",
