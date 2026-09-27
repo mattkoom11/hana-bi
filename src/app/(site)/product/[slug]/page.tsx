@@ -62,7 +62,9 @@ async function getRelatedProducts(currentSlug: string): Promise<Product[]> {
 // for a product without one; see design/ASSETS.md.
 async function getMarker(markerUrl: string): Promise<MarkerData | null> {
   try {
-    const filePath = path.join(process.cwd(), "public", markerUrl.replace(/^\//, ""));
+    // Markers always live in public/patterns/. A literal directory here keeps
+    // Next's file tracer from bundling all of public/ into this function.
+    const filePath = path.join(process.cwd(), "public", "patterns", path.basename(markerUrl));
     const raw = await fs.readFile(filePath, "utf-8");
     return JSON.parse(raw) as MarkerData;
   } catch {
