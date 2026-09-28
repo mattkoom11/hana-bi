@@ -11,8 +11,12 @@ const isDev = process.env.NODE_ENV !== "production";
 
 const csp = [
   "default-src 'self'",
-  // Next.js dev (Fast Refresh) needs 'unsafe-eval'; production does not.
-  `script-src 'self'${isDev ? " 'unsafe-eval'" : ""}`,
+  // The App Router hydrates from inline <script> tags (self.__next_f.push),
+  // so 'unsafe-inline' is required — without it React never hydrates and no
+  // client component runs. A nonce would avoid it, but nonces force every
+  // page to render dynamically, giving up the static/SSG routes.
+  // Next.js dev (Fast Refresh) also needs 'unsafe-eval'; production does not.
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   // Framer Motion and this codebase's own inline `style={{}}` usage rely on
   // inline styles — a nonce-based style-src would require plumbing a nonce
   // through every component, which is out of scope here.
