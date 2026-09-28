@@ -47,11 +47,8 @@ function generateDividerPath(
   for (let i = 1; i < points.length; i++) {
     const prev = points[i - 1];
     const curr = points[i];
-    const next = points[i + 1] || curr;
     const cp1x = prev[0] + (curr[0] - prev[0]) * 0.4;
     const cp1y = prev[1];
-    const cp2x = curr[0] - (next[0] - curr[0]) * 0.2;
-    const cp2y = curr[1];
     if (i === 1) {
       path += ` Q ${cp1x},${cp1y} ${curr[0]},${curr[1]}`;
     } else {

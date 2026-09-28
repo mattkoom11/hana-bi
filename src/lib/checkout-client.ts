@@ -31,7 +31,7 @@ export async function startCheckoutSession(
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        items: items.map((item) => ({ priceId: item.stripePriceId, quantity: item.quantity })),
+        items: items.map((item) => ({ priceId: item.stripePriceId, size: item.size, quantity: item.quantity })),
         cancelUrl: `${window.location.origin}/cart`,
       }),
     });
@@ -56,12 +56,6 @@ export async function startCheckoutSession(
     return { ok: true };
   } catch (error) {
     console.error("Checkout error:", error);
-    return {
-      ok: false,
-      message:
-        error instanceof Error
-          ? error.message
-          : "Failed to start checkout. Please try again.",
-    };
+    return { ok: false, message: "Failed to start checkout. Please try again." };
   }
 }

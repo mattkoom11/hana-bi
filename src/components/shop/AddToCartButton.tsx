@@ -64,13 +64,15 @@ export function AddToCartButton({
           },
         });
       }}
+      // The page's one filled element when it can act; a hairline while it
+      // is waiting on a size or sold out.
       className={cn(
-        "w-full border border-[var(--hb-ink)] px-6 py-4 uppercase tracking-[0.35em] text-xs",
-        "transition hover:-translate-y-0.5",
+        "w-full min-h-[44px] border px-6 py-4 uppercase tracking-[0.35em] text-xs transition-colors duration-300",
         disabled
-          ? "bg-[var(--hb-paper-muted)] text-[var(--hb-smoke)] cursor-not-allowed"
-          : "bg-[var(--hb-ink)] text-[var(--hb-paper)]"
+          ? "bg-transparent border-[var(--hb-dark-border)] text-[var(--hb-dark-muted)] cursor-not-allowed"
+          : "bg-[var(--hb-sienna)] border-[var(--hb-sienna)] text-[var(--hb-on-dark)]"
       )}
+      style={{ fontFamily: "var(--hb-font-mono)" }}
     >
       {soldOut ? "Sold Out" : disabled ? "Select Size" : compact ? "Add" : `Add to Cart — ${formatCurrency(product.price)}`}
     </button>

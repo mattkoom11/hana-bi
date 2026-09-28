@@ -23,7 +23,10 @@ export function SizeGuideModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="text-xs uppercase tracking-[0.3em] text-[var(--hb-smoke)] border-b border-[var(--hb-border)]">
+        <button
+          className="min-h-[44px] text-xs uppercase tracking-[0.3em] text-[var(--hb-dark-muted)] hover:text-[var(--hb-on-dark)] underline decoration-[var(--hb-dark-border)] underline-offset-[6px] transition-colors"
+          style={{ fontFamily: "var(--hb-font-mono)" }}
+        >
           Size Guide
         </button>
       </DialogTrigger>

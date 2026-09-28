@@ -6,9 +6,11 @@ import Image from "next/image";
 
 const DRAG_THRESHOLD = 80;
 
+// Square-on: tilted cards peeking out behind the photo read as a rendering
+// glitch, not a stack. The next image is still there to drag into view.
 const STACK = [
-  { rotate: -2.5, y: 10, scale: 0.97, z: 2 },
-  { rotate: 1.8,  y: 20, scale: 0.94, z: 1 },
+  { rotate: 0, y: 0, scale: 1, z: 2 },
+  { rotate: 0, y: 0, scale: 1, z: 1 },
 ];
 
 function TopCard({

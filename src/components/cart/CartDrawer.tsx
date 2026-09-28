@@ -43,9 +43,13 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
+  // Clear a stale checkout error when the drawer closes — adjusted during
+  // render (React's "reset state on prop change" pattern), not in an effect.
+  const [wasOpen, setWasOpen] = useState(open);
+  if (open !== wasOpen) {
+    setWasOpen(open);
     if (!open) setCheckoutError(null);
-  }, [open]);
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -274,9 +278,14 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                 >
                   {isLoading ? "Redirecting…" : "Checkout"}
                 </button>
-                <button type="button" onClick={clearCart} style={{ ...bare, ...meta, width: "100%" }}>
-                  Clear cart
-                </button>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <Link href="/cart" onClick={onClose} style={{ ...meta, textDecoration: "none" }}>
+                    Full cart →
+                  </Link>
+                  <button type="button" onClick={clearCart} style={{ ...bare, ...meta }}>
+                    Clear cart
+                  </button>
+                </div>
               </footer>
             )}
           </motion.section>

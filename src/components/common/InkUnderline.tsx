@@ -51,13 +51,10 @@ function generateUnderlinePath(
   for (let i = 1; i < points.length; i++) {
     const prev = points[i - 1];
     const curr = points[i];
-    const next = points[i + 1] || curr;
 
     // Control points for smooth curve
     const cp1x = prev[0] + (curr[0] - prev[0]) * 0.5;
     const cp1y = prev[1];
-    const cp2x = curr[0] - (next[0] - curr[0]) * 0.3;
-    const cp2y = curr[1];
 
     if (i === 1) {
       path += ` Q ${cp1x},${cp1y} ${curr[0]},${curr[1]}`;

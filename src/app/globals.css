@@ -147,9 +147,6 @@
   --hb-ease-soft-out: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* ── effects ── */
-  --hb-shadow-wispy: 0 8px 24px rgba(26, 26, 26, 0.08);
-  --hb-shadow-sketch: 0 4px 12px rgba(26, 26, 26, 0.06);
-  --hb-shadow-inner-paper: inset 0 0 20px rgba(26, 26, 26, 0.02);
   --hb-shadow-drawer: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
 
   --hb-stroke-delicate: 0.25;
@@ -229,7 +226,6 @@
   to   { stroke-dashoffset: 0; }
 }
 
-@keyframes hb-spin { to { transform: rotate(360deg); } }
 
 @theme inline {
   --color-paper: var(--hb-paper);
@@ -237,6 +233,7 @@
   --color-smoke: var(--hb-smoke);
   --color-sienna: var(--hb-sienna);
   --color-border: var(--hb-border);
+  --font-display: var(--font-hanabi-serif);
   --font-serif: var(--font-hanabi-serif);
   --font-sans: var(--font-hanabi-sans);
   --font-script: var(--font-hanabi-serif);
@@ -350,14 +347,12 @@ img {
 /* Wispy hover effects - like lifting a sketch from paper */
 .hover-wispy {
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.4s ease,
-    box-shadow 0.5s ease;
+    opacity 0.4s ease;
 }
 
 .hover-wispy:hover {
   transform: translateY(-3px) rotate(0.3deg);
   opacity: 0.92;
-  box-shadow: 0 8px 24px rgba(26, 26, 26, 0.08);
 }
 
 /* Page transition fade - like turning a page */
@@ -394,7 +389,6 @@ img {
 
 .btn-sketch:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(26, 26, 26, 0.06);
 }
 
 .dark {
@@ -441,8 +435,8 @@ img {
 }
 
 /* ── Global keyboard focus ring — hairline sienna outline.
-   Baseline behind component-specific treatments like .fill-link's, so
-   nothing silently falls back to the browser default outline. ── */
+   Baseline behind component-specific treatments, so nothing silently
+   falls back to the browser default outline. ── */
 :focus-visible {
   outline: 2px solid var(--hb-sienna);
   outline-offset: 2px;
@@ -527,32 +521,6 @@ img {
   color: var(--hb-accent);
 }
 
-/* Spotlight animation (aceternity/spotlight) */
-@keyframes spotlight {
-  0% {
-    opacity: 0;
-    transform: translate(-72%, -62%) scale(0.5);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(-50%, -40%) scale(1);
-  }
-}
-
-.animate-spotlight {
-  animation: spotlight 2s ease 0.75s 1 forwards;
-}
-
-/* Loader spinner (SplineScene fallback) */
-.loader {
-  width: 24px;
-  height: 24px;
-  border: 2px solid rgba(250, 248, 244, 0.15);
-  border-top-color: rgba(250, 248, 244, 0.6);
-  border-radius: 50%;
-  animation: hb-spin 0.7s linear infinite;
-}
-
 /* Grain texture overlay for dark surfaces */
 .grain {
   position: relative;
@@ -583,8 +551,11 @@ img {
 /* ConstructionSection body grid — index left, stage right on wide viewports,
    stacked on narrow. A real breakpoint (not a style token), kept as a class
    per design/components/construction-gallery.md. */
+/* minmax(0, …): a plain 1fr track won't shrink below its longest mono line,
+   which pushed the page wider than a phone. */
 .hb-construction {
-  grid-template-columns: 1fr 0.9fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  overflow-x: clip;
 }
 .hb-construction-stage {
   position: sticky;
@@ -592,7 +563,7 @@ img {
 }
 @media (max-width: 900px) {
   .hb-construction {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .hb-construction-stage {
     position: static;
@@ -615,32 +586,6 @@ img {
   animation-play-state: paused;
 }
 
-/* ── FillLink hover background fill ── */
-.fill-link {
-  position: relative;
-  overflow: hidden;
-}
-
-.fill-link__bg {
-  position: absolute;
-  inset: 0;
-  background: var(--hb-sienna);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.fill-link:hover .fill-link__bg,
-.fill-link:focus-visible .fill-link__bg {
-  transform: scaleX(1);
-}
-
-.fill-link:hover span:last-child,
-.fill-link:focus-visible span:last-child {
-  color: #faf8f4;
-  transition: color 0.25s ease;
-}
-
 /* ── Footer oversized kanji reveal ── */
 .footer-kanji__char {
   display: inline-block;
@@ -654,5 +599,102 @@ img {
     opacity: 1;
     clip-path: none;
     animation: none;
+  }
+}
+
+/* ── ScrollStage layout ──
+   Without a centre object, a step fills the stage, centred. With one, the
+   object and the copy share the stage instead of overlapping: stacked on
+   phones (object above), side by side from 768px (copy left, object right). */
+.hb-stage-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: clip;
+}
+
+.hb-stage-step {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--hb-gutter);
+  text-align: center;
+}
+
+.hb-stage-step--split {
+  inset: 42% 0 0 0;
+  justify-content: flex-start;
+}
+
+@media (max-width: 767px) {
+  .hb-stage-center {
+    inset: 0 0 58% 0;
+  }
+
+  /* The turntable renders at a fixed pixel size; shrink it to the phone's
+     upper stage rather than letting it widen the page. */
+  .hb-stage-center > * {
+    transform: scale(0.6);
+  }
+}
+
+@media (min-width: 768px) {
+  .hb-stage-center {
+    inset: 0 0 0 50%;
+  }
+
+  .hb-stage-step--split {
+    inset: 0 50% 0 0;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+  }
+}
+
+/* ── Product hero: one column on phones, image + sticky panel from 768px ── */
+.hb-product-hero {
+  display: grid;
+  gap: 3rem;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .hb-product-hero {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+  }
+
+  .hb-product-panel {
+    position: sticky;
+    top: 5rem;
+  }
+}
+
+/* ── CatalogueIndex rows: number · name · metadata columns; on phones the
+   metadata folds under the name instead of pushing past the screen edge. ── */
+.hb-index-row {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr) repeat(var(--hb-index-cols, 2), 9rem);
+  gap: 1.5rem;
+}
+
+.hb-index-meta {
+  text-align: right;
+}
+
+@media (max-width: 767px) {
+  .hb-index-row {
+    grid-template-columns: 3rem minmax(0, 1fr);
+    row-gap: 0.25rem;
+  }
+
+  .hb-index-meta {
+    grid-column: 2;
+    text-align: left;
   }
 }

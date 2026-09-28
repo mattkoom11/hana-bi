@@ -11,6 +11,7 @@ interface ShopContentProps {
 }
 
 const SIZE_ORDER = ["XS", "S", "M", "L", "XL", "One Size"];
+const FILTER_THRESHOLD = 8;
 
 function sortSizes(sizes: string[]): string[] {
   return [...sizes].sort((a, b) => {
@@ -41,14 +42,21 @@ export function ShopContent({ products, variant = "dark" }: ShopContentProps) {
     [products, availability]
   );
 
+  // A handful of garments is read, not filtered: category/size rows only
+  // appear once the scope is big enough that scanning it is real work.
+  const showRefinements = inScope.length > FILTER_THRESHOLD;
+
   const tags = useMemo(
-    () => Array.from(new Set(inScope.flatMap((product) => product.tags))),
-    [inScope]
+    () => (showRefinements ? Array.from(new Set(inScope.flatMap((product) => product.tags))) : []),
+    [inScope, showRefinements]
   );
 
   const sizes = useMemo(
-    () => sortSizes(Array.from(new Set(inScope.flatMap((product) => product.sizes)))),
-    [inScope]
+    () =>
+      showRefinements
+        ? sortSizes(Array.from(new Set(inScope.flatMap((product) => product.sizes))))
+        : [],
+    [inScope, showRefinements]
   );
 
   const filteredProducts = products.filter((product) => {

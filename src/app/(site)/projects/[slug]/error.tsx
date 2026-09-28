@@ -23,7 +23,7 @@ export default function ProjectError({
         >
           Projects
         </p>
-        <h1 className="font-serif text-4xl leading-tight">
+        <h1 className="font-display text-4xl leading-tight">
           Project not found
         </h1>
         <p

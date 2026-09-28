@@ -24,7 +24,9 @@ Hana-Bi is a sustainable denim brand website built with Next.js 15 App Router. I
 - `sold_sizes` = comma-separated sizes that are sold out per product (e.g. `XS,S`)
 
 ### Checkout Flow
-- Client POSTs `{ items: [{ priceId, quantity }] }` to `/api/checkout`
+- Client POSTs `{ items: [{ priceId, size, quantity }] }` to `/api/checkout`
+- Server re-checks every item against the live Stripe catalog (`validateCheckoutItems` in `src/lib/checkout-validation.ts`): unknown prices, non-`available` products, sizes the garment doesn't come in, and `sold_sizes` are rejected. Client-side sold-out checks are UI only.
+- Stripe prices are per garment, not per size, so the size breakdown is written to Checkout Session metadata (`item_01: "HB-002 Midnight Reed Denim · size 30 · qty 1"`) and copied to the PaymentIntent — that is where fulfilment reads sizes
 - Server creates Stripe Checkout Session with `shipping_address_collection`
 - Success page polls `/api/checkout/verify` which calls `stripe.checkout.sessions.retrieve()` directly — no in-memory state
 - Webhook at `/api/webhooks/stripe` sends branded order confirmation email via Resend on `checkout.session.completed`
@@ -35,7 +37,7 @@ Hana-Bi is a sustainable denim brand website built with Next.js 15 App Router. I
 ### Waitlist / Email Capture
 - `/api/waitlist` route handles the Layered Denim email capture form
 - Sends confirmation to subscriber + notification to `WAITLIST_NOTIFY_EMAIL` via Resend
-- `EmailCaptureForm` component in `src/components/layered-denim/`
+- `EmailCaptureForm` component in `src/components/editorial/` (renamed from `layered-denim/` — the folder holds shared editorial pieces, not drop-specific ones)
 
 ## Environment Variables
 
@@ -96,14 +98,17 @@ Home → Shop → Archive → Projects → About
 
 | Component | Purpose |
 |-----------|---------|
-| `src/components/common/TiltCard.tsx` | Mouse-tracking 3D perspective tilt — used on About page chapter cards |
 | `src/components/common/ImageLightbox.tsx` | Full-screen image viewer with keyboard nav (Esc, ←, →) |
 | `src/components/projects/ProjectGallery.tsx` | Client component — hero + thumbnails with lightbox integration |
-| `src/components/about/ChapterCards.tsx` | Origin/Process/Future Drops cards with tilt effect |
 | `src/components/cart/CartDrawer.tsx` | Slide-in cart drawer |
 | `src/components/shop/AddToCartButton.tsx` | Checks `status === 'available'` AND `soldSizes` before allowing add |
 | `src/lib/stripe-catalog.ts` | Fetches + maps Stripe products to `Product` type |
 | `src/lib/env.ts` | Centralised env var exports |
+| `src/lib/checkout-validation.ts` | Server-side cart validation + size metadata for Checkout Sessions |
+
+## Testing
+
+`npm test` runs Vitest (`vitest.config.mts`, `src/**/*.test.ts`). Covered: checkout validation and `mapStripeProduct`. Add tests alongside any change to checkout, pricing or catalog mapping — that code carries money.
 
 ## Deployment Checklist (before going live)
 
@@ -151,13 +156,15 @@ Mono labels are **always** uppercase, and tracking grows as the label shrinks �
 - Dark is the site's default mode: `--hb-dark` #0e0c0b over video, `--hb-dark-surface` #171310 for raised panels.
 - Paper is the second mode: `--hb-paper` #faf8f4, `--hb-paper-muted` #f5f2ed.
 - Two background systems total. Do not add a third.
+- Paper is always opaque — never a translucent sheet over the video. The header always sits over the video and is always light-on-dark, including on paper pages.
+- A page does not switch modes partway down. The product page is dark end to end.
 - `--hb-sienna` #9a7a5a is reserved for catalogue metadata, eyebrows, and the single primary action per view. It is not a general accent — if sienna appears three times on a screen, two of them are wrong.
 - Hairlines only: `--hb-dark-border` is `rgba(250,248,244,0.08)`, `--hb-border` is #d4ccc0. Never a heavier rule.
 - Status is communicated by desaturating the garment image (`filter: grayscale(1)`), not by a coloured badge.
 
 ### Geometry
 
-Square. `border-radius: 0` everywhere except `Badge` (2px) and `Tag` (pill). No rounded cards.
+Square. `border-radius: 0` everywhere. No rounded cards. (`Badge` and `Tag`, the two former exceptions, were removed on 2026-09-27: status is a mono catalogue line — "2026 · Completed", "HB-002 · Sold out" — and tags are one mono line joined with " · ".)
 
 Shadows are essentially absent — only `--hb-shadow-drawer` on the cart drawer's left edge. Do not add elevation to convey hierarchy; use rules and space.
 
@@ -188,10 +195,10 @@ Empty states are a display-italic line, not a boxed panel with an icon: "Nothing
 
 ### Dead components
 
-Cut in this pass — delete once nothing imports them: `KanjiCanvas`, `Tilt3DStage`, `DepthLayer`, `ParallaxLayer`, `CulturalExplainer`, `MorphingKanji`, `TiltCard`, and the Archive `Index`/`Wall` toggle. `RollText` stays (still used by `SiteHeader` nav). `SketchFrame` is no longer used by Archive but survives elsewhere; check imports before deleting.
+Cut in this pass and now deleted: `KanjiCanvas`, `Tilt3DStage`, `DepthLayer`, `ParallaxLayer`, `CulturalExplainer`, `MorphingKanji`, `TiltCard`, `SketchFrame`, and the Archive `Index`/`Wall` toggle. A later sweep (2026-09-27) also removed components nothing imported: `ProductDetailHero`, `ProductPurchasePanel`, `GarmentStage`, `ui/splite` (with the Spline packages), `StickyScrollSection`, `FillLink`, `ShopWaitlistForm`, `BuyButton`, `ModalGallery`, `WearTimeline`, `ui/card`, `ui/sheet`. Do not reintroduce them. `RollText` stays (still used by `SiteHeader` nav).
 
 ### Open question
 
-The hand-drawn SVG ornaments — `InkUnderline`, `HandDrawnDivider`, `HandDrawnBorder`, `ScribbleArrow`, `ScribbleUnderline`, `RoughBorderCard` — still run on paper surfaces and were never subtraction-tested. They are currently kept. If they are ever cut, cut them all at once: a system with one surviving hand-drawn flourish reads as an accident.
+The hand-drawn SVG ornaments that remain — `InkUnderline`, `HandDrawnDivider`, and the frame on the project gallery hero — run only on paper surfaces and were never subtraction-tested. (On 2026-09-27 `HandDrawnBorder` and `ScribbleUnderline` were deleted as unused, and `RoughBorderCard` and `ScribbleArrow` went when the product page became dark end to end — they had been decorating a dark surface and its paper tail, which is not where ornaments belong.) They are currently kept. If they are ever cut, cut them all at once: a system with one surviving hand-drawn flourish reads as an accident.
 
 Full specs, tokens and per-screen implementation notes: `design/`.

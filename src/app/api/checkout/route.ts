@@ -2,11 +2,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { STRIPE_SECRET_KEY, NEXT_PUBLIC_SITE_URL, STRIPE_SHIPPING_RATE_IDS, STRIPE_SHIPPING_COUNTRIES } from '@/lib/env';
-
-export interface CheckoutLineItem {
-  priceId: string;
-  quantity: number;
-}
+import { getStripeCatalog } from '@/lib/stripe-catalog';
+import { validateCheckoutItems, type CheckoutLineItem } from '@/lib/checkout-validation';
+import { getClientIp, isRateLimited } from '@/lib/rate-limit';
 
 export interface CheckoutRequestBody {
   items: CheckoutLineItem[];
@@ -28,6 +26,9 @@ export async function POST(request: NextRequest) {
   if (!NEXT_PUBLIC_SITE_URL) {
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
   }
+  if (isRateLimited(`checkout:${getClientIp(request)}`, 20, 10 * 60 * 1000)) {
+    return NextResponse.json({ error: 'Too many checkout attempts. Try again shortly.' }, { status: 429 });
+  }
 
   let body: CheckoutRequestBody;
   try {
@@ -36,22 +37,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
   }
 
-  if (!body.items || body.items.length === 0) {
-    return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
-  }
-
-  for (const item of body.items) {
-    // Price always comes from Stripe's own catalog — never trust a client-supplied
-    // amount here. See the price_data removal below for why.
-    if (!item.priceId || typeof item.priceId !== 'string' || !item.priceId.startsWith('price_')) {
-      return NextResponse.json({ error: 'Each item needs a valid Stripe price' }, { status: 400 });
-    }
-    if (typeof item.quantity !== 'number' || !Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > 1000) {
-      return NextResponse.json({ error: 'Invalid item quantity' }, { status: 400 });
-    }
-  }
-
   try {
+    // Price, availability and size all come from Stripe's live catalog —
+    // never from the client, whose cart lives in editable localStorage.
+    const validation = validateCheckoutItems(body.items, await getStripeCatalog());
+    if (!validation.ok) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
+    }
+
     const stripe = getStripe();
     const siteUrl = NEXT_PUBLIC_SITE_URL;
 
@@ -63,7 +56,11 @@ export async function POST(request: NextRequest) {
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: body.items.map((item) => ({ price: item.priceId, quantity: item.quantity })),
+      line_items: validation.lineItems,
+      // Sizes live here: shown on the session and the payment in the Stripe
+      // Dashboard, and read back by the webhook for the confirmation email.
+      metadata: validation.metadata,
+      payment_intent_data: { metadata: validation.metadata },
       mode: 'payment',
       shipping_address_collection: {
         allowed_countries: STRIPE_SHIPPING_COUNTRIES.split(',').map((c) => c.trim()) as Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[],
@@ -82,14 +79,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
+    // Stripe's own messages can expose account details; log them, don't return them.
     console.error('Stripe checkout error:', error);
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : 'Failed to create checkout session. Please try again.',
-      },
+      { error: 'Failed to create checkout session. Please try again.' },
       { status: 500 }
     );
   }

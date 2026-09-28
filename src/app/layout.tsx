@@ -47,9 +47,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    // Font variables go on <html>: the design tokens on :root reference them,
+    // and a variable defined on <body> is invisible to :root.
+    <html lang="en" className={`${hanabiSerif.variable} ${hanabiSans.variable} ${dmMono.variable}`}>
       <body
-        className={`${hanabiSerif.variable} ${hanabiSans.variable} ${dmMono.variable} antialiased min-h-screen`}
+        className="antialiased min-h-screen"
       >
         <VhFix />
         <Toaster

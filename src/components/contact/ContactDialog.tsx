@@ -37,12 +37,12 @@ export function ContactDialog({ open, onOpenChange }: ContactDialogProps) {
   };
 
   const inputClass =
-    "w-full px-0 py-2 bg-transparent border-0 border-b border-[var(--hb-border)] focus:outline-none focus:border-[var(--hb-ink)] disabled:opacity-50 transition-colors font-serif text-sm placeholder:text-[var(--hb-smoke)]/50";
+    "w-full px-0 py-2 bg-transparent border-0 border-b border-[var(--hb-border)] focus:outline-none focus:border-[var(--hb-ink)] disabled:opacity-50 transition-colors font-display text-sm placeholder:text-[var(--hb-smoke)]/50";
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="bg-[var(--hb-paper)] border border-dashed border-[var(--hb-border)] rounded-none shadow-none max-w-md p-8">
-        <DialogTitle className="font-serif text-2xl font-normal">
+        <DialogTitle className="font-display text-2xl font-normal">
           Get in touch
         </DialogTitle>
 

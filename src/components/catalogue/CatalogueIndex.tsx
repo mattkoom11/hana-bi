@@ -131,11 +131,12 @@ export function CatalogueIndex({
                   if (onSelect) onSelect(item, i);
                   else if (item.href) router.push(item.href);
                 }}
+                className="hb-index-row"
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: `4rem minmax(0, 1fr) repeat(${columns.length}, 9rem)`,
+                  // Column layout lives in .hb-index-row so phones can fold the
+                  // metadata under the name.
+                  ["--hb-index-cols" as string]: columns.length,
                   alignItems: "baseline",
-                  gap: "1.5rem",
                   padding: "1.5rem 0",
                   paddingLeft: isActive ? "1rem" : 0,
                   opacity: dimmed ? 0.45 : 1,
@@ -173,10 +174,7 @@ export function CatalogueIndex({
                 </span>
 
                 {columns.map((col) => (
-                  <span
-                    key={col}
-                    style={{ ...metaStyle, width: "9rem", textAlign: "right" }}
-                  >
+                  <span key={col} className="hb-index-meta" style={metaStyle}>
                     {String(item[col] ?? "")}
                   </span>
                 ))}

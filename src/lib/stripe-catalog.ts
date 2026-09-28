@@ -26,7 +26,7 @@ function metaStatus(value: string | undefined): ProductStatus {
  */
 const NON_PURCHASABLE_SLUGS = new Set(['layered-denim']);
 
-function mapStripeProduct(
+export function mapStripeProduct(
   product: Stripe.Product,
   price: Stripe.Price
 ): Product & { stripePriceId: string } {

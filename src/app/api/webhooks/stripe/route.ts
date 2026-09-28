@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import { STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, RESEND_API_KEY } from "@/lib/env";
+import { escapeHtml } from "@/lib/escape-html";
+import { orderLinesFromMetadata } from "@/lib/checkout-validation";
 
 function getStripe() {
   const secretKey = STRIPE_SECRET_KEY;
@@ -25,10 +27,14 @@ async function sendOrderConfirmation(session: Stripe.Checkout.Session) {
   const name = session.customer_details?.name;
   if (!email) return;
 
-  const greeting = name ? `Hi ${name},` : "Hi,";
+  // Customer name comes from the Checkout form — escape it like any user input.
+  const greeting = name ? `Hi ${escapeHtml(name)},` : "Hi,";
   const amountFormatted = session.amount_total
     ? `$${(session.amount_total / 100).toFixed(2)}`
     : "—";
+  const orderLines = orderLinesFromMetadata(session.metadata)
+    .map((line) => `<p style="margin: 0 0 4px;">${escapeHtml(line)}</p>`)
+    .join("");
 
   const resend = getResend();
   await resend.emails.send({
@@ -41,11 +47,18 @@ async function sendOrderConfirmation(session: Stripe.Checkout.Session) {
         <h1 style="font-family: serif; font-weight: 300; font-style: italic; font-size: 2rem; margin: 8px 0 24px;">Order Confirmed</h1>
         <p>${greeting}</p>
         <p>Thank you for your order. We've received your payment and will begin processing your garment.</p>
-        <div style="border: 1px dashed #c9c4bb; padding: 16px; margin: 24px 0;">
+        <div style="border: 1px dashed #c9c4bb; padding: 16px; margin: 24px 0;">${
+          orderLines
+            ? `
+          <p style="font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #8b5e3c; margin: 0 0 8px;">Garments</p>
+          ${orderLines}
+          <div style="height: 16px;"></div>`
+            : ""
+        }
           <p style="font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #8b5e3c; margin: 0 0 8px;">Order Total</p>
           <p style="font-size: 1.1rem; margin: 0;">${amountFormatted}</p>
         </div>
-        <p style="font-size: 0.875rem; color: #6b6560;">We'll notify you when your order ships. First drops take 6–8 weeks.</p>
+        <p style="font-size: 0.875rem; color: #6b6560;">We'll notify you when your order ships. Garments are made to order and ship in 3–4 months.</p>
         <p style="font-size: 0.875rem; color: #6b6560;">Questions? Reply to this email or write to <a href="mailto:hello@hanabiny.com" style="color: #8b5e3c;">hello@hanabiny.com</a></p>
         <p style="margin-top: 32px; font-family: serif; font-style: italic; color: #6b6560;">— Hana-Bi Studio</p>
       </div>

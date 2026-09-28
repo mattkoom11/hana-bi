@@ -39,17 +39,21 @@ export function ProductFilters({
   const line = isDark ? "var(--hb-dark-border)" : "var(--hb-border)";
   const on = isDark ? "var(--hb-on-dark)" : "var(--hb-ink)";
 
+  // Bare type: the selected option is marked by colour and a hairline under
+  // it, not a box around every option.
   const chipStyle = (selected: boolean): React.CSSProperties => ({
     fontFamily: "var(--hb-font-mono)",
     fontSize: "0.7rem",
     textTransform: "uppercase",
     letterSpacing: "var(--hb-track-meta)",
-    padding: "0.5rem 0.875rem",
+    minHeight: "44px",
+    padding: "0 0.25rem",
     background: "transparent",
     borderRadius: 0,
-    border: `1px solid ${selected ? "var(--hb-sienna)" : line}`,
+    border: "none",
+    boxShadow: selected ? `inset 0 -1px 0 ${on}` : `inset 0 -1px 0 transparent`,
     color: selected ? on : dim,
-    transition: "border-color 300ms ease, color 300ms ease",
+    transition: "box-shadow 300ms var(--hb-ease-expo-out), color 300ms var(--hb-ease-expo-out)",
     cursor: "pointer",
   });
 
@@ -67,7 +71,8 @@ export function ProductFilters({
   const rowStyle: React.CSSProperties = {
     display: "flex",
     flexWrap: "wrap",
-    gap: "0.5rem",
+    columnGap: "1.5rem",
+    borderBottom: `1px solid ${line}`,
   };
 
   return (

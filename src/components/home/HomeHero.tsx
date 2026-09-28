@@ -24,23 +24,6 @@ export function HomeHero() {
         overflow: "hidden",
       }}
     >
-      <span
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          bottom: 0,
-          right: "-0.02em",
-          userSelect: "none",
-          pointerEvents: "none",
-          fontFamily: "var(--hb-font-kanji)",
-          fontSize: "clamp(9rem, 26vw, 22rem)",
-          lineHeight: 0.9,
-          color: "var(--hb-dark-kanji)",
-        }}
-      >
-        花火
-      </span>
-
       <div style={{ position: "relative", zIndex: 2, maxWidth: "58rem" }}>
         <p
           style={{

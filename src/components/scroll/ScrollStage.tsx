@@ -104,12 +104,20 @@ export function ScrollStage({
           justifyContent: "center",
         }}
       >
+        {/* Scrim: the stage sits over whatever clip is playing, some of them
+            bright daylight — keep the copy legible regardless. */}
+        {isDark && (
+          <div
+            aria-hidden="true"
+            style={{ position: "absolute", inset: 0, background: "rgba(14, 12, 11, 0.62)", pointerEvents: "none" }}
+          />
+        )}
+
         {center && (
           <div
             aria-hidden="true"
+            className="hb-stage-center"
             style={{
-              position: "absolute",
-              inset: 0,
               pointerEvents: "none",
               transform: rotateCenter ? `rotate(${progress * rotateDegrees}deg)` : undefined,
               willChange: rotateCenter ? "transform" : undefined,
@@ -143,15 +151,8 @@ export function ScrollStage({
             <div
               key={step.id ?? i}
               aria-hidden={!isActive}
+              className={center ? "hb-stage-step hb-stage-step--split" : "hb-stage-step"}
               style={{
-                position: "absolute",
-                inset: 0,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "0 var(--hb-gutter)",
-                textAlign: "center",
                 opacity: isActive ? 1 : 0,
                 pointerEvents: isActive ? "auto" : "none",
                 transform: isActive
@@ -183,7 +184,7 @@ export function ScrollStage({
                     <span
                       aria-hidden="true"
                       style={{
-                        fontFamily: "var(--hb-font-kanji)",
+                        fontFamily: "var(--hb-font-display)",
                         fontSize: "clamp(6rem, 20vw, 16rem)",
                         lineHeight: 1,
                         color: kanjiColor,

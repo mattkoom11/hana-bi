@@ -1,32 +1,41 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+
+const noopSubscribe = () => () => {};
+
+function shouldSkipIntro(): boolean {
+  try {
+    if (sessionStorage.getItem('hb-loaded')) return true;
+  } catch {
+    // Storage blocked — show the intro rather than failing.
+  }
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
 
 export function LoadingScreen() {
-  const [visible, setVisible] = useState<boolean | null>(null);
+  // The server has no sessionStorage, so it renders nothing (skip = true) and
+  // the client decides on hydration — no setState-in-effect needed.
+  const skip = useSyncExternalStore(noopSubscribe, shouldSkipIntro, () => true);
+  const [dismissed, setDismissed] = useState(false);
   const [fading, setFading] = useState(false);
   const animDone = useRef(false);
   const loadDone = useRef(false);
   const fadeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (sessionStorage.getItem('hb-loaded')) {
-      setVisible(false);
-      return;
-    }
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setVisible(false);
-      return;
-    }
-
-    setVisible(true);
+    if (skip) return;
 
     const tryDismiss = () => {
       if (!animDone.current || !loadDone.current) return;
-      sessionStorage.setItem('hb-loaded', '1');
       setFading(true);
-      fadeTimer.current = setTimeout(() => setVisible(false), 600);
+      fadeTimer.current = setTimeout(() => {
+        // Marked only once fully hidden, so shouldSkipIntro doesn't cut the fade short.
+        try {
+          sessionStorage.setItem('hb-loaded', '1');
+        } catch {}
+        setDismissed(true);
+      }, 600);
     };
 
     const animTimer = setTimeout(() => {
@@ -51,9 +60,9 @@ export function LoadingScreen() {
       if (fadeTimer.current) clearTimeout(fadeTimer.current);
       window.removeEventListener('load', onLoad);
     };
-  }, []);
+  }, [skip]);
 
-  if (visible === null || !visible) return null;
+  if (skip || dismissed) return null;
 
   return (
     <div

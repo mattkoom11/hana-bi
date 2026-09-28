@@ -6,7 +6,7 @@
  * anchors were never built and should not come back.
  */
 
-import { BottomSheetNav } from "@/components/layered-denim/BottomSheetNav";
+import { BottomSheetNav } from "@/components/editorial/BottomSheetNav";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu } from "lucide-react";
 import { useState } from "react";

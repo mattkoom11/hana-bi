@@ -1,6 +1,6 @@
 'use client';
 
-import { EmailCaptureForm } from '@/components/layered-denim/EmailCaptureForm';
+import { EmailCaptureForm } from '@/components/editorial/EmailCaptureForm';
 import { InkUnderline } from '@/components/common/InkUnderline';
 import { VideoBackground } from '@/components/layout/VideoBackground';
 import { cn } from '@/lib/utils';
@@ -43,7 +43,7 @@ function LockedPageInner() {
             style={{ fontFamily: 'var(--hb-font-mono)' }}>
             Hana-Bi
           </p>
-          <h1 className="font-serif text-5xl italic font-light">
+          <h1 className="font-display text-5xl italic font-light">
             Coming Soon
           </h1>
           <div className="flex justify-center">
@@ -81,7 +81,7 @@ function LockedPageInner() {
             placeholder="Enter password"
             required
             disabled={unlockState === 'loading'}
-            className="w-full px-0 py-2 bg-transparent border-0 border-b text-center focus:outline-none disabled:opacity-50 transition-colors font-serif text-sm placeholder:text-center"
+            className="w-full px-0 py-2 bg-transparent border-0 border-b text-center focus:outline-none disabled:opacity-50 transition-colors font-display text-sm placeholder:text-center"
             style={{
               borderColor: 'rgba(250,248,244,0.2)',
               color: 'rgba(250,248,244,0.9)',

@@ -26,9 +26,17 @@ export function PageShell({
     <section
       className={cn(
         "px-4 sm:px-8 md:px-12 lg:px-20 py-24 space-airy relative",
-        isDark ? "bg-[var(--hb-dark)]/80 grain" : "bg-[var(--hb-paper)]/85",
+        // Paper is opaque — a see-through sheet let the video muddy every
+        // light page. Dark fades in from the header instead of starting on a
+        // hard edge.
+        isDark ? "grain" : "bg-[var(--hb-paper)]",
         className
       )}
+      style={
+        isDark
+          ? { background: "linear-gradient(to bottom, rgba(14,12,11,0) 0, rgba(14,12,11,0.8) 12rem)" }
+          : undefined
+      }
     >
       {!isDark && (
         <PaperBackground intensity="subtle" texture="grain" className="absolute inset-0" />

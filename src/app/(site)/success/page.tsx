@@ -24,39 +24,47 @@ const line = "1px solid var(--hb-dark-border)";
 function SuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
-  const [verified, setVerified] = useState<boolean | null>(null);
+  // No session id means nothing to verify — start unverified rather than
+  // setting state from inside the effect.
+  const [verified, setVerified] = useState<boolean | null>(sessionId ? null : false);
 
   useEffect(() => {
-    if (!sessionId) {
-      setVerified(false);
-      return;
-    }
+    if (!sessionId) return;
 
     let attempts = 0;
+    let cancelled = false;
+    let retryTimer: ReturnType<typeof setTimeout> | undefined;
     const maxAttempts = 5;
     const retryDelayMs = 1000;
+
+    const retryOrFail = () => {
+      attempts += 1;
+      if (attempts < maxAttempts) retryTimer = setTimeout(verify, retryDelayMs);
+      else setVerified(false);
+    };
 
     const verify = () => {
       fetch(`/api/checkout/verify?session_id=${encodeURIComponent(sessionId)}`)
         .then((res) => res.json())
         .then((data) => {
+          if (cancelled) return;
           if (data.verified === true) {
             setVerified(true);
             useCartStore.getState().clearCart();
           } else {
-            attempts += 1;
-            if (attempts < maxAttempts) setTimeout(verify, retryDelayMs);
-            else setVerified(false);
+            retryOrFail();
           }
         })
         .catch(() => {
-          attempts += 1;
-          if (attempts < maxAttempts) setTimeout(verify, retryDelayMs);
-          else setVerified(false);
+          if (!cancelled) retryOrFail();
         });
     };
 
     verify();
+    return () => {
+      cancelled = true;
+      clearTimeout(retryTimer);
+    };
   }, [sessionId]);
 
   if (verified === null) {
@@ -112,7 +120,7 @@ function SuccessContent() {
         <dl style={{ margin: 0, display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           {[
             ["Order", sessionId ?? "—"],
-            ["Ships", "6–8 weeks (first drop)"],
+            ["Ships", "3–4 months (made to order)"],
             ["Contact", "hello@hanabiny.com"],
           ].map(([k, v]) => (
             <div key={k} style={{ borderTop: line, paddingTop: "1rem" }}>

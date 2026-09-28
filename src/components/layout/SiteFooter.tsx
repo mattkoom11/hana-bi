@@ -4,27 +4,25 @@
 import { useEffect, useRef, useState } from 'react';
 import { ContactDialog } from '@/components/contact/ContactDialog';
 import Link from 'next/link';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 const KANJI_CHARS = ['花', '火'];
 
 export function SiteFooter() {
-  const [revealed, setRevealed] = useState(false);
+  const [scrolledIntoView, setScrolledIntoView] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const footerRef = useRef<HTMLElement>(null);
+  const reducedMotion = usePrefersReducedMotion();
+  const revealed = scrolledIntoView || reducedMotion;
 
   useEffect(() => {
     const el = footerRef.current;
-    if (!el) return;
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setRevealed(true);
-      return;
-    }
+    if (!el || reducedMotion) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setRevealed(true);
+          setScrolledIntoView(true);
           observer.disconnect();
         }
       },
@@ -32,10 +30,10 @@ export function SiteFooter() {
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [reducedMotion]);
 
   return (
-    <footer ref={footerRef} className="bg-[var(--hb-dark)] px-4 sm:px-8 md:px-12 lg:px-20 py-12 relative mt-20 grain overflow-hidden">
+    <footer ref={footerRef} className="bg-[var(--hb-dark)] px-4 sm:px-8 md:px-12 lg:px-20 py-12 relative grain overflow-hidden">
       {/* Top border */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--hb-dark-border)] to-transparent" />
 

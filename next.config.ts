@@ -4,8 +4,7 @@ import type { NextConfig } from "next";
 // next/font, product/carousel images are proxied server-side through
 // /_next/image (the browser never fetches images.unsplash.com/cdn.shopify.com/
 // files.stripe.com directly), checkout is a full-page redirect to Stripe
-// rather than an embedded frame, and Spline/@stripe/stripe-js are installed
-// but currently unused anywhere in the app. So the policy below only needs
+// rather than an embedded frame. So the policy below only needs
 // 'self' plus the couple of narrow exceptions noted inline.
 const isDev = process.env.NODE_ENV !== "production";
 
@@ -34,7 +33,6 @@ const csp = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@splinetool/react-spline", "@splinetool/runtime"],
   experimental: {
     serverSourceMaps: false,
   },

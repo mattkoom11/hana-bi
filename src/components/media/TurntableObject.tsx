@@ -56,8 +56,11 @@ export function TurntableObject({
   style,
 }: TurntableObjectProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  // Read by the animation loop each frame; synced after render, not during.
   const rotationRef = useRef(rotation);
-  rotationRef.current = rotation;
+  useEffect(() => {
+    rotationRef.current = rotation;
+  }, [rotation]);
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
@@ -178,8 +181,7 @@ export function TurntableObject({
     };
     // patternUrl + pieceName are expected to be stable for this mount's
     // lifetime — callers key on them to force a remount instead.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [patternUrl, pieceName, size, speed]);
+  },[patternUrl, pieceName, size, speed]);
 
   return (
     <div

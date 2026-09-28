@@ -40,7 +40,7 @@ export function EmailCaptureForm({ className }: EmailCaptureFormProps) {
             key="success"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center font-serif text-xl"
+            className="text-center font-display text-xl"
           >
             You&apos;re on the list.
           </motion.p>
@@ -68,7 +68,7 @@ export function EmailCaptureForm({ className }: EmailCaptureFormProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={formState === 'loading'}
-                className="w-full px-0 py-3 bg-transparent border-0 border-b border-[var(--hb-border)] focus:outline-none focus:border-[var(--hb-accent)] disabled:opacity-50 transition-colors font-serif placeholder:text-[var(--hb-smoke)]/50"
+                className="w-full px-0 py-3 bg-transparent border-0 border-b border-[var(--hb-dark-border)] text-[var(--hb-on-dark)] focus:outline-none focus:border-[var(--hb-on-dark)] disabled:opacity-50 transition-colors font-display placeholder:text-[var(--hb-dark-muted)]"
                 placeholder="your@email.com"
               />
             </div>
@@ -83,15 +83,16 @@ export function EmailCaptureForm({ className }: EmailCaptureFormProps) {
               </motion.p>
             )}
 
+            {/* Hairline, not filled — the page's filled element is its
+                primary action, and this form never is. */}
             <motion.button
               type="submit"
               disabled={formState === 'loading'}
-              whileHover={{ scale: formState === 'loading' ? 1 : 1.02 }}
-              whileTap={{ scale: formState === 'loading' ? 1 : 0.98 }}
               className={cn(
-                "w-full py-4 bg-[var(--hb-ink)] text-[var(--hb-paper)] font-serif text-lg transition-colors",
-                "hover:bg-[var(--hb-ink-light)] disabled:opacity-50 disabled:cursor-not-allowed"
+                "w-full min-h-[44px] py-4 border border-[var(--hb-dark-border)] text-[var(--hb-on-dark)] text-xs uppercase tracking-[0.35em] transition-colors duration-300",
+                "hover:border-[var(--hb-on-dark)] disabled:opacity-50 disabled:cursor-not-allowed"
               )}
+              style={{ fontFamily: 'var(--hb-font-mono)' }}
             >
               {formState === 'loading' ? 'Joining...' : 'Join the Drop List'}
             </motion.button>

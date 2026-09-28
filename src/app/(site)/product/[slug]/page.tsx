@@ -2,19 +2,34 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { InkUnderline } from "@/components/common/InkUnderline";
-import { Tag } from "@/components/common/Tag";
-import { PageShell } from "@/components/layout/PageShell";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { ProductHeroBand } from "@/components/product/ProductHeroBand";
 import { ProductStickyNav } from "@/components/product/ProductStickyNav";
 import { ConstructionSection } from "@/components/product/ConstructionSection";
 import type { MarkerData } from "@/components/media/TurntableObject";
-import { ScribbleArrow } from "@/components/layered-denim/ScribbleArrow";
-import { EmailCaptureForm } from "@/components/layered-denim/EmailCaptureForm";
-import { FAQAccordion } from "@/components/layered-denim/FAQAccordion";
+import { EmailCaptureForm } from "@/components/editorial/EmailCaptureForm";
+import { FAQAccordion } from "@/components/editorial/FAQAccordion";
 import { getStripeCatalog, getStripeProductBySlug } from "@/lib/stripe-catalog";
 import { getProductBySlug, products as fallbackProducts, type Product } from "@/data/products";
+
+const block: React.CSSProperties = { borderTop: "1px solid var(--hb-dark-border)", padding: "3.5rem 0" };
+const eyebrow: React.CSSProperties = {
+  fontFamily: "var(--hb-font-mono)",
+  fontSize: "0.65rem",
+  textTransform: "uppercase",
+  letterSpacing: "var(--hb-track-meta)",
+  color: "var(--hb-sienna)",
+  margin: "0 0 1rem",
+};
+const heading: React.CSSProperties = {
+  fontFamily: "var(--hb-font-display)",
+  fontStyle: "italic",
+  fontWeight: 300,
+  fontSize: "clamp(1.75rem, 3vw, 2.25rem)",
+  lineHeight: 1.15,
+  color: "var(--hb-on-dark)",
+  margin: "0 0 2rem",
+};
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -94,7 +109,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const related = await getRelatedProducts(product.slug);
 
   const navItems = [
-    { label: "Materials", href: "#materials" },
+    product.materials || product.care ? { label: "Materials", href: "#materials" } : null,
     marker ? { label: "Construction", href: "#construction" } : null,
     { label: "FAQ", href: "#faq" },
     { label: "Drop list", href: "#drop-list" },
@@ -110,128 +125,68 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {/* ── Band 2 — Construction (conditional) ── */}
       {marker && product.marker && <ConstructionSection marker={marker} markerUrl={product.marker} />}
 
-      {/* ── Band 3 — Preorder terms ── */}
-      <section style={{ background: "rgba(245,242,237,0.94)", padding: "4rem var(--hb-gutter) 1.5rem" }}>
-        <div style={{ maxWidth: "42rem", margin: "0 auto" }}>
-          <p
-            style={{
-              textTransform: "uppercase",
-              fontSize: "0.75rem",
-              letterSpacing: "var(--hb-track-nav)",
-              color: "var(--hb-smoke)",
-              fontFamily: "var(--hb-font-mono)",
-              margin: 0,
-            }}
-          >
-            Preorder
-          </p>
-          <h2
-            style={{
-              fontFamily: "var(--hb-font-serif)",
-              fontSize: "1.875rem",
-              margin: "0.75rem 0 2rem",
-              color: "var(--hb-ink)",
-            }}
-          >
-            Made to order — no excess, no waste.
-          </h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", fontSize: "1rem", lineHeight: 1.7, color: "var(--hb-ink)" }}>
-            <p style={{ margin: 0 }}>
-              Every piece on this site is a preorder. When you purchase, your payment goes directly toward sourcing materials and manufacturing your garment. Nothing is produced speculatively.
-            </p>
-            <p style={{ margin: 0 }}>
-              Production only begins once we reach a minimum number of orders. If that threshold isn&rsquo;t met, you will be fully refunded — no questions asked.
-            </p>
-            <p style={{ margin: 0 }}>
-              Once production begins, your garment is cut, sewn, and shipped to you in <strong>3–4 months</strong>.
-            </p>
+      {/* ── Band 3 — Terms, FAQ, drop list, related ──
+          One continuous dark band: the page used to flip to paper here, which
+          read as a second site bolted on. Blocks are separated by hairlines. */}
+      <section
+        className="hb-grain"
+        style={{ background: "rgba(14,12,11,0.85)", color: "var(--hb-on-dark)", padding: "0 var(--hb-gutter) 5rem" }}
+      >
+        <div style={{ maxWidth: "var(--hb-max-width)", margin: "0 auto" }}>
+          <div style={block}>
+            <p style={eyebrow}>Preorder</p>
+            <h2 style={heading}>Made to order — no excess, no waste.</h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", lineHeight: 1.7, color: "var(--hb-dark-muted)", maxWidth: "42rem" }}>
+              <p style={{ margin: 0 }}>
+                Every piece on this site is a preorder. Your payment goes directly toward sourcing materials and manufacturing your garment. Nothing is produced speculatively.
+              </p>
+              <p style={{ margin: 0 }}>
+                Production begins once a minimum number of orders is reached. If it isn&rsquo;t, you are fully refunded.
+              </p>
+              <p style={{ margin: 0 }}>
+                Once production begins, your garment is cut, sewn and shipped in 3–4 months.
+              </p>
+            </div>
           </div>
+
+          <div id="faq" style={block}>
+            <p style={eyebrow}>Questions</p>
+            <div style={{ maxWidth: "42rem" }}>
+              <FAQAccordion
+                items={[
+                  { question: "When does my order ship?", answer: "Your garment is cut, sewn and shipped 3–4 months after production begins." },
+                  { question: "What if the minimum isn't met?", answer: "You are fully refunded." },
+                  { question: "How should I care for it?", answer: product.care },
+                ]}
+              />
+            </div>
+          </div>
+
+          <div id="drop-list" style={block}>
+            <p style={eyebrow}>Drop list</p>
+            <h2 style={heading}>Hear about the next edition.</h2>
+            <EmailCaptureForm className="mx-0" />
+          </div>
+
+          {related.length > 0 && (
+            <div style={block}>
+              <p style={eyebrow}>From the archive</p>
+              <h2 style={heading}>You may also like</h2>
+              <div
+                style={{
+                  display: "grid",
+                  gap: "var(--hb-grid-gap)",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 18rem), 1fr))",
+                }}
+              >
+                {related.map((p) => (
+                  <ProductCard key={p.id} product={p} variant="dark" />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
-
-      {/* ── Band 4 — Materials tags ── */}
-      <section id="materials" style={{ background: "rgba(245,242,237,0.94)", padding: "0.75rem var(--hb-gutter)" }}>
-        <div style={{ maxWidth: "56rem", margin: "0 auto", display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-          {product.tags.map((tag) => (
-            <Tag key={tag}>{tag}</Tag>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Band 5 — FAQ ── */}
-      <section id="faq" style={{ background: "rgba(245,242,237,0.94)", padding: "2.5rem var(--hb-gutter)" }}>
-        <div style={{ maxWidth: "42rem", margin: "0 auto" }}>
-          <FAQAccordion
-            items={[
-              { question: "When does my order ship?", answer: "Your garment is cut, sewn and shipped 3–4 months after production begins." },
-              { question: "What if the minimum isn't met?", answer: "You are fully refunded — no questions asked." },
-              { question: "How should I care for it?", answer: product.care },
-            ]}
-          />
-        </div>
-      </section>
-
-      {/* ── Band 6 — Drop list ── */}
-      <section id="drop-list" style={{ background: "rgba(245,242,237,0.94)", padding: "1.5rem var(--hb-gutter) 4rem" }}>
-        <div style={{ maxWidth: "42rem", margin: "0 auto", textAlign: "center" }}>
-          <p
-            style={{
-              textTransform: "uppercase",
-              fontSize: "0.75rem",
-              letterSpacing: "var(--hb-track-nav)",
-              color: "var(--hb-smoke)",
-              opacity: 0.7,
-              fontFamily: "var(--hb-font-mono)",
-              margin: 0,
-            }}
-          >
-            Stay in the Loop
-          </p>
-          <div style={{ display: "flex", justifyContent: "center", margin: "0.5rem 0" }}>
-            <InkUnderline width={80} variant="delicate" strokeOpacity={0.3} />
-          </div>
-          <h2
-            style={{
-              fontFamily: "var(--hb-font-serif)",
-              fontStyle: "italic",
-              fontWeight: 300,
-              fontSize: "2rem",
-              color: "var(--hb-ink)",
-              margin: "0 0 0.75rem",
-            }}
-          >
-            Join the Drop List
-          </h2>
-          <p style={{ color: "var(--hb-smoke)", fontSize: "1rem", margin: "0 0 1.5rem" }}>
-            Be the first to know about future releases and updates.
-          </p>
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: "1.5rem" }}>
-            <ScribbleArrow direction="down" size={28} strokeOpacity={0.4} />
-          </div>
-          <EmailCaptureForm />
-        </div>
-      </section>
-
-      {/* ── Band 7 — Related ── */}
-      {related.length > 0 && (
-        <PageShell
-          eyebrow="From the archive"
-          title="You may also like"
-          intro="Pieces that share fabrication notes or silhouettes with this garment."
-        >
-          <div
-            style={{
-              display: "grid",
-              gap: "var(--hb-grid-gap)",
-              gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 18rem), 1fr))",
-            }}
-          >
-            {related.map((p) => (
-              <ProductCard key={p.id} product={p} variant="light" />
-            ))}
-          </div>
-        </PageShell>
-      )}
     </main>
   );
 }

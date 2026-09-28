@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { MarginNote } from "@/components/common/MarginNote";
-import { Badge } from "@/components/common/Badge";
 import { ImageLightbox } from "@/components/common/ImageLightbox";
 import type { Project } from "@/data/projects";
 
@@ -14,20 +12,12 @@ const STATUS_LABELS: Record<Project["status"], string> = {
   planning: "Planning",
 };
 
-const STATUS_TONES: Record<Project["status"], "sienna" | "smoke" | "ink"> = {
-  completed: "sienna",
-  in_progress: "ink",
-  on_hold: "smoke",
-  planning: "smoke",
-};
-
 interface ProjectGalleryProps {
   project: Project;
 }
 
 export function ProjectGallery({ project }: ProjectGalleryProps) {
   const statusLabel = STATUS_LABELS[project.status];
-  const statusTone = STATUS_TONES[project.status];
 
   // All images: hero first, then extras
   const allImages = [project.heroImage, ...project.images];
@@ -38,7 +28,7 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
       <div className="relative space-y-6">
         {/* Hero image */}
         <div
-          className="relative w-full aspect-[3/4] overflow-hidden -rotate-[0.5deg] cursor-zoom-in"
+          className="relative w-full aspect-[3/4] overflow-hidden cursor-zoom-in"
           onClick={() => setLightboxIndex(0)}
         >
           {/* Hand-drawn border overlay */}
@@ -75,16 +65,17 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
               priority
               unoptimized
             />
-            <div className="absolute top-6 left-6 z-10">
-              <Badge tone={statusTone}>{statusLabel}</Badge>
-            </div>
-            {project.year && (
-              <MarginNote position="top-right" variant="script" size="xs">
-                {project.year}
-              </MarginNote>
-            )}
           </div>
         </div>
+
+        {/* Status as a catalogue line, not a coloured badge on the photo. */}
+        <p
+          className="uppercase text-[var(--hb-smoke)]"
+          style={{ fontFamily: "var(--hb-font-mono)", fontSize: "0.65rem", letterSpacing: "var(--hb-track-meta)" }}
+        >
+          {project.year ? `${project.year} · ` : ""}
+          {statusLabel}
+        </p>
 
         {/* Thumbnails */}
         {project.images.length > 0 && (

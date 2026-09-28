@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { InkUnderline } from "@/components/common/InkUnderline";
 import { PageShell } from "@/components/layout/PageShell";
 
 export const metadata: Metadata = {
@@ -13,24 +12,23 @@ export const metadata: Metadata = {
   },
 };
 
-const ABOUT_PARAGRAPHS = [
-  "Hana-Bi began in the small basement of a Northern Virginia home. There was no drafting table and no fancy sewing machine, but there was a hive of ideas. Each project starts with a hand-made pattern which outlines the DNA of the garment. Ranging from extravagant designs to humble blueprints, there is no end to what Hana-Bi is willing to create.",
-  "Hana-Bi only sources fabric from the best international mills and keeps a focus on domestic manufacturing. Hana-Bi's concept of sustainability sprouted from Professor Marcy Linton's class on sustainable fashion, taught at the University of Virginia. Manufacturing is taken north to New York, where the Garment District hosts a web of dreams.",
-  "Hana-Bi wants to capture the innovative spirit of New York while also maintaining the wearability of timeless fashion. When it comes to future projects, Hana-Bi hopes to adopt what breaks down the limits of human creativity, and to always pioneer in the fields of elegance and beauty.",
-];
-
-const CHAPTERS = [
+// Facts, not adjectives — one line each. See the Copy rules in CLAUDE.md.
+const RECORD = [
   {
     title: "Origin",
-    copy: "Hana-Bi began in the small basement of a Northern Virginia home. There was no drafting table and no fancy sewing machine, but there was a hive of ideas.",
+    copy: "Started in a basement in Northern Virginia — no drafting table, no industrial machine.",
   },
   {
-    title: "Process",
-    copy: "We draft silhouettes in pencil, then digitize the sketches while preserving smudges. Fabrics are sourced from regenerative mills and all trims are catalogued for future reference.",
+    title: "Pattern",
+    copy: "Every garment begins as a hand-drafted paper pattern.",
   },
   {
-    title: "Future Drops",
-    copy: "Expect limited runways documented like museum catalogues. Upcoming capsules blend denim tailoring with archival leather findings.",
+    title: "Fabric",
+    copy: "Sourced from international mills. The focus on sustainability began in Professor Marcy Linton’s sustainable fashion class at the University of Virginia.",
+  },
+  {
+    title: "Making",
+    copy: "Cut and sewn in New York’s Garment District, to order and in small runs. Nothing is produced speculatively.",
   },
 ];
 
@@ -40,90 +38,54 @@ export default function AboutPage() {
       <PageShell
         eyebrow="About"
         title="The Hana-Bi study."
-        intro="A sustainable atelier with a focus on denim construction and design."
+        intro="A denim atelier. Patterns drafted by hand, garments made to order in New York."
       >
-        <div
-          style={{
-            display: "grid",
-            gap: "4rem",
-            gridTemplateColumns: "1.2fr 0.8fr",
-            alignItems: "start",
-          }}
-        >
-          <article style={{ maxWidth: "var(--hb-max-width-prose)" }}>
-            <InkUnderline width={160} variant="wispy" strokeOpacity={0.4} />
-            <div
+        <ol style={{ listStyle: "none", margin: 0, padding: 0, maxWidth: "48rem" }}>
+          {RECORD.map((row, i) => (
+            <li
+              key={row.title}
               style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "1.5rem",
-                marginTop: "2.5rem",
-                fontSize: "var(--hb-body-lg)",
-                lineHeight: 1.8,
-                color: "var(--hb-smoke)",
-                opacity: 0.85,
+                borderTop: "1px solid var(--hb-border)",
+                padding: "1.75rem 0",
+                display: "grid",
+                gridTemplateColumns: "3rem minmax(0, 1fr)",
+                columnGap: "1rem",
+                rowGap: "0.5rem",
               }}
             >
-              {ABOUT_PARAGRAPHS.map((p, i) => (
-                <p key={i} style={{ margin: 0 }}>
-                  {p}
-                </p>
-              ))}
-            </div>
-          </article>
-
-          <section style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-            {CHAPTERS.map((chapter, i) => (
-              <div
-                key={chapter.title}
+              <span
                 style={{
-                  borderTop: "1px solid var(--hb-border)",
-                  paddingTop: "1.25rem",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.75rem",
+                  fontFamily: "var(--hb-font-mono)",
+                  fontSize: "0.65rem",
+                  letterSpacing: "var(--hb-track-catalog)",
+                  color: "var(--hb-sienna)",
+                  paddingTop: "0.6rem",
                 }}
               >
-                <p
-                  style={{
-                    fontFamily: "var(--hb-font-mono)",
-                    fontSize: "0.7rem",
-                    textTransform: "uppercase",
-                    letterSpacing: "var(--hb-track-catalog)",
-                    color: "var(--hb-sienna)",
-                    margin: 0,
-                  }}
-                >
-                  {"0" + (i + 1)}
-                </p>
-                <h3
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <h2
                   style={{
                     fontFamily: "var(--hb-font-display)",
                     fontStyle: "italic",
                     fontWeight: 300,
                     fontSize: "1.75rem",
-                    lineHeight: 1.1,
-                    margin: 0,
+                    lineHeight: 1.15,
+                    margin: "0 0 0.5rem",
                     color: "var(--hb-ink)",
                   }}
                 >
-                  {chapter.title}
-                </h3>
-                <p
-                  style={{
-                    fontSize: "0.9375rem",
-                    color: "var(--hb-smoke)",
-                    opacity: 0.85,
-                    lineHeight: 1.7,
-                    margin: 0,
-                  }}
-                >
-                  {chapter.copy}
+                  {row.title}
+                </h2>
+                <p style={{ margin: 0, fontSize: "1rem", lineHeight: 1.7, color: "var(--hb-smoke)" }}>
+                  {row.copy}
                 </p>
               </div>
-            ))}
-          </section>
-        </div>
+            </li>
+          ))}
+          <li aria-hidden="true" style={{ borderTop: "1px solid var(--hb-border)" }} />
+        </ol>
       </PageShell>
     </main>
   );
