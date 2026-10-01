@@ -1,6 +1,19 @@
 import type Stripe from "stripe";
-import { describe, expect, it } from "vitest";
-import { mapStripeProduct } from "./stripe-catalog";
+import { describe, expect, it, vi } from "vitest";
+import { getStripeCatalog, mapStripeProduct } from "./stripe-catalog";
+
+const listed = vi.hoisted(() => ({ products: [] as unknown[] }));
+
+vi.mock("@/lib/env", () => ({ STRIPE_SECRET_KEY: "sk_test_mock" }));
+vi.mock("stripe", () => ({
+  default: class {
+    products = {
+      list: async function* () {
+        yield* listed.products;
+      },
+    };
+  },
+}));
 
 function product(metadata: Record<string, string>, overrides: Partial<Stripe.Product> = {}) {
   return {
@@ -57,5 +70,17 @@ describe("mapStripeProduct", () => {
   it("forces every size sold out for non-purchasable garments", () => {
     const p = mapStripeProduct(product({ slug: "layered-denim", sizes: "S,M,L" }), price);
     expect(p.soldSizes).toEqual(["S", "M", "L"]);
+  });
+});
+
+describe("getStripeCatalog", () => {
+  it("drops every Stripe product except the displayed garments", async () => {
+    listed.products = [
+      product({ slug: "layered-denim" }, { id: "prod_ld", default_price: price }),
+      product({ slug: "test-jean" }, { id: "prod_test", default_price: price }),
+      product({}, { id: "prod_no_slug", default_price: price }),
+    ];
+    const catalog = await getStripeCatalog();
+    expect(catalog.map((p) => p.slug)).toEqual(["layered-denim"]);
   });
 });

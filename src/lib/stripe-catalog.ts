@@ -26,6 +26,13 @@ function metaStatus(value: string | undefined): ProductStatus {
  */
 const NON_PURCHASABLE_SLUGS = new Set(['layered-denim']);
 
+/**
+ * The only slugs the site displays. Anything else in Stripe (test garments,
+ * drafts) is dropped from the catalog, so it never reaches Shop, Archive,
+ * product pages, the sitemap or checkout. Add a slug here to publish a garment.
+ */
+const DISPLAYED_SLUGS = new Set(['layered-denim']);
+
 export function mapStripeProduct(
   product: Stripe.Product,
   price: Stripe.Price
@@ -102,7 +109,7 @@ export const getStripeCatalog = cache(async (): Promise<StripeProduct[]> => {
         (p.default_price as Stripe.Price).unit_amount !== null
     )
     .map((p) => mapStripeProduct(p, p.default_price as Stripe.Price))
-    .filter((p) => p.slug);
+    .filter((p) => DISPLAYED_SLUGS.has(p.slug));
 });
 
 /**
