@@ -1,5 +1,6 @@
 // The relaunch site's "one night in New York" story, in order.
-// Swapping in real footage means changing `clip` (and adding `poster`) here — nothing else.
+// Swapping in real footage means changing `clip` (and adding `webm`, `poster`) here — nothing else.
+// `npm run encode:scene -- <raw file> --name <id>` prints the line to paste.
 //
 // PLACEHOLDERS (2026-11-26): every clip is a stand-in from the current site's library and still
 // carries the Japanese imagery the relaunch drops; every line is draft copy pending the name,
@@ -9,7 +10,10 @@ export type NightScene = {
   id: string;
   /** Mono label, e.g. "01 · Street". */
   label: string;
+  /** H.264 MP4 (fallback that plays everywhere). */
   clip: string;
+  /** VP9 WebM from scripts/encode-scene.mjs, offered first when present. */
+  webm?: string;
   poster?: string;
   /** One line, said once. */
   line: string;

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "manifest:videos": "node scripts/generate-video-manifest.mjs",
+    "encode:scene": "node scripts/encode-scene.mjs",
     "predev": "node scripts/generate-video-manifest.mjs",
     "dev": "next dev",
     "prebuild": "node scripts/generate-video-manifest.mjs",

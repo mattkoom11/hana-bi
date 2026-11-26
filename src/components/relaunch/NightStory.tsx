@@ -87,7 +87,7 @@ export function NightStory({ scenes, atelierHref, tuning }: Props) {
                 className="night-story__layer"
                 data-first={i === 0 || undefined}
               >
-                <SceneVideo src={scene.clip} poster={scene.poster} playing={near} preload={near ? "auto" : "none"} />
+                <SceneVideo src={scene.clip} webm={scene.webm} poster={scene.poster} playing={near} preload={near ? "auto" : "none"} />
               </div>
             );
           })}
