@@ -17,8 +17,14 @@ export function isRateLimited(key: string, limit: number, windowMs: number): boo
   return recent.length > limit;
 }
 
+/**
+ * The caller's IP, from headers the hosting platform sets rather than ones the client can.
+ * The first X-Forwarded-For entry is whatever the client sent, so it is never used: prefer
+ * x-real-ip (set by Vercel), else the last X-Forwarded-For hop (appended by the nearest proxy).
+ */
 export function getClientIp(request: Request): string {
-  const forwardedFor = request.headers.get('x-forwarded-for');
-  if (forwardedFor) return forwardedFor.split(',')[0].trim();
-  return request.headers.get('x-real-ip') ?? 'unknown';
+  const realIp = request.headers.get('x-real-ip');
+  if (realIp) return realIp.trim();
+  const hops = request.headers.get('x-forwarded-for')?.split(',').map((h) => h.trim()).filter(Boolean);
+  return hops?.at(-1) ?? 'unknown';
 }

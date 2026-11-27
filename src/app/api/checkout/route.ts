@@ -5,6 +5,7 @@ import { STRIPE_SECRET_KEY, NEXT_PUBLIC_SITE_URL, STRIPE_SHIPPING_RATE_IDS, STRI
 import { getStripeCatalog } from '@/lib/stripe-catalog';
 import { validateCheckoutItems, type CheckoutLineItem } from '@/lib/checkout-validation';
 import { getClientIp, isRateLimited } from '@/lib/rate-limit';
+import { sameOriginUrl } from '@/lib/safe-url';
 
 export interface CheckoutRequestBody {
   items: CheckoutLineItem[];
@@ -48,11 +49,9 @@ export async function POST(request: NextRequest) {
     const stripe = getStripe();
     const siteUrl = NEXT_PUBLIC_SITE_URL;
 
-    const rawCancelUrl = body.cancelUrl;
-    const cancelUrl =
-      rawCancelUrl && rawCancelUrl.startsWith(siteUrl)
-        ? rawCancelUrl
-        : `${siteUrl}/cart`;
+    // Client-supplied: kept only if it is on our origin. The old prefix check accepted
+    // https://<site>.evil.com.
+    const cancelUrl = sameOriginUrl(body.cancelUrl, siteUrl, `${siteUrl}/cart`);
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
