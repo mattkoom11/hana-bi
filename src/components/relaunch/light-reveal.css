@@ -1,0 +1,77 @@
+/* Relaunch prototype — see LightReveal.tsx.
+   Layer order (bottom → top): media (one or more videos), tungsten tint, darkness with a hole in it, content.
+   --lx / --ly / --lr are written per frame by JS; --lcore / --lwarm / --lambient by React. */
+
+.light-reveal {
+  --lx: 50%;
+  --ly: 50%;
+  --lr: 0; /* vmin; 0 = no light until the first frame */
+  --lcore: 0.56;
+  --lwarm: 0.3;
+  --lambient: 0.05;
+  --lsize: calc(var(--lr) * 1vmin);
+
+  position: relative;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--hb-dark);
+  touch-action: pan-y; /* vertical scroll still works on touch */
+  isolation: isolate;
+}
+
+.light-reveal__media,
+.light-reveal__video,
+.light-reveal__warmth,
+.light-reveal__dark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.light-reveal__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Tungsten: one warm source, strongest at the centre of the light. */
+.light-reveal__warmth {
+  background: radial-gradient(
+    circle calc(var(--lsize) * 1.15) at var(--lx) var(--ly),
+    rgb(255 166 87 / var(--lwarm)) 0%,
+    rgb(255 166 87 / 0) 100%
+  );
+  mix-blend-mode: soft-light;
+}
+
+/* Darkness everywhere except a soft-edged hole at the light.
+   Mask alpha: 0 = scene shows, 1 = darkness shows. The mid stop bends the
+   falloff so the edge reads as light dying off, not a hard disc. */
+.light-reveal__dark {
+  background: var(--hb-dark);
+  opacity: calc(1 - var(--lambient));
+  -webkit-mask-image: radial-gradient(
+    circle var(--lsize) at var(--lx) var(--ly),
+    rgb(0 0 0 / 0) calc(var(--lcore) * 100%),
+    rgb(0 0 0 / 0.45) calc((var(--lcore) + (1 - var(--lcore)) * 0.45) * 100%),
+    rgb(0 0 0 / 1) 100%
+  );
+  mask-image: radial-gradient(
+    circle var(--lsize) at var(--lx) var(--ly),
+    rgb(0 0 0 / 0) calc(var(--lcore) * 100%),
+    rgb(0 0 0 / 0.45) calc((var(--lcore) + (1 - var(--lcore)) * 0.45) * 100%),
+    rgb(0 0 0 / 1) 100%
+  );
+}
+
+.light-reveal__content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  pointer-events: none; /* the light follows the pointer across the copy too */
+}
+
+.light-reveal__content a,
+.light-reveal__content button {
+  pointer-events: auto;
+}

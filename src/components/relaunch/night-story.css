@@ -1,0 +1,126 @@
+/* Relaunch "one night" story — see NightStory.tsx.
+   Opacity of .night-story__layer / .night-story__copy is written by the scroll handler.
+   Before it runs, only the first scene shows. */
+
+.night-story {
+  position: relative;
+  background: var(--hb-dark);
+}
+
+.night-story__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+}
+
+.night-story__layer,
+.night-story__copy {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.night-story__layer[data-first],
+.night-story__copy[data-first] {
+  opacity: 1;
+}
+
+.night-story__copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2.5rem;
+}
+
+.night-story__label,
+.night-story__pager {
+  margin: 0;
+  font-family: var(--hb-font-mono);
+  font-weight: 300;
+  font-size: 0.65rem;
+  letter-spacing: var(--hb-track-meta, 0.3em);
+  text-transform: uppercase;
+}
+
+.night-story__label {
+  color: var(--hb-sienna);
+}
+
+.night-story__line {
+  margin: 0;
+  font-family: var(--hb-font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.1;
+  color: var(--hb-paper);
+}
+
+/* Bare text actions: mono, tracked, a hairline beneath. The single primary action
+   (entering the atelier) is the only sienna one. */
+.night-story__enter,
+.night-story__skip {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hb-touch-min, 44px);
+  font-family: var(--hb-font-mono);
+  font-weight: 300;
+  font-size: 0.75rem;
+  letter-spacing: var(--hb-track-nav, 0.4em);
+  text-transform: uppercase;
+  text-decoration: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 450ms var(--hb-ease-expo-out, cubic-bezier(0.23, 1, 0.32, 1));
+}
+
+.night-story__enter {
+  margin-top: 1.5rem;
+  color: var(--hb-sienna);
+  border-bottom: 1px solid currentColor;
+  min-height: 0;
+  padding-bottom: 0.4rem;
+  pointer-events: auto;
+}
+
+.night-story__skip {
+  position: absolute;
+  top: 1.75rem;
+  right: 2.5rem;
+  color: var(--hb-paper);
+  opacity: 0.45;
+  pointer-events: auto;
+}
+
+.night-story__skip:hover,
+.night-story__skip:focus-visible,
+.night-story__enter:hover {
+  opacity: 1;
+}
+
+.night-story__pager {
+  position: absolute;
+  right: 2.5rem;
+  bottom: 2.5rem;
+  color: var(--hb-paper);
+  opacity: 0.45;
+}
+
+@media (max-width: 640px) {
+  .night-story__copy {
+    padding: 1.5rem;
+  }
+  /* Same size and tracking as the scene label, so the top row fits a phone. */
+  .night-story__skip {
+    top: 0.65rem;
+    right: 1.5rem;
+    font-size: 0.65rem;
+    letter-spacing: var(--hb-track-meta, 0.3em);
+  }
+  .night-story__pager {
+    right: 1.5rem;
+    bottom: 1.5rem;
+  }
+}
